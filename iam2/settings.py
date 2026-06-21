@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
-DEBUG = os.getenv('DEBUG', 'False') == 'ّFalse'
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 allowed_hosts = os.getenv('ALLOWED_HOSTS','')
 ALLOWED_HOSTS = allowed_hosts.split(',') if allowed_hosts else []
