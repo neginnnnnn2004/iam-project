@@ -3,6 +3,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models import Q
 from django.conf import settings
+import hashlib
+
+from django.utils.regex_helper import normalize
+
 
 class Role(models.Model):
     id = models.AutoField(primary_key=True)
@@ -73,16 +77,30 @@ class User(AbstractUser):
 
 
 
+import hashlib
+from django.db import models
+
+
+import hashlib
+from django.db import models
+
+
 class Group(models.Model):
     id = models.AutoField(primary_key=True)
 
-    code = models.CharField(
-        unique=True
-        ,max_length=15
-    )
-    title = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
+    code = models.BigIntegerField(unique=True, editable=False)
 
+    title = models.CharField(max_length=100)
+
+    title_normalized = models.CharField(
+        max_length=100,
+        unique=True,
+        editable=False,
+        null=True,
+        blank=True
+    )
+
+    description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
 
     assigned_by = models.ForeignKey(
@@ -92,9 +110,25 @@ class Group(models.Model):
         blank=True,
         related_name='groups_created_by'
     )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True,blank=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def save(self, *args, **kwargs):
+        if self.title:
+            self.title_normalized = self.title.strip().lower()
+
+            hash_value = hashlib.sha256(
+                self.title_normalized.encode('utf-8')
+            ).hexdigest()
+
+            self.code = int(hash_value[:12], 16)
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

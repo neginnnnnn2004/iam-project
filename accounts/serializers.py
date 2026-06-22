@@ -1,4 +1,8 @@
+import hashlib
+
 from rest_framework import serializers
+from unicodedata import normalize
+
 from accounts.models import User, Group, UserGroup, Role
 
 
@@ -52,12 +56,12 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
 class ListOfGroupsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = '__all__'
+        fields = ['id' , 'code' ,'title','description','is_active']
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = "__all__"
-        read_only_fields = ["assigned_by", "deleted_at"]
+        read_only_fields = ["assigned_by", "deleted_at","created_at","updated_at","updated_by","code"]
 class UserGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserGroup
@@ -104,14 +108,29 @@ class ProfileUpdateResponseSerializer(serializers.Serializer) :
     message = serializers.CharField()
     data = ProfileUpdateSerializer()
 
+from rest_framework import serializers
+from accounts.models import Group
+
+
 class GroupCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ['code','title', 'description']
+        fields = ['title', 'description']
+
+    def validate_title(self, value):
+        normalized = value.strip().lower()
+
+        if Group.objects.filter(title_normalized=normalized).exists():
+            raise serializers.ValidationError(
+                "این عنوان یا مشابه آن قبلاً ثبت شده است."
+            )
+
+        return value
+
 class GroupResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ['id','title']
+        fields = ['id','title','code']
 
 class ProfileUpdateResponseSerializer(serializers.Serializer):
     message = serializers.CharField()
