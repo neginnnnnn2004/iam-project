@@ -15,4 +15,6 @@ urlpatterns = [
     path('admin/users/<int:pk>/', views.ManageUsersStatusView.as_view(), name='manage-user-status'),
     path('admin/groups/<int:pk>/', views.GroupDetailView.as_view(), name='group_detail'),
     path('admin/users/<int:pk>/is-active/', views.UserActivationView.as_view(), name='is-active'),
+
+
 ]

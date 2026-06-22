@@ -96,3 +96,23 @@ class UserStatusUpdateSerializer(serializers.ModelSerializer):
         instance.status = validated_data.get('status' , instance.status)
         instance.save()
         return instance
+
+class UserActivationSerializer(serializers.Serializer):
+    is_active = serializers.BooleanField()
+
+class ProfileUpdateResponseSerializer(serializers.Serializer) :
+    message = serializers.CharField()
+    data = ProfileUpdateSerializer()
+
+class GroupCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['code','title', 'description']
+class GroupResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id','title']
+
+class ProfileUpdateResponseSerializer(serializers.Serializer):
+    message = serializers.CharField()
+    data = ProfileUpdateSerializer()
