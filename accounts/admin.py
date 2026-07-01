@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.auth.admin import  UserAdmin
 from .models import User,Role,Group,UserGroup,Domain,Tag,User_Domain_Tag
 
 admin.site.register(User)

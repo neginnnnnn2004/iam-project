@@ -157,6 +157,9 @@ class UserGroup(models.Model):
             )
         ]
 
+    def __str__(self):
+        return f"{self.user.username} -> {self.group.title}"
+
 class Domain(models.Model):
     id = models.AutoField(primary_key=True)
     domain_name = models.TextField(max_length=255, unique=True)
