@@ -49,16 +49,21 @@ class DomainDetail(APIView):
     )
     def get(self, request):
         user = request.user
-        # ۱. پیدا کردن آیدی گروه‌هایی که کاربر عضو آن‌هاست
-        user_groups = UserGroup.objects.filter(user=user).values_list('group_id', flat=True)
+        is_admin = (
+            user.role is not None and
+            user.role.code in ['admin', 'super_admin']
+        )
+        if is_admin or user.is_superuser:
+            domains = Domain.objects.all()
+        else:
+            user_groups = UserGroup.objects.filter(user=user).values_list('group_id', flat=True)
 
-        # ۲. فیلتر ترکیبی: دامنه‌های عضو گروه‌های کاربر "یا" دامنه‌های فاقد گروه (عمومی)
-        domains = Domain.objects.filter(
-            Q(group_id__in=user_groups) | Q(group_id__isnull=True)
-        ).distinct()
-
+            domains =Domain.objects.filter(
+                Q(group_id__in=user_groups) |
+                Q(group_id = None)
+            ).distinct()
         serializer = DomainRegisterSerializer(domains, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data , status=status.HTTP_200_OK)
 
 #3 create tags
 class CreatTag(APIView):
