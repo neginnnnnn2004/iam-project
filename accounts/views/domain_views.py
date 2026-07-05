@@ -20,20 +20,32 @@ class ImportDomain(APIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
     @swagger_auto_schema(
-        operation_description="اضافه کردن دامنه",
+        operation_description="""
+        اضافه کردن دامنه
+        
+        کدهای اختصاصی:
+        - code 10: اطلاعات ارسالی (نام دامنه یا آیدی گروه) ناقص یا نامعتبر است.
+        """,
         request_body= DomainRegisterSerializer,
         responses={
             201: DomainRegisterSerializer,
-            400: "Bad Request"
+            400: "Bad Request (Code 10)",
+            401: "Unauthorized",
+            403: "Forbidden",
         }
     )
 
     def post(self, request):
         serializer = DomainRegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(created_by=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not serializer.is_valid():
+            return Response({
+                "error_code": 10,
+                "message": "اطلاعات ارسالی برای ایمپورت دامنه معتبر نیست.",
+                "detail": serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        domain = serializer.save()
+        return Response(DomainRegisterSerializer(domain).data, status=status.HTTP_201_CREATED)
 
 #2 list of all domains
 class DomainDetail(APIView):
@@ -70,19 +82,31 @@ class CreatTag(APIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
     @swagger_auto_schema(
-        operation_description="ساخت تگ",
-        request_body= TagRegisterSerializer,
+        operation_description="""
+            ایجاد گروه جدید
+
+            کدهای خطای اختصاصی :
+            - code 10: اطلاعات ارسالی ناقص یا اشتباه است.
+            """,
+        request_body=TagRegisterSerializer,
         responses={
-            201: TagRegisterSerializer,
-            400: "Bad Request",
+            201: TagRegisterSerializer(),
+            400: "Bad Request (Code 10)",
+            401: "Unauthorized",
+            403: "Forbidden",
         }
     )
     def post(self, request):
         serializer = TagRegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(created_by=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not serializer.is_valid():
+            return Response({
+                "error_code": 10,
+                "message": "اطلاعات ارسالی برای ایجاد تگ معتبر نیست.",
+                "detail": serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        tag = serializer.save(created_by=request.user)
+        return Response(TagRegisterSerializer(tag).data, status=status.HTTP_201_CREATED)
 
 #4 list of all tags
 class TagDetail(APIView):
@@ -103,17 +127,23 @@ class TagDetail(APIView):
         return Response(serializer.data , status=status.HTTP_200_OK)
 
 
-#5 Assign a tag to domain by a user
+# 5 Assign a tag to domain by a user
 class AssignTagToDomain(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_description="انتساب تگ به دامنه/دامنه های مورد نظر",
+        operation_description="""
+        انتساب تگ/تگ ها به دامنه‌های موجود
+
+        کدهای خطای اختصاصی :
+        - code 10: اطلاعات ارسالی ناقص یا فرمت آرایه اشتباه است.
+        - code 60: یک یا چند دامنه از قبل دارای تگ هستند .
+        """,
         request_body=UserDomainTagSerializer(many=True),
         responses={
             201: UserDomainTagSerializer(many=True),
-            400: "Bad Request",
-            409: "Conflict",
+            400: "Bad Request (Code 10)",
+            409: "Conflict (Code 60)",
         }
     )
     def post(self, request):
@@ -123,7 +153,11 @@ class AssignTagToDomain(APIView):
             many=True
         )
         if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "error_code": 10,
+                "message": "اطلاعات ارسالی برای ثبت تگ‌ها معتبر نیست.",
+                "detail": serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         user = request.user
         items_to_create = []
@@ -142,8 +176,9 @@ class AssignTagToDomain(APIView):
         if conflicts:
             return Response(
                 {
-                    "detail": "یک یا تعدادی از دامنه‌ها از قبل دارای تگ هستند. عملیات متوقف شد.",
-                    "conflicts": conflicts,
+                    "error_code": 60,
+                    "message": "یک یا تعدادی از دامنه‌ها از قبل دارای تگ هستند. عملیات متوقف شد.",
+                    "detail": {"conflicts": conflicts},
                 },
                 status=status.HTTP_409_CONFLICT
             )
@@ -153,20 +188,27 @@ class AssignTagToDomain(APIView):
 
         return Response(
             {
-                "detail": f"تعداد {len(items_to_create)} تگ با موفقیت برای دامنه‌ها ثبت شد.",
+                "message": f"تعداد {len(items_to_create)} تگ با موفقیت برای دامنه‌ها ثبت شد.",
                 "data": UserDomainTagSerializer(items_to_create, many=True).data
             },
             status=status.HTTP_201_CREATED
         )
 
     @swagger_auto_schema(
-        operation_description="ویرایش تگ یک دامنه/چند تا تگ با تایید کاربر",
+        operation_description="""
+        ویرایش دسته‌جمعی تگ دامنه‌ها با مکانیزم confirm
+
+        کدهای خطای اختصاصی :
+        - code 10: اطلاعات ارسالی ناقص یا فرمت آرایه اشتباه است.
+        - code 61: دامنه‌ای جهت ویرایش فرستاده شده که از قبل تگی ندارد.
+        - code 21: تغییر تگ دامنه‌ها نیاز به تایید نهایی کاربر دارد.
+        """,
         request_body=UserDomainTagPatchSerializer(many=True),
         responses={
             200: UserDomainTagSerializer(many=True),
-            400: "Bad Request",
-            404: "Not Found",
-            409: "Conflict",
+            400: "Bad Request (Code 10)",
+            404: "Not Found (Code 61)",
+            409: "Conflict (Code 21)",
         }
     )
     def patch(self, request):
@@ -176,7 +218,11 @@ class AssignTagToDomain(APIView):
             many=True
         )
         if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "error_code": 10,
+                "message": "اطلاعات ارسالی برای ویرایش تگ‌ها معتبر نیست.",
+                "detail": serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         user = request.user
         requires_confirm_list = []
@@ -209,8 +255,9 @@ class AssignTagToDomain(APIView):
         if not_found_domains:
             return Response(
                 {
-                    "detail": "برای دامنه‌های زیر تگی ثبت نشده است که مایل به تغییر آن باشید:",
-                    "domains": not_found_domains
+                    "error_code": 61,
+                    "message": "برای دامنه‌های زیر تگی ثبت نشده است که مایل به تغییر آن باشید?.",
+                    "detail": {"domains": not_found_domains}
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
@@ -218,9 +265,12 @@ class AssignTagToDomain(APIView):
         if requires_confirm_list:
             return Response(
                 {
-                    "detail": "تغییر تگ برای دامنه‌های زیر نیاز به تایید نهایی دارد.",
-                    "requires_confirmation": True,
-                    "conflicts": requires_confirm_list
+                    "error_code": 21,
+                    "message": "تغییر تگ برای دامنه‌های زیر نیاز به تایید نهایی دارد.",
+                    "detail": {
+                        "requires_confirmation": True,
+                        "conflicts": requires_confirm_list
+                    }
                 },
                 status=status.HTTP_409_CONFLICT
             )
@@ -232,7 +282,7 @@ class AssignTagToDomain(APIView):
 
         return Response(
             {
-                "detail": f"تعداد {len(records_to_update)} تگ با موفقیت به‌روزرسانی شد.",
+                "message": f"تعداد {len(records_to_update)} تگ با موفقیت به‌روزرسانی شد.",
                 "data": UserDomainTagSerializer(records_to_update, many=True).data
             },
             status=status.HTTP_200_OK
