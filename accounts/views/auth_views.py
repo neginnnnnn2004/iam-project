@@ -19,13 +19,14 @@ class UserRegisterView(APIView):
         ثبت نام کاربر جدید
 
         کدهای خطای اختصاصی  :
-        - code 10: اطلاعات ارسالی (فرمت نام کاربری یا پسورد) ناقص یا اشتباه است.
-        - code 11: نام کاربری تکراری است.
+        - code 10: اطلاعات ارسالی (فرمت نام کاربری یا پسورد) اشتباه است.
+        - code 11: نام کاربری تکراری است .
+        - code 12: یک یا چند فیلدِ اجباری، اصلاً فرستاده نشده‌اند یا خالی ارسال شده‌اند.
         """,
         request_body=UserRegisterSerializer,
         responses={
             201: UserRegisterSerializer,
-            400: "Bad Request(Code 10 or 11)",
+            400: "Bad Request(Code 10 or 11 or 12)",
         }
     )
     def post(self, request):
@@ -34,14 +35,21 @@ class UserRegisterView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        error_code = 11 if 'username' in serializer.errors else 10
+        errors = serializer.errors
+        error_code = 10
+
+        error_string = str(errors)
+
+        if 'required' in error_string or 'blank' in error_string:
+            error_code = 12
+        elif 'unique' in error_string and 'username' in errors:
+            error_code = 11
 
         return Response({
             "error_code": error_code,
             "message": "ثبت نام با خطا مواجه شد. لطفاً ورودی‌ها را بررسی کنید.",
-            'detail': serializer.errors
+            'detail': errors
         }, status=status.HTTP_400_BAD_REQUEST)
-
 
 # 2 Login
 class UserLoginView(APIView):
@@ -51,7 +59,7 @@ class UserLoginView(APIView):
 
         کدهای خطای اختصاصی :
         - code 10: اطلاعات ارسالی (فرمت نام کاربری یا پسورد) ناقص یا اشتباه است.
-        - code 12: نام کاربری یا رمز عبور در دیتابیس مطابقت ندارد.
+        - code 13: نام کاربری یا رمز عبور در دیتابیس مطابقت ندارد.
         """,
         request_body=UserLoginSerializer,
         responses={
@@ -65,7 +73,7 @@ class UserLoginView(APIView):
                     }
                 )
             ),
-            401: "Unauthorized (Code 12)",
+            401: "Unauthorized (Code 13)",
             400: "Bad Request (Code 10)",
         }
     )
@@ -87,7 +95,7 @@ class UserLoginView(APIView):
         # if user not found
         if user is None:
             return Response({
-                "error_code": 12,
+                "error_code": 13,
                 "message": "نام کاربری یا رمز عبور اشتباه است.",
                 "detail": None
             }, status=status.HTTP_401_UNAUTHORIZED
