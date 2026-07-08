@@ -7,5 +7,5 @@ class IsAdminRole(BasePermission):
             request.user.is_authenticated and
             hasattr(request.user, 'role') and
             request.user.role is not None and
-            request.user.role.code == 'admin'
+            request.user.role.code in ['admin', 'super_admin']
         )

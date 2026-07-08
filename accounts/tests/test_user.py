@@ -20,14 +20,14 @@ class AdminUserManagmentTest(APITestCase):
             is_system = True,
         )
 
-        self.regular_role = Role.objects.create(
+        self.limited_role= Role.objects.create(
             code='limited',
             title='کاربر محدود شده ',
             level = 20 ,
             is_system = True,
         )
 
-        self.limited_role = Role.objects.create(
+        self.regular_role = Role.objects.create(
             code='regular',
             title='کاربر معمولی',
             level = 20 ,
