@@ -56,7 +56,6 @@ class DomainDetail(APIView):
         responses={
             200: DomainRegisterSerializer(many=True),
             401: "Unauthorized",
-            403: "Forbidden",
         }
     )
     def get(self, request):
@@ -78,12 +77,12 @@ class DomainDetail(APIView):
         return Response(serializer.data , status=status.HTTP_200_OK)
 
 #3 create tags
-class CreatTag(APIView):
+class CreateTag(APIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
     @swagger_auto_schema(
         operation_description="""
-            ایجاد گروه جدید
+            ایجاد تگ جدید
 
             کدهای خطای اختصاصی :
             - code 10: اطلاعات ارسالی ناقص یا اشتباه است.
@@ -117,7 +116,6 @@ class TagDetail(APIView):
         responses={
             200: TagRegisterSerializer(many=True),
             401: "Unauthorized",
-            403: "Forbidden",
         }
     )
 
@@ -143,6 +141,7 @@ class AssignTagToDomain(APIView):
         responses={
             201: UserDomainTagSerializer(many=True),
             400: "Bad Request (Code 10)",
+            401: "Unauthorized",
             409: "Conflict (Code 60)",
         }
     )

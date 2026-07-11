@@ -20,7 +20,7 @@ urlpatterns = [
 
     path('domain-register/', domain_views.ImportDomain.as_view(), name='domain-register'),
     path('listOfDomains/', domain_views.DomainDetail.as_view(), name='list-of-domains'),
-    path('tag-register/', domain_views.CreatTag.as_view(), name='tag-register'),
+    path('tag-register/', domain_views.CreateTag.as_view(), name='tag-register'),
     path('listOfTags/', domain_views.TagDetail.as_view(), name='list-of-tags'),
     path('assign-a-tag/', domain_views.AssignTagToDomain.as_view(), name='assign-a-tag'),
 ]

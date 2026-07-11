@@ -5,7 +5,7 @@ from accounts.models import User, Role, Group, UserGroup
 
 class GroupUserManagmentTest(APITestCase):
     def setUp(self):
-        # create roles
+        # create_roles
         self.admin_role = Role.objects.create(
             code='admin',
             title='ادمین',
@@ -49,6 +49,7 @@ class GroupUserManagmentTest(APITestCase):
             phone="+989444444444",
             status="pending"
         )
+        # create_group
         self.sample_group = Group.objects.create(
             title="development team",
             description="System programmers group",
@@ -142,7 +143,7 @@ class GroupUserManagmentTest(APITestCase):
 
         self.sample_group.refresh_from_db()
         self.assertIsNotNone(self.sample_group.deleted_at)
-        
+
     def test_assign_user_to_group_success(self):
         self.client.force_authenticate(user=self.admin_user)
         data = {
