@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import user_views, auth_views, group_views, domain_views
+from .views import user_views, auth_views, group_views, domain_views, reset_pass_views
 
 urlpatterns = [
     path('register/', auth_views.UserRegisterView.as_view(), name='user-register'),
@@ -23,4 +23,6 @@ urlpatterns = [
     path('tag-register/', domain_views.CreateTag.as_view(), name='tag-register'),
     path('listOfTags/', domain_views.TagDetail.as_view(), name='list-of-tags'),
     path('assign-a-tag/', domain_views.AssignTagToDomain.as_view(), name='assign-a-tag'),
-]
+
+    path('password-reset/request/', reset_pass_views.PasswordResetRequestView.as_view(), name='password-reset_request'),
+    path('password-reset/confirm/', reset_pass_views.PasswordResetConfirmView.as_view(), name='password-reset-confirm'),]
