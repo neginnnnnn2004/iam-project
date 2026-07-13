@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import User, Role
+from identity.models import User, Role
 
 class ListOfUsersSerializer(serializers.ModelSerializer):
     class Meta:

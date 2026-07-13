@@ -1,7 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from accounts.models import User, Role, Group, UserGroup
+from identity.models import User, Role, Group, UserGroup
 
 class GroupUserManagmentTest(APITestCase):
     def setUp(self):

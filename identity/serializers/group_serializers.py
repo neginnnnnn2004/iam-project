@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import Group, UserGroup
+from identity.models import Group, UserGroup
 
 class ListOfGroupsSerializer(serializers.ModelSerializer):
     class Meta:

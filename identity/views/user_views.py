@@ -5,10 +5,10 @@ from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 from rest_framework.views import APIView
 
-from accounts.models import User, Role
-from accounts.permissions import IsAdminRole
+from identity.models import User, Role
+from identity.permissions import IsAdminRole
 
-from accounts.serializers.user_serializers import (ListOfUsersSerializer,UserRoleUpdateSerializer,listOfRoleSerializer,UserStatusUpdateSerializer ,UserActivationSerializer)
+from identity.serializers.user_serializers import (ListOfUsersSerializer,UserRoleUpdateSerializer,listOfRoleSerializer,UserStatusUpdateSerializer ,UserActivationSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi

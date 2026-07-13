@@ -1,7 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from accounts.models import User
+from identity.models import User
 
 class UserRegisterTest(APITestCase):
     def setUp(self):

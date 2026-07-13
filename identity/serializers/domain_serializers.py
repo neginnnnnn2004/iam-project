@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import Domain, Tag, User_Domain_Tag
+from identity.models import Domain, Tag, User_Domain_Tag
 
 class DomainRegisterSerializer(serializers.ModelSerializer):
     class Meta:

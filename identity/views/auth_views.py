@@ -6,7 +6,7 @@ from rest_framework import status
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
-from accounts.serializers.auth_serializers import (UserRegisterSerializer,UserLoginSerializer,ProfileUpdateSerializer,ProfileUpdateResponseSerializer)
+from identity.serializers.auth_serializers import (UserRegisterSerializer,UserLoginSerializer,ProfileUpdateSerializer,ProfileUpdateResponseSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi

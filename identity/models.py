@@ -93,7 +93,7 @@ class Group(models.Model):
     is_active = models.BooleanField(default=True)
 
     assigned_by = models.ForeignKey(
-        'accounts.User',
+        'identity.User',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -135,7 +135,7 @@ class UserGroup(models.Model):
         related_name='group_memberships'
     )
     assigned_by = models.ForeignKey(
-        'accounts.User',
+        'identity.User',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

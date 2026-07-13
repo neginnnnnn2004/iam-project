@@ -1,7 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from accounts.models import User, Role, Group, UserGroup, Domain, Tag, User_Domain_Tag
+from identity.models import User, Role, Group, UserGroup, Domain, Tag, User_Domain_Tag
 
 class DomainTest(APITestCase):
     def setUp(self):

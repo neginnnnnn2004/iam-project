@@ -6,9 +6,9 @@ from django.db import transaction
 from django.db.models import Q
 from rest_framework.views import APIView
 
-from accounts.models import UserGroup, Domain, Tag, User_Domain_Tag
-from accounts.permissions import IsAdminRole
-from accounts.serializers.domain_serializers import (DomainRegisterSerializer ,
+from identity.models import UserGroup, Domain, Tag, User_Domain_Tag
+from identity.permissions import IsAdminRole
+from identity.serializers.domain_serializers import (DomainRegisterSerializer ,
                                                      TagRegisterSerializer ,
                                                      UserDomainTagSerializer ,
                                                      UserDomainTagPatchSerializer)

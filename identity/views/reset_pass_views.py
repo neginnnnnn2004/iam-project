@@ -4,9 +4,9 @@ from rest_framework import status
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 
-from accounts.models import User as CustomUser
-from accounts.utils import generate_reset_token, verify_reset_token
-# from accounts.models import User
+from identity.models import User as CustomUser
+from identity.utils import generate_reset_token, verify_reset_token
+# from identity.models import User
 User = get_user_model()
 
 class PasswordResetRequestView(APIView):

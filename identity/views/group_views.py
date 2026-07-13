@@ -5,10 +5,10 @@ from rest_framework import status
 
 from django.utils import timezone
 from rest_framework.views import APIView
-from accounts.models import  Group, UserGroup
+from identity.models import  Group, UserGroup
 
-from accounts.permissions import IsAdminRole
-from accounts.serializers.group_serializers import (ListOfGroupsSerializer,UserGroupSerializer,GroupSerializer,GroupCreateSerializer ,GroupResponseSerializer)
+from identity.permissions import IsAdminRole
+from identity.serializers.group_serializers import (ListOfGroupsSerializer,UserGroupSerializer,GroupSerializer,GroupCreateSerializer ,GroupResponseSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
