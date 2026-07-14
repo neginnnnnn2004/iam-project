@@ -15,6 +15,8 @@ from drf_yasg import openapi
 
 #1 ListOfAllUsers
 class ListOfUsersView(APIView):
+    permission_classes = [IsAuthenticated,IsAdminRole]
+
     @swagger_auto_schema(
         operation_description="دریافت لیست تمام کاربران",
         responses={200:ListOfUsersSerializer(many=True)}
