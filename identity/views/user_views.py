@@ -19,7 +19,12 @@ class ListOfUsersView(APIView):
 
     @swagger_auto_schema(
         operation_description="دریافت لیست تمام کاربران",
-        responses={200:ListOfUsersSerializer(many=True)}
+        responses={
+            200:ListOfUsersSerializer(many=True),
+            401: "Unauthorized",
+            403: "Forbidden",
+        }
+
     )
     def get(self,request):
         users = User.objects.all()
