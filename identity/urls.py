@@ -24,5 +24,5 @@ urlpatterns = [
     path('listOfTags/', domain_views.TagDetail.as_view(), name='list-of-tags'),
     path('assign-a-tag/', domain_views.AssignTagToDomain.as_view(), name='assign-a-tag'),
 
-    path('password-reset/request/', reset_pass_views.PasswordResetRequestView.as_view(), name='password-reset_request'),
-    path('password-reset/confirm/', reset_pass_views.PasswordResetConfirmView.as_view(), name='password-reset-confirm'),]
+    path('password-reset/confirm/', reset_pass_views.PasswordResetWithBackupCodeView.as_view(),name='password_reset_confirm'),
+    ]

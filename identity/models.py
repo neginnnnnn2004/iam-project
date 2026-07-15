@@ -240,3 +240,17 @@ class User_Domain_Tag(models.Model):
         ]
     def __str__(self):
         return f"{self.user} - {self.domain} - {self.tag}"
+
+class Backup_Code(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='backup_codes'
+    )
+    hash_code = models.CharField(max_length=255)
+    is_used = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Backup Code for {self.user.username} - Used: {self.is_used}"

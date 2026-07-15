@@ -11,12 +11,13 @@ from identity.serializers.auth_serializers import (UserRegisterSerializer,UserLo
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
+from identity.utils import create_user_backup_codes
 
 # 1 registration
 class UserRegisterView(APIView):
     @swagger_auto_schema(
         operation_description="""
-        ثبت نام کاربر جدید
+        ثبت نام کاربر جدید و دریافت کدهای پشتیبان یک‌بار مصرف
 
         کدهای خطای اختصاصی  :
         - code 10: اطلاعات ارسالی (فرمت نام کاربری یا پسورد) اشتباه است.
@@ -25,19 +26,38 @@ class UserRegisterView(APIView):
         """,
         request_body=UserRegisterSerializer,
         responses={
-            201: UserRegisterSerializer,
-            400: "Bad Request(Code 10 or 11 or 12)",
+            201: openapi.Response(
+                description="User created successfully",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        "message": openapi.Schema(type=openapi.TYPE_STRING),
+                        "user": openapi.Schema(type=openapi.TYPE_OBJECT),
+                        "backup_codes": openapi.Schema(
+                            type=openapi.TYPE_ARRAY,
+                            items=openapi.Schema(type=openapi.TYPE_STRING)
+                        ),
+                    }
+                )
+            ),
+            400: "Bad Request (Code 10 or 11 or 12)",
         }
     )
     def post(self, request):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            user = serializer.save()
+
+            raw_codes = create_user_backup_codes(user, count=8)
+
+            return Response({
+                "message": "ثبت نام شما با موفقیت انجام شد. لطفاً کدهای پشتیبان خود را در جایی امن ذخیره کنید.",
+                "user": serializer.data,
+                "backup_codes": raw_codes
+            }, status=status.HTTP_201_CREATED)
 
         errors = serializer.errors
         error_code = 10
-
         error_string = str(errors)
 
         if 'required' in error_string or 'blank' in error_string:
