@@ -1,5 +1,4 @@
 import secrets
-import string
 from django.contrib.auth.hashers import make_password, check_password
 from identity.models import Backup_Code
 
