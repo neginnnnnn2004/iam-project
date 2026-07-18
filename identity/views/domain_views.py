@@ -15,28 +15,26 @@ from identity.serializers.domain_serializers import (DomainRegisterSerializer ,
 
 from drf_yasg.utils import swagger_auto_schema
 
-#1 import domain by admin
+
+# 1 import and update domain by admin (Bulk Enabled)
 class ImportDomain(APIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
     @swagger_auto_schema(
         operation_description="""
-        اضافه کردن دامنه
-        
-        کدهای اختصاصی:
-        - code 10: اطلاعات ارسالی (نام دامنه یا آیدی گروه) ناقص یا نامعتبر است.
+        اضافه کردن دسته‌جمعی دامنه‌ها (Bulk Import)
         """,
-        request_body= DomainRegisterSerializer,
+        request_body=DomainRegisterSerializer(many=True),
         responses={
-            201: DomainRegisterSerializer,
-            400: "Bad Request (Code 10)",
-            401: "Unauthorized",
-            403: "Forbidden",
+            201: DomainRegisterSerializer(many=True),
+            400: "Bad Request (Code 10)"
         }
     )
-
     def post(self, request):
-        serializer = DomainRegisterSerializer(data=request.data)
+        data = request.data
+        is_many = isinstance(data, list)
+        serializer = DomainRegisterSerializer(data=data, many=is_many)
+
         if not serializer.is_valid():
             return Response({
                 "error_code": 10,
@@ -44,8 +42,88 @@ class ImportDomain(APIView):
                 "detail": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        domain = serializer.save()
-        return Response(DomainRegisterSerializer(domain).data, status=status.HTTP_201_CREATED)
+        if is_many:
+            domains_to_create = []
+            for validated_data in serializer.validated_data:
+                groups = validated_data.pop('group_id', [])
+                domain_instance = Domain(**validated_data)
+                domains_to_create.append((domain_instance, groups))
+
+            with transaction.atomic():
+                created_instances = Domain.objects.bulk_create(
+                    [item[0] for item in domains_to_create]
+                )
+                for instance, groups in zip(created_instances, [item[1] for item in domains_to_create]):
+                    if groups:
+                        instance.group_id.set(groups)
+
+            return Response(
+                DomainRegisterSerializer(created_instances, many=True).data,
+                status=status.HTTP_201_CREATED
+            )
+        else:
+            domain = serializer.save()
+            return Response(DomainRegisterSerializer(domain).data, status=status.HTTP_201_CREATED)
+
+    @swagger_auto_schema(
+        operation_description="""
+        ویرایش دسته‌جمعی مشخصات دامنه‌ها و گروه‌های آن‌ها
+
+        در بدنه درخواست باید برای هر دامنه، شناسه 'id' آن ارسال شود.
+        """,
+        request_body=DomainRegisterSerializer(many=True),
+        responses={
+            200: "Domains updated successfully",
+            400: "Bad Request (Code 10)"
+        }
+    )
+    def put(self, request):
+        data = request.data
+        if not isinstance(data, list):
+            return Response({
+                "error_code": 10,
+                "message": "فرمت داده‌ها باید به صورت یک آرایه (لیست) باشد."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        updated_domains = []
+        errors = {}
+
+        with transaction.atomic():
+            for index, item in enumerate(data):
+                domain_id = item.get('id')
+                if not domain_id:
+                    errors[f"item_{index}"] = "ارسال فیلد id برای ویرایش الزامی است."
+                    continue
+
+                try:
+                    domain_instance = Domain.objects.get(id=domain_id)
+                except Domain.DoesNotExist:
+                    errors[f"item_{index}"] = f"دامنه با شناسه {domain_id} یافت نشد."
+                    continue
+
+                serializer = DomainRegisterSerializer(domain_instance, data=item, partial=True)
+                if not serializer.is_valid():
+                    errors[f"item_{index}"] = serializer.errors
+                    continue
+
+                updated_instance = serializer.save()
+                updated_domains.append(updated_instance)
+
+        if errors:
+            transaction.set_rollback(True)
+            return Response({
+                "error_code": 10,
+                "message": "برخی از اطلاعات ارسالی برای ویرایش نامعتبر هستند.",
+                "detail": errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(
+            {
+                "message": f"مشخصات تعداد {len(updated_domains)} دامنه با موفقیت بروزرسانی شد.",
+                "data": DomainRegisterSerializer(updated_domains, many=True).data
+            },
+            status=status.HTTP_200_OK
+        )
 
 #2 list of all domains
 class DomainDetail(APIView):

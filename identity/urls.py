@@ -18,7 +18,7 @@ urlpatterns = [
     path('admin/groups/<int:pk>/', group_views.GroupDetailView.as_view(), name='group_detail'),
     path('admin/users/group/', group_views.AssignUsersGroups.as_view(), name='assign-users-group'),
 
-    path('domain-register/', domain_views.ImportDomain.as_view(), name='domain-register'),
+    path('domains/import/', domain_views.ImportDomain.as_view(), name='domain-import-bulk'),
     path('listOfDomains/', domain_views.DomainDetail.as_view(), name='list-of-domains'),
     path('tag-register/', domain_views.CreateTag.as_view(), name='tag-register'),
     path('listOfTags/', domain_views.TagDetail.as_view(), name='list-of-tags'),
