@@ -8,10 +8,7 @@ from rest_framework.views import APIView
 
 from identity.models import UserGroup, Domain, Tag, User_Domain_Tag
 from identity.permissions import IsAdminRole
-from identity.serializers.domain_serializers import (DomainRegisterSerializer ,
-                                                     TagRegisterSerializer ,
-                                                     UserDomainTagSerializer ,
-                                                     UserDomainTagPatchSerializer)
+from identity.serializers.domain_serializers import (DomainRegisterSerializer ,TagRegisterSerializer ,UserDomainTagSerializer ,UserDomainTagPatchSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
 
@@ -45,7 +42,7 @@ class ImportDomain(APIView):
         if is_many:
             domains_to_create = []
             for validated_data in serializer.validated_data:
-                groups = validated_data.pop('group_id', [])
+                groups = validated_data.pop('groups', [])
                 domain_instance = Domain(**validated_data)
                 domains_to_create.append((domain_instance, groups))
 
@@ -55,7 +52,7 @@ class ImportDomain(APIView):
                 )
                 for instance, groups in zip(created_instances, [item[1] for item in domains_to_create]):
                     if groups:
-                        instance.group_id.set(groups)
+                        instance.groups.set(groups)
 
             return Response(
                 DomainRegisterSerializer(created_instances, many=True).data,
@@ -145,11 +142,11 @@ class DomainDetail(APIView):
         if is_admin or user.is_superuser:
             domains = Domain.objects.all()
         else:
-            user_groups = UserGroup.objects.filter(user=user).values_list('group_id', flat=True)
+            user_groups = UserGroup.objects.filter(user=user).values_list('groups', flat=True)
 
             domains =Domain.objects.filter(
-                Q(group_id__in=user_groups) |
-                Q(group_id = None)
+                Q(groups__in=user_groups) |
+                Q(groups = None)
             ).distinct()
         serializer = DomainRegisterSerializer(domains, many=True)
         return Response(serializer.data , status=status.HTTP_200_OK)
@@ -322,8 +319,8 @@ class AssignTagToDomain(APIView):
             if not confirm:
                 requires_confirm_list.append({
                     "domain_name": domain.domain_name,
-                    "old_tag": existing.tag.tag_title,
-                    "new_tag": new_tag.tag_title
+                    "old_tag": existing.tag.title,
+                    "new_tag": new_tag.title
                 })
             else:
                 existing.tag = new_tag
