@@ -18,11 +18,11 @@ urlpatterns = [
     path('admin/groups/<int:pk>/', group_views.GroupDetailView.as_view(), name='group_detail'),
     path('admin/users/group/', group_views.AssignUsersGroups.as_view(), name='assign-users-group'),
 
-    path('domains/import/', domain_views.ImportDomain.as_view(), name='domain-import-bulk'),
-    path('listOfDomains/', domain_views.DomainDetail.as_view(), name='list-of-domains'),
-    path('tag-register/', domain_views.CreateTag.as_view(), name='tag-register'),
-    path('listOfTags/', domain_views.TagDetail.as_view(), name='list-of-tags'),
-    path('assign-a-tag/', domain_views.AssignTagToDomain.as_view(), name='assign-a-tag'),
+    path('domains/import/', domain_views.ImportDomainView.as_view(), name='domain-import-bulk'),
+    path('listOfDomains/', domain_views.DomainDetailView.as_view(), name='list-of-domains'),
+    path('tag-register/', domain_views.CreateTagView.as_view(), name='tag-register'),
+    path('listOfTags/', domain_views.TagDetailView.as_view(), name='list-of-tags'),
+    path('assign-a-tag/', domain_views.AssignTagToDomainView.as_view(), name='assign-a-tag'),
 
     path('password-reset/confirm/', reset_pass_views.PasswordResetWithBackupCodeView.as_view(),name='password_reset_confirm'),
     ]

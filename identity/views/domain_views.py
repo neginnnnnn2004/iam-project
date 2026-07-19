@@ -14,7 +14,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 
 # 1 import and update domain by admin (Bulk Enabled)
-class ImportDomain(APIView):
+class ImportDomainView(APIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
     @swagger_auto_schema(
@@ -123,7 +123,7 @@ class ImportDomain(APIView):
         )
 
 #2 list of all domains
-class DomainDetail(APIView):
+class DomainDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
@@ -152,7 +152,7 @@ class DomainDetail(APIView):
         return Response(serializer.data , status=status.HTTP_200_OK)
 
 #3 create tags
-class CreateTag(APIView):
+class CreateTagView(APIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
     @swagger_auto_schema(
@@ -183,7 +183,7 @@ class CreateTag(APIView):
         return Response(TagRegisterSerializer(tag).data, status=status.HTTP_201_CREATED)
 
 #4 list of all tags
-class TagDetail(APIView):
+class TagDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
@@ -201,7 +201,7 @@ class TagDetail(APIView):
 
 
 # 5 Assign a tag to domain by a user
-class AssignTagToDomain(APIView):
+class AssignTagToDomainView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
