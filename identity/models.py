@@ -162,8 +162,8 @@ class UserGroup(models.Model):
 
 class Domain(models.Model):
     id = models.AutoField(primary_key=True)
-    domain_name = models.TextField(max_length=255, unique=True)
-    description = models.TextField(blank=True)
+    domain_name = models.CharField(max_length=255, unique=True)
+    description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         'User',
@@ -173,15 +173,18 @@ class Domain(models.Model):
     )
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-    group_id = models.ManyToManyField('Group')
-
+    groups = models.ManyToManyField(
+        'Group',
+        related_name='domains',
+        blank=True
+    )
     def __str__(self):
         return self.domain_name
 
 class Tag(models.Model):
     id = models.AutoField(primary_key=True)
-    tag_title = models.CharField(max_length=100)
-    tag_title_normalized = models.CharField(
+    title = models.CharField(max_length=100)
+    title_normalized = models.CharField(
         max_length=100,
         unique=True,
         editable=False,
@@ -189,7 +192,7 @@ class Tag(models.Model):
         blank=True
     )
     code = models.BigIntegerField(unique=True, editable=False)
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         'User',
@@ -203,8 +206,8 @@ class Tag(models.Model):
     class Meta:
         ordering = ['-created_at']
     def save(self, *args, **kwargs):
-        if self.tag_title:
-            self.tag_title_normalized = self.tag_title.strip().lower()
+        if self.title:
+            self.tag_title_normalized = self.title.strip().lower()
 
             hash_value = hashlib.sha256(
                 self.tag_title_normalized.encode('utf-8')
@@ -214,7 +217,7 @@ class Tag(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.tag_title
+        return self.title
 
 class User_Domain_Tag(models.Model):
     id = models.AutoField(primary_key=True)
