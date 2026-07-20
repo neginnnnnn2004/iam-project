@@ -21,9 +21,10 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-allowed_hosts = os.getenv('ALLOWED_HOSTS','')
-ALLOWED_HOSTS = allowed_hosts.split(',') if allowed_hosts else []
+# allowed_hosts = os.getenv('ALLOWED_HOSTS','')
+# ALLOWED_HOSTS = allowed_hosts.split(',') if allowed_hosts else []
 
+ALLOWED_HOSTS = ['*']
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
@@ -48,11 +49,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # <--- این خط حتماً باید اینجا باشد
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -168,3 +171,6 @@ SIMPLE_JWT = {
 # EMAIL_HOST_PASSWORD = 'vhrrvnwmfmarpajn'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+CORS_ALLOW_ALL_ORIGINS = True

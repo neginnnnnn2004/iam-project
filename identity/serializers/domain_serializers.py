@@ -2,6 +2,7 @@ from rest_framework import serializers
 from identity.models import Domain, Tag, User_Domain_Tag
 
 class DomainRegisterSerializer(serializers.ModelSerializer):
+    created_by = serializers.ReadOnlyField(source='created_by.username')
     class Meta:
         model = Domain
         fields = ['domain_name', 'description', 'created_by', 'groups']
@@ -15,6 +16,7 @@ class DomainRegisterSerializer(serializers.ModelSerializer):
         return domain
 
 class TagRegisterSerializer(serializers.ModelSerializer):
+    created_by = serializers.ReadOnlyField(source='created_by.username')
     class Meta:
         model = Tag
         fields = ['code', 'title', 'description', 'is_active', 'created_by']

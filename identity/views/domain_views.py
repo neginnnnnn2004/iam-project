@@ -13,14 +13,12 @@ from identity.serializers.domain_serializers import (DomainRegisterSerializer ,T
 from drf_yasg.utils import swagger_auto_schema
 
 
-# 1 import and update domain by admin (Bulk Enabled)
-class ImportDomainView(APIView):
+# 1 import and update domain by admin (Bulk & Single Enabled)
+class ImportOrEditDomainView(APIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
     @swagger_auto_schema(
-        operation_description="""
-        اضافه کردن دسته‌جمعی دامنه‌ها (Bulk Import)
-        """,
+        operation_description="اضافه کردن دسته‌جمعی یا تکی دامنه‌ها (Bulk/Single Import)",
         request_body=DomainRegisterSerializer(many=True),
         responses={
             201: DomainRegisterSerializer(many=True),
@@ -43,7 +41,7 @@ class ImportDomainView(APIView):
             domains_to_create = []
             for validated_data in serializer.validated_data:
                 groups = validated_data.pop('groups', [])
-                domain_instance = Domain(**validated_data)
+                domain_instance = Domain(**validated_data, created_by=request.user)
                 domains_to_create.append((domain_instance, groups))
 
             with transaction.atomic():
@@ -53,20 +51,22 @@ class ImportDomainView(APIView):
                 for instance, groups in zip(created_instances, [item[1] for item in domains_to_create]):
                     if groups:
                         instance.groups.set(groups)
+                    instance.created_by = request.user
 
             return Response(
                 DomainRegisterSerializer(created_instances, many=True).data,
                 status=status.HTTP_201_CREATED
             )
         else:
-            domain = serializer.save()
+            domain = serializer.save(created_by=request.user)
             return Response(DomainRegisterSerializer(domain).data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
         operation_description="""
-        ویرایش دسته‌جمعی مشخصات دامنه‌ها و گروه‌های آن‌ها
+        ویرایش تکی یا دسته‌جمعی مشخصات دامنه‌ها (PATCH)
 
-        در بدنه درخواست باید برای هر دامنه، شناسه 'id' آن ارسال شود.
+        - برای ویرایش تکی: یک Object ارسال کنید: {"domain_name": "a.com", "description": "new"}
+        - برای ویرایش دسته‌جمعی: یک Array ارسال کنید: [{"domain_name": "a.com", ...}, ...]
         """,
         request_body=DomainRegisterSerializer(many=True),
         responses={
@@ -74,53 +74,72 @@ class ImportDomainView(APIView):
             400: "Bad Request (Code 10)"
         }
     )
-    def put(self, request):
+    def patch(self, request):
         data = request.data
-        if not isinstance(data, list):
+
+        if isinstance(data, list):
+            updated_domains = []
+            errors = {}
+
+            with transaction.atomic():
+                for index, item in enumerate(data):
+                    domain_name = item.get('domain_name')
+                    if not domain_name:
+                        errors[f"item_{index}"] = "ارسال فیلد domain_name برای ویرایش الزامی است."
+                        continue
+
+                    try:
+                        domain_instance = Domain.objects.get(domain_name=domain_name)
+                    except Domain.DoesNotExist:
+                        errors[f"item_{index}"] = f"دامنه با نام «{domain_name}» یافت نشد."
+                        continue
+
+                    serializer = DomainRegisterSerializer(domain_instance, data=item, partial=True)
+                    if not serializer.is_valid():
+                        errors[f"item_{index}"] = serializer.errors
+                        continue
+
+                    updated_instance = serializer.save()
+                    updated_domains.append(updated_instance)
+
+            if errors:
+                transaction.set_rollback(True)
+                return Response({
+                    "error_code": 10,
+                    "message": "برخی از اطلاعات ارسالی برای ویرایش نامعتبر هستند.",
+                    "detail": errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+
             return Response({
-                "error_code": 10,
-                "message": "فرمت داده‌ها باید به صورت یک آرایه (لیست) باشد."
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-        updated_domains = []
-        errors = {}
-
-        with transaction.atomic():
-            for index, item in enumerate(data):
-                domain_id = item.get('id')
-                if not domain_id:
-                    errors[f"item_{index}"] = "ارسال فیلد id برای ویرایش الزامی است."
-                    continue
-
-                try:
-                    domain_instance = Domain.objects.get(id=domain_id)
-                except Domain.DoesNotExist:
-                    errors[f"item_{index}"] = f"دامنه با شناسه {domain_id} یافت نشد."
-                    continue
-
-                serializer = DomainRegisterSerializer(domain_instance, data=item, partial=True)
-                if not serializer.is_valid():
-                    errors[f"item_{index}"] = serializer.errors
-                    continue
-
-                updated_instance = serializer.save()
-                updated_domains.append(updated_instance)
-
-        if errors:
-            transaction.set_rollback(True)
-            return Response({
-                "error_code": 10,
-                "message": "برخی از اطلاعات ارسالی برای ویرایش نامعتبر هستند.",
-                "detail": errors
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-        return Response(
-            {
                 "message": f"مشخصات تعداد {len(updated_domains)} دامنه با موفقیت بروزرسانی شد.",
                 "data": DomainRegisterSerializer(updated_domains, many=True).data
-            },
-            status=status.HTTP_200_OK
-        )
+            }, status=status.HTTP_200_OK)
+
+        else:
+            domain_name = data.get('domain_name')
+            if not domain_name:
+                return Response({
+                    "error_code": 10,
+                    "message": "ارسال فیلد domain_name در بدنه درخواست الزامی است."
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                domain = Domain.objects.get(domain_name=domain_name)
+            except Domain.DoesNotExist:
+                return Response({
+                    "error": f"دامنه‌ای با نام «{domain_name}» یافت نشد."
+                }, status=status.HTTP_404_NOT_FOUND)
+
+            serializer = DomainRegisterSerializer(domain, data=data, partial=True)
+            if not serializer.is_valid():
+                return Response({
+                    "error_code": 10,
+                    "message": "اطلاعات ارسالی معتبر نیست.",
+                    "detail": serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            updated_domain = serializer.save()
+            return Response(DomainRegisterSerializer(updated_domain).data, status=status.HTTP_200_OK)
 
 #2 list of all domains
 class DomainDetailView(APIView):
@@ -152,7 +171,7 @@ class DomainDetailView(APIView):
         return Response(serializer.data , status=status.HTTP_200_OK)
 
 #3 create tags
-class CreateTagView(APIView):
+class CreateOrEditTagView(APIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
     @swagger_auto_schema(
@@ -182,6 +201,51 @@ class CreateTagView(APIView):
         tag = serializer.save(created_by=request.user)
         return Response(TagRegisterSerializer(tag).data, status=status.HTTP_201_CREATED)
 
+    @swagger_auto_schema(
+        operation_description="""
+                ویرایش تگ
+               کدهای خطای اختصاصی :
+               - code 10: اطلاعات ارسالی ناقص یا اشتباه است.
+               - code 55: تگ مورد نظر یافت نشد.
+
+               """,
+        request_body=TagRegisterSerializer,
+        responses={
+            200: TagRegisterSerializer(),
+            400: "Bad Request (Code 10)",
+            401: "Unauthorized",
+            403: "Forbidden",
+            404: "Not Found (Code 55)"
+        }
+    )
+    def patch(self, request):
+        tag_title = request.data.get('title')
+        if not tag_title:
+            return Response({
+            "error_code": 10,
+            "message": "ارسال فیلد title در بدنه درخواست الزامی است."
+        }, status = status.HTTP_400_BAD_REQUEST)
+        try :
+            tag = Tag.objects.get(title=tag_title)
+        except Tag.DoesNotExist:
+            return Response({
+                "error_code": 55,
+                "message": f"تگی با عنوان «{tag_title}» یافت نشد."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = TagRegisterSerializer(tag , data=request.data,partial=True)
+        if not serializer.is_valid():
+            return Response({
+                "error_code": 10,
+                "message": "اطلاعات ارسالی معتبر نیست.",
+                "detail": serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        updated_tag = serializer.save()
+        return Response(TagRegisterSerializer(updated_tag).data, status=status.HTTP_200_OK)
+
+
+
 #4 list of all tags
 class TagDetailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -207,7 +271,7 @@ class AssignTagToDomainView(APIView):
     @swagger_auto_schema(
         operation_description="""
         انتساب تگ/تگ ها به دامنه‌های موجود
-
+        توجه در قسمت title
         کدهای خطای اختصاصی :
         - code 10: اطلاعات ارسالی ناقص یا فرمت آرایه اشتباه است.
         - code 60: یک یا چند دامنه از قبل دارای تگ هستند .
