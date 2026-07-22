@@ -1,4 +1,4 @@
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MinLengthValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models import Q
@@ -30,6 +30,23 @@ class Role(models.Model):
         return self.title
 
 class User(AbstractUser):
+    username = models.CharField(
+        max_length=20,
+        unique=True,
+        validators=[
+            MinLengthValidator(5, message='Username must be at least 5 characters long.'),
+            RegexValidator(
+                regex=r'^[A-Za-z0-9_-]+$',
+                message='Username can only contain letters, numbers, underscores, and hyphens.',
+                code='invalid_username_characters'
+            ),
+            RegexValidator(
+                regex=r'^(?!\d+$)',
+                message='Username cannot consist of numbers only.',
+                code='numeric_username_not_allowed'
+            ),
+        ],
+    )
     email = models.EmailField(unique=True)
     phone = models.CharField(
         validators=[RegexValidator(regex=r'^\+?1?\d{9,15}$',)],

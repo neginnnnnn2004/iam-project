@@ -1,3 +1,5 @@
+from idlelib.iomenu import errors
+
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
 
@@ -19,10 +21,13 @@ class UserRegisterView(APIView):
         operation_description="""
         ثبت نام کاربر جدید و دریافت کدهای پشتیبان یک‌بار مصرف
 
-        کدهای خطای اختصاصی  :
+        کدهای خطای اختصاصی این اندپوینت:
         - code 10: اطلاعات ارسالی (فرمت نام کاربری یا پسورد) اشتباه است.
-        - code 11: نام کاربری تکراری است .
-        - code 12: یک یا چند فیلدِ اجباری، اصلاً فرستاده نشده‌اند یا خالی ارسال شده‌اند.
+        - code 11: نام کاربری تکراری است.
+        - code 12: یک یا چند فیلد اجباری، اصلاً فرستاده نشده‌اند یا خالی ارسال شده‌اند.
+        - code 14: رمز عبور وارد شده معتبر نیست؛ رمز عبور باید شامل حداقل ۸ کاراکتر به صورت ترکیبی از اعداد و حروف باشد، از رمزهای ساده و رایج استفاده نشود و شبیه نام کاربری یا ایمیل نباشد.
+        - code 15: با این شماره همراه قبلاً ثبت‌نام صورت گرفته است.
+        - code 16: با این آدرس ایمیل قبلاً ثبت‌نام صورت گرفته است.
         """,
         request_body=UserRegisterSerializer,
         responses={
@@ -40,7 +45,7 @@ class UserRegisterView(APIView):
                     }
                 )
             ),
-            400: "Bad Request (Code 10 or 11 or 12)",
+            400: "Bad Request (Code 10,11,12,14,15,16)",
         }
     )
     def post(self, request):
@@ -58,12 +63,28 @@ class UserRegisterView(APIView):
 
         errors = serializer.errors
         error_code = 10
-        error_string = str(errors)
 
-        if 'required' in error_string or 'blank' in error_string:
+        is_missing_required = False
+        for field, field_errors in errors.items():
+            err_str  = str(field_errors)
+            if 'required' in err_str or 'blank' in err_str or 'null' in err_str:
+                is_missing_required = True
+                break
+
+        if  is_missing_required:
             error_code = 12
-        elif 'unique' in error_string and 'username' in errors:
-            error_code = 11
+        elif 'phone' in errors:
+            error_code = 15
+        elif 'email' in errors:
+            error_code = 16
+        elif 'username' in errors:
+            err_str = str(errors['username']).lower()
+            if 'unique' in err_str or 'exist' in err_str:
+                error_code = 11
+            else:
+                error_code = 10
+        elif 'password' in errors:
+            error_code = 14
 
         return Response({
             "error_code": error_code,
@@ -145,34 +166,31 @@ class ProfileUpdateView(APIView):
                 'message': 'پروفایل با موفقیت بروزرسانی شد',
                 'data': serializer.data
             }, status=status.HTTP_200_OK)
+
+        errors = serializer.errors
+        error_code = 10
+        if 'password' in errors:
+            error_code = 14
+
         return Response({
-            "error_code": 10,
+            "error_code":  error_code,
             "message": "ویرایش اطلاعات پروفایل انجام نشد.",
-            "detail": serializer.errors
+            "detail": errors
         }, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         operation_description="""
-        بروزرسانی کامل پروفایل کاربر
-        کدهای خطای اختصاصی این اندپوینت :
-        - code 10: اطلاعات ارسالی (فرمت نام کاربری یا پسورد) ناقص یا اشتباه است.
-        """,
-        request_body=ProfileUpdateSerializer,
-        responses={
-            200: ProfileUpdateResponseSerializer,
-            401: "Unauthorized",
-            400: "Bad Request (Code 10)",
-        }
-    )
-    def put(self, request):
-        return self.update(request, partial=False)
+                بروزرسانی جزئی اطلاعات پروفایل کاربر
 
-    @swagger_auto_schema(
-        operation_description="بروزرسانی جزیی پروفایل کاربر",
+                کدهای خطای اختصاصی این اندپوینت:
+                - code 10: اطلاعات ارسالی نامعتبر یا اشتباه است.
+                - code 14: رمز عبور وارد شده معتبر نیست؛ رمز عبور باید شامل حداقل ۸ کاراکتر به صورت ترکیبی از اعداد و حروف باشد، از رمزهای ساده و رایج استفاده نشود و شبیه نام کاربری یا ایمیل نباشد.
+                """,
+
         request_body=ProfileUpdateSerializer,
         responses={
             200: ProfileUpdateResponseSerializer,
-            400: "Bad Request (Code 10)",
+            400: "Bad Request (Code 10,14)",
             401: "Unauthorized",
         }
     )

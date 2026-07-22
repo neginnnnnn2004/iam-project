@@ -9,7 +9,7 @@ class UserRegisterTest(APITestCase):
     def test_successful_register(self):
         valid_data1 = {
             'username':"samira",
-            'password':"pass1122",
+            'password':"8!4J8&kj",
             'email':"samira@test.com",
             'phone':"+989100825689",
             'first_name':"Samira",
@@ -23,7 +23,7 @@ class UserRegisterTest(APITestCase):
 
         valid_data2 = {
             'username':"alireza",
-            'password':"123456",
+            'password':"!Mp4t4)4",
             'email':"alrz@test.com",
             'phone':"+989123456789",
             'first_name':"Alireza",
@@ -44,14 +44,14 @@ class UserRegisterTest(APITestCase):
         }
         response = self.client.post(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'], 10)
+        self.assertEqual(response.data['error_code'], 16)
 
 
     def test_unsuccessful_error_code_11(self):
         User.objects.create_user(username='dara', password='old_pass')
         data = {
             'username': "dara",
-            'password': "passwd",
+            'password': "pa",
             'email': "dra@test.com",
             'phone': "+989188325689",
             'first_name': "Dara",
@@ -76,33 +76,33 @@ class LoginRegisterTest(APITestCase):
     def setUp(self):
         self.url = reverse('user-login')
     def test_successful(self):
-        User.objects.create_user(username='dara', password='pass123', email='dara@test.com',phone='+989100825689')
+        User.objects.create_user(username='dara', password='^5MN76f[', email='dara@test.com',phone='+989100825689')
         data = {
             'username':"dara",
-            'password':"pass123",
+            'password':"^5MN76f[",
         }
         response = self.client.post(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('access_token', response.data)
 
-        User.objects.create_user(username='nima', password='pass1213', email='nima@test.com',phone='+989188825689')
+        User.objects.create_user(username='nima', password='r4-0X^1~', email='nima@test.com',phone='+989188825689')
         data = {
             'username':"nima",
-            'password':"pass1213",
+            'password':"r4-0X^1~",
         }
         response = self.client.post(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('access_token', response.data)
 
     def test_unsuccessful_wrong_pass(self):
-        User.objects.create_user(username='dara', password='pass123', email='dara@test.com',phone='+989100825689')
+        User.objects.create_user(username='dara', password='5MN76f', email='dara@test.com',phone='+989100825689')
         data = {'username': "dara", 'password': "passwrong"}
         response = self.client.post(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(response.data['error_code'], 13)
 
-        User.objects.create_user(username='nima', password='pass1213', email='nima@test.com', phone='+989188825689')
-        data = {'username': "nimaa", 'password': "pass1213"}
+        User.objects.create_user(username='nima', password='r4-0X^1~', email='nima@test.com', phone='+989188825689')
+        data = {'username': "nimaa", 'password': "r4-0X^1~"}
         response = self.client.post(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(response.data['error_code'], 13)
@@ -136,7 +136,7 @@ class ProfileUpdateTest(APITestCase):
 
         self.user = User.objects.create_user(
             username='dara',
-            password='old_pass123',
+            password='^9*$0Z9p',
             first_name='Dara',
             last_name='Zamani',
         )
@@ -158,21 +158,21 @@ class ProfileUpdateTest(APITestCase):
         self.user.refresh_from_db()
         self.assertEqual(self.user.first_name, 'Dana')
 
-    def test_successful_put_update_and_password_hashing(self):
+    def test_successful_patch_update_and_password_hashing(self):
         self.client.force_authenticate(user=self.user)
         data = {
             'first_name': 'Mohammad',
             'last_name': 'Rezaei',
-            'password': 'new_secure_password123'
+            'password': 'S4=3no3='
         }
-        response = self.client.put(self.url, data, format='json')
+        response = self.client.patch(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # verification
         self.user.refresh_from_db()
         self.assertEqual(self.user.first_name, 'Mohammad')
         self.assertEqual(self.user.last_name, 'Rezaei')
-        self.assertTrue(self.user.check_password('new_secure_password123'))
+        self.assertTrue(self.user.check_password('S4=3no3='))
 
     def test_update_code_10_blank_or_whitespace_fields(self):
         self.client.force_authenticate(user=self.user)
@@ -195,4 +195,4 @@ class ProfileUpdateTest(APITestCase):
         }
         response = self.client.patch(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'], 10)
+        self.assertEqual(response.data['error_code'], 14)
