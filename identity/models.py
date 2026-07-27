@@ -11,7 +11,6 @@ class Role(models.Model):
     CODE_CHOICES = (
         ('limited','Limited'),
         ('regular','Regular'),
-        ('editor','Editor'),
         ('admin','Admin'),
         ('super_admin','Super Admin'),
     )

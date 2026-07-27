@@ -98,7 +98,7 @@ class AssignUserRoleView(APIView):
     )
 
     def patch(self,request,pk ):
-        user = User.objects.filter(pk=pk, deleted_at__isnull=True).first()
+        user = User.objects.select_related('role').filter(pk=pk, deleted_at__isnull=True).first()
         if not user:
             return Response({
                 "error_code":40,
