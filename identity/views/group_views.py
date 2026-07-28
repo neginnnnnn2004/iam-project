@@ -5,30 +5,42 @@ from rest_framework import status
 
 from django.utils import timezone
 from rest_framework.views import APIView
-from identity.models import  Group, UserGroup
+from identity.models import Group, UserGroup
 
 from identity.permissions import IsAdminRole
-from identity.serializers.group_serializers import (ListOfGroupsSerializer,UserGroupSerializer,GroupSerializer,GroupCreateSerializer ,GroupResponseSerializer)
+from identity.serializers.group_serializers import (AdminListOfGroupsSerializer,UserListOfGroupsSerializer,UserGroupSerializer,GroupSerializer,GroupCreateSerializer ,GroupResponseSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 #1 Group List
 class ListOfGroupsView(APIView):
-    permission_classes = [IsAuthenticated,IsAdminRole]
+    permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
         operation_description="دریافت لیست گروه ها",
         responses={
-            200: ListOfGroupsSerializer(many=True),
+            200: UserListOfGroupsSerializer(many=True), # or  AdminListOfGroupsSerializer
             401: "Unauthorized",
             403: "Forbidden",
         }
     )
+
     def get(self,request):
-        groups = Group.objects.all()
-        serializer = ListOfGroupsSerializer(groups, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        user = request.user
+        is_admin = (
+            user.is_superuser or
+            user.role is not None and  user.role.code in ['admin','super_admin']
+        )
+        if is_admin:
+            groups = Group.objects.all()
+            serializer = AdminListOfGroupsSerializer(groups, many=True)
+        else:
+            user_group_ids = UserGroup.objects.filter(user=user).values_list('group_id', flat=True)
+            groups=Group.objects.filter(id__in=user_group_ids).distinct()
+            serializer = UserListOfGroupsSerializer(groups, many=True)
+
+        return Response(serializer.data,status=status.HTTP_200_OK)
 
 #2 Group Create
 class GroupRegisterView(APIView):

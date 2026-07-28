@@ -1,10 +1,15 @@
 from rest_framework import serializers
 from identity.models import Group, UserGroup
 
-class ListOfGroupsSerializer(serializers.ModelSerializer):
+class AdminListOfGroupsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ['id', 'code', 'title', 'description', 'is_active']
+
+class UserListOfGroupsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id', 'title', 'description']
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:

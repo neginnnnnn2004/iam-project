@@ -31,5 +31,14 @@ def verify_and_use_backup_code(user, backup_code):
         if check_password(backup_code, code_obj.hash_code):
             code_obj.is_used = True
             code_obj.save()
-            return True
+
+            new_raw_code = generate_random_backup_code()
+            hashed_code = make_password(new_raw_code)
+            Backup_Code.objects.create(
+                user=user,
+                hash_code=hashed_code,
+                is_used=False
+            )
+            return new_raw_code
+
     return False

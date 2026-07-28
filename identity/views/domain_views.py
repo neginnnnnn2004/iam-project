@@ -150,6 +150,7 @@ class DomainDetailView(APIView):
         responses={
             200: DomainRegisterSerializer(many=True),
             401: "Unauthorized",
+            403:"Forbidden"
         }
     )
     def get(self, request):

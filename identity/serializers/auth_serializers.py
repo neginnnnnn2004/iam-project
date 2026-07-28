@@ -10,34 +10,50 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         required=True,
         style={'input_type': 'password'}
     )
+    confirm_password = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={'input_type': 'password'}
+    )
     first_name = serializers.CharField(required=False, allow_blank=True)
     last_name = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'email', 'phone', 'first_name', 'last_name')
+        fields = ('username', 'password','confirm_password', 'email', 'phone', 'first_name', 'last_name')
+
+    def validate_username(self,value):
+        username = value.lower()
+        if User.objects.filter(username=username).exists():
+            raise serializers.ValidationError("این نام کاربری قبلا ثبت شده است")
+        return username
 
     def validate_password(self, value):
         validate_password(value)
         return value
 
     def validate_email(self, value):
-        email = value.lower()
-        if User.objects.filter(email=email).exists():
-            raise serializers.ValidationError('Email already exists.')
-        return email
-
-    def validate_phone(self, value):
-        if User.objects.filter(phone=value).exists():
-            raise serializers.ValidationError("Phone already exists.")
+        if value:
+            email = value.lower()
+            if User.objects.filter(email=email).exists():
+                raise serializers.ValidationError('این آدرس ایمیل از قبل ثبت شده است.')
+            return email
         return value
 
-    def validators_username(self,value):
-        username = value.lower()
-        if User.objects.filter(username=username).exists():
-            raise serializers.ValidationError("Username already exists.")
+    def validate_phone(self, value):
+        if value and User.objects.filter(phone=value).exists():
+            raise serializers.ValidationError("این شماره همراه از قبل ثبت شده است..")
+        return value
+
+    def validate(self, attrs):
+        if attrs.get('password') != attrs.get('confirm_password'):
+            raise serializers.ValidationError({
+                "confirm_password": "رمز عبور و تکرار آن مطابقت ندارند"
+            })
+        return attrs
 
     def create(self, validated_data):
+        validated_data.pop('confirm_password', None)
         return User.objects.create_user(**validated_data)
 
 

@@ -55,6 +55,9 @@ class UserRegisterView(APIView):
             user = serializer.save()
             raw_codes = create_user_backup_codes(user, count=8)
 
+            user_data = serializer.data
+            user_data.pop('confirm_password', None)
+
             return Response({
                 "message": "ثبت نام شما با موفقیت انجام شد. لطفاً کدهای پشتیبان خود را در جایی امن ذخیره کنید.",
                 "user": serializer.data,
@@ -78,7 +81,7 @@ class UserRegisterView(APIView):
         elif 'username' in errors:
             err_str = str(errors['username']).lower()
             error_code  = 11 if ('unique' in err_str or 'exist' in err_str)else 10
-        elif 'password' in errors:
+        elif 'password' in errors or 'confirm_password' in errors or 'non_field_errors' in errors:
             error_code = 13
 
         return Response({
