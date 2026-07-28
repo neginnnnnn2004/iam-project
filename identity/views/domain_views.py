@@ -161,7 +161,7 @@ class DomainDetailView(APIView):
         if is_admin or user.is_superuser:
             domains = Domain.objects.all()
         else:
-            user_groups = UserGroup.objects.filter(user=user).values_list('groups', flat=True)
+            user_groups = UserGroup.objects.filter(user=user).values_list('group', flat=True)
 
             domains =Domain.objects.filter(
                 Q(groups__in=user_groups) |

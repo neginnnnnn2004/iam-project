@@ -1,5 +1,3 @@
-from idlelib.iomenu import errors
-
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
 
@@ -15,6 +13,9 @@ from drf_yasg import openapi
 
 from identity.utils import create_user_backup_codes
 
+from typing import Optional
+from identity.models import User
+
 # 1 registration
 class UserRegisterView(APIView):
     @swagger_auto_schema(
@@ -25,9 +26,9 @@ class UserRegisterView(APIView):
         - code 10: اطلاعات ارسالی (فرمت نام کاربری یا پسورد) اشتباه است.
         - code 11: نام کاربری تکراری است.
         - code 12: یک یا چند فیلد اجباری، اصلاً فرستاده نشده‌اند یا خالی ارسال شده‌اند.
-        - code 14: رمز عبور وارد شده معتبر نیست؛ رمز عبور باید شامل حداقل ۸ کاراکتر به صورت ترکیبی از اعداد و حروف باشد، از رمزهای ساده و رایج استفاده نشود و شبیه نام کاربری یا ایمیل نباشد.
-        - code 15: با این شماره همراه قبلاً ثبت‌نام صورت گرفته است.
-        - code 16: با این آدرس ایمیل قبلاً ثبت‌نام صورت گرفته است.
+        - code 13: رمز عبور وارد شده معتبر نیست.
+        - code 14: با این شماره همراه قبلاً ثبت‌نام صورت گرفته است.
+        - code 15: با این آدرس ایمیل قبلاً ثبت‌نام صورت گرفته است.
         """,
         request_body=UserRegisterSerializer,
         responses={
@@ -45,14 +46,13 @@ class UserRegisterView(APIView):
                     }
                 )
             ),
-            400: "Bad Request (Code 10,11,12,14,15,16)",
+            400: "Bad Request (Code 10,11,12,13,14,15)",
         }
     )
     def post(self, request):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-
             raw_codes = create_user_backup_codes(user, count=8)
 
             return Response({
@@ -64,27 +64,22 @@ class UserRegisterView(APIView):
         errors = serializer.errors
         error_code = 10
 
-        is_missing_required = False
-        for field, field_errors in errors.items():
-            err_str  = str(field_errors)
-            if 'required' in err_str or 'blank' in err_str or 'null' in err_str:
-                is_missing_required = True
-                break
+        is_missing_required = any(
+            'required' in str(err) or 'blank' in str(err) or 'null' in str(err)
+            for err in errors.values()
+        )
 
         if  is_missing_required:
             error_code = 12
         elif 'phone' in errors:
-            error_code = 15
+            error_code = 14
         elif 'email' in errors:
-            error_code = 16
+            error_code = 15
         elif 'username' in errors:
             err_str = str(errors['username']).lower()
-            if 'unique' in err_str or 'exist' in err_str:
-                error_code = 11
-            else:
-                error_code = 10
+            error_code  = 11 if ('unique' in err_str or 'exist' in err_str)else 10
         elif 'password' in errors:
-            error_code = 14
+            error_code = 13
 
         return Response({
             "error_code": error_code,
@@ -100,7 +95,8 @@ class UserLoginView(APIView):
 
         کدهای خطای اختصاصی :
         - code 10: اطلاعات ارسالی (فرمت نام کاربری یا پسورد) ناقص یا اشتباه است.
-        - code 13: نام کاربری یا رمز عبور در دیتابیس مطابقت ندارد.
+        - code 20: نام کاربری یا رمز عبور در دیتابیس مطابقت ندارد(یا کاربر حذف شده است).
+        - code 21: وضعیت کاربر غیرفعال است (Unverified, Pending, Suspended).
         """,
         request_body=UserLoginSerializer,
         responses={
@@ -114,7 +110,7 @@ class UserLoginView(APIView):
                     }
                 )
             ),
-            401: "Unauthorized (Code 13)",
+            401: "Unauthorized (Code 20 /  Code 21)",
             400: "Bad Request (Code 10)",
         }
     )
@@ -129,24 +125,53 @@ class UserLoginView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         # user authenticate with help of (authenticate method)
-        user = authenticate(
+        user : Optional[User] = authenticate(
             username=serializer.validated_data['username'],
             password=serializer.validated_data['password']
         )
         # if user not found
-        if user is None:
+        if user is None or user.status == 'deleted':
             return Response({
-                "error_code": 13,
+                "error_code": 20,
                 "message": "نام کاربری یا رمز عبور اشتباه است.",
                 "detail": None
-            }, status=status.HTTP_401_UNAUTHORIZED
-            )
+            }, status=status.HTTP_401_UNAUTHORIZED)
+
+        if user.status == 'unverified':
+            return Response({
+                "error_code": 21,
+                "message": "حساب کاربری شما توسط ادمین تایید نشده است و اجازه ورود ندارید",
+                "detail": None
+            }, status=status.HTTP_401_UNAUTHORIZED)
+
+        if user.status == 'pending':
+            return Response({
+                "error_code": 21,
+                "message": "حساب کاربری شما در انتظار بررسی است و هنوز فعال نشده است.",
+                "detail": None
+            }, status=status.HTTP_401_UNAUTHORIZED)
+
+        if user.status == 'suspended':
+            return Response({
+                "error_code": 21,
+                "message": "حساب کاربری شما مسدود شده است و اجازه ورود ندارید",
+                "detail": None
+            }, status=status.HTTP_401_UNAUTHORIZED)
+
         # create token
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            'access_token': str(refresh.access_token),
-            'refresh': str(refresh),
-        }, status=status.HTTP_200_OK)
+        elif user.status == 'active':
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'access_token': str(refresh.access_token),
+                'refresh': str(refresh),
+            }, status=status.HTTP_200_OK)
+
+        else:
+            return Response({
+                "error_code": 21,
+                "message": "وضعیت حساب کاربری شما نامعتبر است.",
+                "detail": None
+            }, status=status.HTTP_401_UNAUTHORIZED)
 
 
 # 3 ProfileUpdate
@@ -170,7 +195,7 @@ class ProfileUpdateView(APIView):
         errors = serializer.errors
         error_code = 10
         if 'password' in errors:
-            error_code = 14
+            error_code = 30
 
         return Response({
             "error_code":  error_code,
@@ -184,13 +209,16 @@ class ProfileUpdateView(APIView):
 
                 کدهای خطای اختصاصی این اندپوینت:
                 - code 10: اطلاعات ارسالی نامعتبر یا اشتباه است.
-                - code 14: رمز عبور وارد شده معتبر نیست؛ رمز عبور باید شامل حداقل ۸ کاراکتر به صورت ترکیبی از اعداد و حروف باشد، از رمزهای ساده و رایج استفاده نشود و شبیه نام کاربری یا ایمیل نباشد.
+                - code 30: رمز عبور وارد شده معتبر نیست؛ رمز عبور باید شامل حداقل ۸ کاراکتر به صورت ترکیبی از اعداد و حروف باشد، از رمزهای ساده و رایج استفاده نشود و شبیه نام کاربری یا ایمیل نباشد.
                 """,
 
         request_body=ProfileUpdateSerializer,
         responses={
-            200: ProfileUpdateResponseSerializer,
-            400: "Bad Request (Code 10,14)",
+            200: openapi.Response(
+                description="Profile update successfully",
+                schema=ProfileUpdateSerializer
+            ),
+            400: "Bad Request (Code 10,30)",
             401: "Unauthorized",
         }
     )
