@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,8 +8,8 @@ from django.db.models import Q
 from rest_framework.views import APIView
 
 from identity.models import UserGroup, Domain, Tag, User_Domain_Tag
-from identity.permissions import IsAdminRole
-from identity.serializers.domain_serializers import (DomainRegisterSerializer ,TagRegisterSerializer ,UserDomainTagSerializer ,UserDomainTagPatchSerializer)
+from identity.permissions import IsAdminRole,IsAllowedUser
+from identity.serializers.domain_serializers import (DomainRegisterSerializer ,TagRegisterSerializer ,UserDomainTagSerializer ,UserDomainTagPatchSerializer, TagListSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
 
@@ -172,7 +173,7 @@ class DomainDetailView(APIView):
         return Response(serializer.data , status=status.HTTP_200_OK)
 
 #3 create tags
-class CreateOrEditTagView(APIView):
+class TagListCreateView(APIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
     @swagger_auto_schema(
@@ -202,9 +203,19 @@ class CreateOrEditTagView(APIView):
         tag = serializer.save(created_by=request.user)
         return Response(TagRegisterSerializer(tag).data, status=status.HTTP_201_CREATED)
 
+# 4 edit or delete the tag
+class TagDetailView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminRole]
+
+    def get_object(self, pk):
+        try:
+            return Tag.objects.get(pk=pk)
+        except Tag.DoesNotExist:
+            return None
+
     @swagger_auto_schema(
         operation_description="""
-                ویرایش تگ
+ویرایش تگ بر اساس شناسه               
                کدهای خطای اختصاصی :
                - code 10: اطلاعات ارسالی ناقص یا اشتباه است.
                - code 55: تگ مورد نظر یافت نشد.
@@ -219,55 +230,74 @@ class CreateOrEditTagView(APIView):
             404: "Not Found (Code 55)"
         }
     )
-    def patch(self, request):
-        tag_title = request.data.get('title')
-        if not tag_title:
+    def patch(self, request, pk):
+        tag = self.get_object(pk)
+        if not tag:
             return Response({
-            "error_code": 10,
-            "message": "ارسال فیلد title در بدنه درخواست الزامی است."
-        }, status = status.HTTP_400_BAD_REQUEST)
-        try :
-            tag = Tag.objects.get(title=tag_title)
-        except Tag.DoesNotExist:
-            return Response({
-                "error_code": 55,
-                "message": f"تگی با عنوان «{tag_title}» یافت نشد."
-            }, status=status.HTTP_404_NOT_FOUND)
-
-        serializer = TagRegisterSerializer(tag , data=request.data,partial=True)
+            "error_code": 55,
+                "message": f"تگی با شناسه {pk} یافت نشد.",
+                }, status = status.HTTP_404_NOT_FOUND)
+        serializer = TagRegisterSerializer(tag, data=request.data,partial=True)
         if not serializer.is_valid():
             return Response({
                 "error_code": 10,
                 "message": "اطلاعات ارسالی معتبر نیست.",
                 "detail": serializer.errors
-            }, status=status.HTTP_400_BAD_REQUEST)
+            },status=status.HTTP_400_BAD_REQUEST)
 
         updated_tag = serializer.save()
         return Response(TagRegisterSerializer(updated_tag).data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        operation_description="""
+            حذف نرم تگ توسط ادمین / سوپرادمین بر اساس شناسه
+            
+            کدهای خطای اختصاصی :
+            - code 55: تگ مورد نظر یافت نشد.
+            """,
+        responses={
+            204: "No Content",
+            401: "Unauthorized",
+            403: "Forbidden",
+            404: "Not Found (Code 55)"
+        }
+    )
+    def delete(self, request,pk):
+        tag = self.get_object(pk)
+        if not tag:
+            return Response({
+                "error_code": 55,
+                "message": f"تگی با شناسه {pk} یافت نشد.",
+            },status=status.HTTP_404_NOT_FOUND)
+        tag.deleted_at = timezone.now()
+        tag.is_active = False
+        tag.save(update_fields=["is_active", 'deleted_at'])
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-#4 list of all tags
-class TagDetailView(APIView):
+
+#5 list of all tags
+class ListOfTagView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
         operation_description="لیست تمامی تگ ها",
         responses={
-            200: TagRegisterSerializer(many=True),
+            200: TagListSerializer(many=True),
             401: "Unauthorized",
         }
     )
 
     def get(self, request):
         tag = Tag.objects.all()
-        serializer = TagRegisterSerializer(tag , many=True)
+        serializer = TagListSerializer(tag , many=True)
         return Response(serializer.data , status=status.HTTP_200_OK)
 
 
-# 5 Assign a tag to domain by a user
+# 6 Assign a tag to domain by a user
 class AssignTagToDomainView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,IsAllowedUser]
 
     @swagger_auto_schema(
         operation_description="""

@@ -6,7 +6,7 @@ from django.utils import timezone
 from rest_framework.views import APIView
 
 from identity.models import User, Role
-from identity.permissions import IsAdminRole
+from identity.permissions import IsAdminRole,IsSuperAdmin
 
 from identity.serializers.user_serializers import (ListOfUsersSerializer,UserRoleUpdateSerializer,listOfRoleSerializer,UserStatusUpdateSerializer ,UserActivationSerializer)
 
@@ -68,11 +68,11 @@ class ListOfRolesView(APIView):
 
 #4 Assign a role to users by admin
 class AssignUserRoleView(APIView):
-    permission_classes = [IsAuthenticated,IsAdminRole]
+    permission_classes = [IsAuthenticated,IsSuperAdmin]
 
     @swagger_auto_schema(
         operation_description="""
-        انتساب یک نقش از نقش های موجود به کاربر مورد نظر توسط ادمین
+تغییر و انتساب نقش کاربر (ارتقا به ادمین، تنزل به کاربر عادی، تغییر مهمان به عادی) توسط سوپرادمین        
         
         کدهای خطای اختصاصی :
         - code 10: اطلاعات ارسالی ناقص یا اشتباه است.
@@ -106,6 +106,13 @@ class AssignUserRoleView(APIView):
                 "detail":None
             }, status=status.HTTP_404_NOT_FOUND)
 
+        if user == request.user:
+            return Response({
+                "error_code": 10,
+                "messages": "شما نمی‌توانید نقش خودتان را تغییر دهید.",
+                "detail": None
+            }, status=status.HTTP_400_BAD_REQUEST)
+
         serializer = UserRoleUpdateSerializer(user,data=request.data ,partial=True)
 
         if not serializer.is_valid():
@@ -127,14 +134,20 @@ class AssignUserRoleView(APIView):
 #list of status:[unverified,pending,active,suspended,deleted]
 
 class ManageUsersStatusView(APIView):
-    permission_classes = [IsAuthenticated, IsAdminRole]
+    permission_classes = [IsAuthenticated, IsSuperAdmin]
 
     def get_object(self, pk):
         return User.objects.filter(pk=pk, deleted_at__isnull=True).first()
 
     @swagger_auto_schema(
         operation_description="""
-        تغییر وضعیت کاربر توسط ادمین
+مدیریت و تغییر وضعیت کاربر توسط سوپرادمین (از جمله تایید حساب‌های کاربری در انتظار تایید)        
+        
+        کدهای وضعیت معتبر:
+        - pending: در انتظار تایید
+        - active: فعال / تایید شده 
+        - suspended: معلق
+        - unverified: تایید نشده
         
         کدهای خطای اختصاصی :
         - code 10: وضعیت ارسالی نامعتبر است.
@@ -143,7 +156,7 @@ class ManageUsersStatusView(APIView):
         request_body=UserStatusUpdateSerializer,
         responses={
             200: openapi.Response(
-                description="User status updated",
+                description="User status updated successfully",
                 schema=openapi.Schema(
                     type=openapi.TYPE_OBJECT,
                     properties={
@@ -167,6 +180,7 @@ class ManageUsersStatusView(APIView):
                 "message":"کاربر مورد نظر یافت نشد.",
                 "detail":None
             },status=status.HTTP_404_NOT_FOUND)
+
         serializer = UserStatusUpdateSerializer(user,data=request.data,partial=True)
         if not serializer.is_valid():
             return Response({
@@ -174,6 +188,7 @@ class ManageUsersStatusView(APIView):
                 "message": "وضعیت انتخاب شده برای کاربر نامعتبر است.",
                 "detail": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
+
         update_user = serializer.save()
 
         return Response({

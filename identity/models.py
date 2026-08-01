@@ -218,18 +218,22 @@ class Tag(models.Model):
         related_name='created_tags'
     )
     is_active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ['-created_at']
+
     def save(self, *args, **kwargs):
         if self.title:
-            self.tag_title_normalized = self.title.strip().lower()
+            self.title_normalized = self.title.strip().lower()
 
             hash_value = hashlib.sha256(
-                self.tag_title_normalized.encode('utf-8')
+                self.title_normalized.encode('utf-8')
             ).hexdigest()
 
-            self.code = int(hash_value[:12], 16)
+            self.code = int(hash_value[:10], 16)
+
         super().save(*args, **kwargs)
 
     def __str__(self):

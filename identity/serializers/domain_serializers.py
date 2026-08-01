@@ -15,6 +15,12 @@ class DomainRegisterSerializer(serializers.ModelSerializer):
             domain.groups.set(groups)
         return domain
 
+class TagListSerializer(serializers.ModelSerializer):
+    created_by = serializers.ReadOnlyField(source='created_by.username')
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
 class TagRegisterSerializer(serializers.ModelSerializer):
     created_by = serializers.ReadOnlyField(source='created_by.username')
     class Meta:
