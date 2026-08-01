@@ -7,7 +7,7 @@ from django.db import transaction
 from django.db.models import Q
 from rest_framework.views import APIView
 
-from identity.models import UserGroup, Domain, Tag, User_Domain_Tag
+from identity.models import UserGroup, Domain, Tag, User_Domain_Tag, Role
 from identity.permissions import IsAdminRole,IsAllowedUser
 from identity.serializers.domain_serializers import (DomainRegisterSerializer ,TagRegisterSerializer ,UserDomainTagSerializer ,UserDomainTagPatchSerializer, TagListSerializer)
 
@@ -147,8 +147,7 @@ class DomainDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_description="دریافت لیست دامنه ها",
-        responses={
+        operation_description="دریافت لیست دامنه‌ها به همراه تگ‌های مجاز و وضعیت قابلیت افزودن تگ",        responses={
             200: DomainRegisterSerializer(many=True),
             401: "Unauthorized",
             403:"Forbidden"
@@ -161,16 +160,40 @@ class DomainDetailView(APIView):
             user.role.code in ['admin', 'super_admin']
         )
         if is_admin or user.is_superuser:
-            domains = Domain.objects.all()
+            domains = Domain.objects.filter(deleted_at__isnull=True)
         else:
-            user_groups = UserGroup.objects.filter(user=user).values_list('group', flat=True)
-
+            user_groups = UserGroup.objects.filter(user=user).values_list('group_id', flat=True)
             domains =Domain.objects.filter(
-                Q(groups__in=user_groups) |
-                Q(groups = None)
+                Q(groups__in=user_groups) | Q(groups = None),
+                deleted_at__isnull=True
             ).distinct()
-        serializer = DomainRegisterSerializer(domains, many=True)
-        return Response(serializer.data , status=status.HTTP_200_OK)
+        result = []
+        for domain in domains:
+            domain_tags_qs = User_Domain_Tag.objects.filter(domain=domain).select_related('tag','user')
+
+            main_tags = [udt.tag for udt in domain_tags_qs if udt.tag.created_by and udt.tag.created_by.role and udt.tag.created_by.role.code in ['admin', 'super_admin']]
+            has_main_tag = len(main_tags) > 0
+
+            if is_admin:
+                visible_tags = [udt.tag for udt in domain_tags_qs]
+                can_add_tag = True
+            elif has_main_tag:
+                visible_tags = main_tags
+                can_add_tag = False
+            else:
+                user_tags = [udt.tag for udt in domain_tags_qs if udt.user == user]
+                visible_tags = list({t.id: t for t  in (main_tags + user_tags)}.values())
+
+                has_user_tag = any(udt.user == user for udt in domain_tags_qs)
+                can_add_tag = not has_user_tag
+
+        domain_data = DomainRegisterSerializer(domain).data
+        domain_data['tags'] = TagListSerializer(visible_tags, many=True).data
+        domain_data['can_add_tag'] = can_add_tag
+        domain_data['has_main_tag'] = has_main_tag
+
+        result.append(domain_data)
+        return Response(result, status=status.HTTP_200_OK)
 
 #3 create tags
 class TagListCreateView(APIView):
@@ -290,7 +313,7 @@ class ListOfTagView(APIView):
     )
 
     def get(self, request):
-        tag = Tag.objects.all()
+        tag = Tag.objects.filter(is_active=True,deleted_at_isnull=True)
         serializer = TagListSerializer(tag , many=True)
         return Response(serializer.data , status=status.HTTP_200_OK)
 

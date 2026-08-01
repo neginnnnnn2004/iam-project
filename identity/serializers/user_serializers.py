@@ -25,3 +25,12 @@ class UserStatusUpdateSerializer(serializers.ModelSerializer):
 
 class UserActivationSerializer(serializers.Serializer):
     is_active = serializers.BooleanField()
+
+class ListOfRoleUsersSerializer(serializers.ModelSerializer):
+    role_id = serializers.IntegerField(source='role.id', read_only=True)
+    role_code = serializers.CharField(source='role.code', read_only=True)
+    role_title = serializers.CharField(source='role.title', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'phone', 'first_name', 'last_name','role_id','role_code','role_title')

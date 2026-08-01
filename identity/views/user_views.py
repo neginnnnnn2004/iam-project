@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from identity.models import User, Role
 from identity.permissions import IsAdminRole,IsSuperAdmin
 
-from identity.serializers.user_serializers import (ListOfUsersSerializer,UserRoleUpdateSerializer,listOfRoleSerializer,UserStatusUpdateSerializer ,UserActivationSerializer)
+from identity.serializers.user_serializers import (ListOfUsersSerializer,UserRoleUpdateSerializer,listOfRoleSerializer,UserStatusUpdateSerializer ,UserActivationSerializer,ListOfRoleUsersSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -65,6 +65,21 @@ class ListOfRolesView(APIView):
         role = Role.objects.all()
         serializer = listOfRoleSerializer(role, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ReturnTheRoleOfUser(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="دریافت اطلاعات کامل و نقش کاربر لاگین شده",        responses={
+            200: ListOfRoleUsersSerializer(),
+            401: "Unauthorized",
+        }
+    )
+    def get (self, request):
+        user = request.user
+        serializer = ListOfRoleUsersSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 #4 Assign a role to users by admin
 class AssignUserRoleView(APIView):
