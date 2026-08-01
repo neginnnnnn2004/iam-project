@@ -10,6 +10,7 @@ urlpatterns = [
     path('pending/', user_views.PendingUsersView.as_view(), name='pending-users'),
     path('roles/', user_views.ListOfRolesView.as_view(), name='list-of-roles'),
     path('admin/users/<int:pk>/role/', user_views.AssignUserRoleView.as_view(), name='assign-users-role'),
+    path('me/', user_views.ReturnTheRoleOfUser.as_view(), name='user-profile-me'),
     path('admin/users/<int:pk>/status/', user_views.ManageUsersStatusView.as_view(), name='manage-user-status'),
     path('admin/users/<int:pk>/is-active/', user_views.UserActivationView.as_view(), name='is-active'),
 
