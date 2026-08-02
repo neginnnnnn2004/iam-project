@@ -174,46 +174,36 @@ class DomainDetailView(APIView):
         for domain in domains:
             domain_tags_qs = User_Domain_Tag.objects.filter(domain=domain).select_related('tag', 'user__role')
 
-            # 🟢 1. تگ‌های اصلی: تگ‌هایی که توسط یک ادمین روی دامنه ست شده‌اند
             main_tags = [
                 udt.tag for udt in domain_tags_qs
                 if udt.user and udt.user.role and udt.user.role.code in ['admin', 'super_admin']
             ]
             has_main_tag = len(main_tags) > 0
 
-            # 🟢 2. تگ‌های خودِ این کاربر جاری
             user_tags = [
                 udt.tag for udt in domain_tags_qs
                 if udt.user == user
             ]
             has_user_tag = len(user_tags) > 0
 
-            # 🟢 3. پیاده‌سازی دقیقا بر اساس نقش‌ها
             if is_admin:
-                # ادمین همه‌چیز را می‌بیند
                 visible_tags = [udt.tag for udt in domain_tags_qs]
                 can_add_tag = True
 
             elif is_limited:
-                # کاربر محدود فقط تگ‌های اصلی را می‌بیند و اجازه افزودن ندارد
                 visible_tags = main_tags
                 can_add_tag = False
 
             elif has_main_tag:
-                # اگر دامنه تگ اصلی داشته باشد، کاربر عادی فقط تگ‌های اصلی را می‌بیند
                 visible_tags = main_tags
                 can_add_tag = False
 
             else:
-                # 🎯 نیازمندی 5.11: کاربر عادی فقط تگ‌های خودش + تگ‌های اصلی را می‌بیند (نه کاربران دیگر)
-                # ترکیب تگ‌های اصلی و تگ‌های خود کاربر (بدون تکرار)
                 unique_tags_dict = {t.id: t for t in (main_tags + user_tags)}
                 visible_tags = list(unique_tags_dict.values())
 
-                # اگر کاربر قبلاً خودش رو این دامنه تگ نزده باشد، می‌تواند تگ اضافه کند
                 can_add_tag = not has_user_tag
 
-            # سریالایز و ساخت خروجی
             domain_data = DomainRegisterSerializer(domain).data
             domain_data['tags'] = TagListSerializer(visible_tags, many=True).data
             domain_data['can_add_tag'] = can_add_tag
@@ -379,7 +369,7 @@ class AssignTagToDomainView(APIView):
             return None, f"آیتم {index}: تگی با عنوان «{title}» یافت نشد یا غیرفعال است."
 
     # =========================================================================
-    # 1. POST: اختصاص و اضافه کردن تگ جدید (Bulk Create)
+    # 1. POST: add & assign new tag (Bulk Create)
     # =========================================================================
     @swagger_auto_schema(
         operation_description="افزودن دسته‌جمعی تگ‌های جدید به دامنه‌ها با domain_name و title",
@@ -403,13 +393,11 @@ class AssignTagToDomainView(APIView):
             domain_name = item.get("domain_name")
             title = item.get("title")
 
-            # 1. یافتن دامنه بر اساس نام
             domain, err = self._get_domain_by_name(domain_name, index)
             if err:
                 errors.append(err)
                 continue
 
-            # نیازمندی 5.12: عدم اجازه اضافه کردن تگ برای کاربر عادی در صورت وجود main_tag
             has_main_tag = User_Domain_Tag.objects.filter(
                 domain=domain,
                 tag__created_by__role__code__in=['admin', 'super_admin']
@@ -419,7 +407,6 @@ class AssignTagToDomainView(APIView):
                 errors.append(f"دامنه «{domain.domain_name}» دارای برچسب اصلی است و امکان افزودن برچسب جدید ندارد.")
                 continue
 
-            # 2. یافتن تگ بر اساس عنوان
             tag, err = self._get_tag_by_title(title, index)
             if err:
                 errors.append(err)
@@ -427,12 +414,10 @@ class AssignTagToDomainView(APIView):
 
             user_existing_udts = list(User_Domain_Tag.objects.filter(user=user, domain=domain))
 
-            # جلوگیری از اضافه کردن تگ تکراری
             if any(udt.tag_id == tag.id for udt in user_existing_udts):
                 errors.append(f"تگ «{tag.title}» قبلاً توسط شما برای دامنه «{domain.domain_name}» ثبت شده است.")
                 continue
 
-            # بررسی سقف تگ (ادمین: ۲ | کاربر عادی: ۱)
             max_allowed_tags = 2 if is_admin else 1
             pending_creations = pending_creations_per_domain.get(domain.id, 0)
             effective_tag_count = len(user_existing_udts) + pending_creations
@@ -454,7 +439,7 @@ class AssignTagToDomainView(APIView):
         return Response({"message": "تگ‌های جدید با موفقیت اضافه شدند."}, status=status.HTTP_200_OK)
 
     # =========================================================================
-    # 2. PATCH: ویرایش و جایگزینی تگ موجود (Bulk Update)
+    # 2. PATCH: edit & replace the current tag (Bulk Update)
     # =========================================================================
     @swagger_auto_schema(
         operation_description="ویرایش دسته‌جمعی تگ‌های دامنه‌ها بر اساس domain_name و title (نیاز به confirm برای کاربر عادی)",
@@ -479,45 +464,38 @@ class AssignTagToDomainView(APIView):
             title = item.get("title")
             confirm = item.get("confirm", False)
 
-            # 1. یافتن دامنه بر اساس نام
             domain, err = self._get_domain_by_name(domain_name, index)
             if err:
                 errors.append(err)
                 continue
 
-            # دریافت تگ‌های موجود همین کاربر برای این دامنه
             user_existing_udts = list(User_Domain_Tag.objects.filter(user=user, domain=domain))
 
             if not user_existing_udts:
                 errors.append(f"دامنه «{domain.domain_name}»: تگی برای ویرایش وجود ندارد. ابتدا تگ اضافه کنید.")
                 continue
 
-            # 🟢 تغییر اصلی در بررسی main_tag:
-            # چک می‌کنیم آیا این دامنه تگ ادمینی دارد که متعلق به یک ادمین *دیگر* باشد؟
-            # اگر خود فاطمه هم ادمین نباشد و تگ‌های ادمین روی دامنه وجود داشته باشند، بلاک می‌شود.
             has_main_tag = User_Domain_Tag.objects.filter(
                 domain=domain,
                 user__role__code__in=['admin', 'super_admin']
-            ).exclude(user=user).exists()  # 👈 exclude(user=user) اضافه شد!
+            ).exclude(user=user).exists()
 
             if has_main_tag and not is_admin:
                 errors.append(f"دامنه «{domain.domain_name}» دارای برچسب اصلی است و امکان تغییر تگ ندارد.")
                 continue
 
-            # 2. یافتن تگ جدید بر اساس عنوان
             tag, err = self._get_tag_by_title(title, index)
             if err:
                 errors.append(err)
                 continue
 
-            existing_udt = user_existing_udts[0]  # تگ فعلی کاربر
+            existing_udt = user_existing_udts[0]
 
             if existing_udt.tag_id == tag.id:
                 errors.append(
                     f"دامنه «{domain.domain_name}»: تگ انتخاب شده («{tag.title}») هم‌اکنون برای شما فعال است و تغییری ایجاد نشد.")
                 continue
 
-            # نیازمندی 5.8: دریافت تاییدیه برای ویرایش تگ کاربر عادی
             if not is_admin and not confirm:
                 requires_confirm_list.append({
                     "domain_name": domain.domain_name,
@@ -532,7 +510,6 @@ class AssignTagToDomainView(APIView):
             return Response({"error_code": 60, "message": "خطا در ویرایش تگ‌ها.", "detail": errors},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        # ارسال هشدار 409 و دریافت تاییدیه از کاربر
         if requires_confirm_list:
             return Response({
                 "error_code": 21,
@@ -549,7 +526,7 @@ class AssignTagToDomainView(APIView):
 
         return Response({"message": "ویرایش تگ‌ها با موفقیت انجام شد."}, status=status.HTTP_200_OK)
     # =========================================================================
-    # 3. DELETE: حذف تگ‌ها (Bulk Delete)
+    # 3. DELETE: delete tha tags(Bulk Delete)
     # =========================================================================
     @swagger_auto_schema(
         operation_description="حذف دسته‌جمعی تگ‌های کاربر روی دامنه‌ها بر اساس domain_name و title",
@@ -570,7 +547,6 @@ class AssignTagToDomainView(APIView):
             domain_name = item.get("domain_name")
             title = item.get("title")
 
-            # 1. یافتن دامنه بر اساس نام
             domain, err = self._get_domain_by_name(domain_name, index)
             if err:
                 errors.append(err)
@@ -581,7 +557,6 @@ class AssignTagToDomainView(APIView):
             if not user_existing_udts.exists():
                 continue
 
-            # 2. اگر title فرستاده شد، همان تگ خاص حذف می‌شود؛ در غیر این صورت کل تگ‌های کاربر روی آن دامنه
             if title:
                 tag, err = self._get_tag_by_title(title, index)
                 if err:
