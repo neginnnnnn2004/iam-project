@@ -7,9 +7,9 @@ from django.db import transaction
 from django.db.models import Q
 from rest_framework.views import APIView
 
-from identity.models import UserGroup, Domain, Tag, User_Domain_Tag, Role
+from identity.models import UserGroup, Domain, Tag, User_Domain_Tag
 from identity.permissions import IsAdminRole,IsAllowedUser
-from identity.serializers.domain_serializers import (DomainRegisterSerializer ,TagRegisterSerializer ,UserDomainTagSerializer ,UserDomainTagPatchSerializer, TagListSerializer)
+from identity.serializers.domain_serializers import (DomainRegisterSerializer ,TagRegisterSerializer ,UserDomainTagSerializer , TagListSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
 
@@ -142,58 +142,85 @@ class ImportOrEditDomainView(APIView):
             updated_domain = serializer.save()
             return Response(DomainRegisterSerializer(updated_domain).data, status=status.HTTP_200_OK)
 
-#2 list of all domains
+#2 List of All Domains with Tag Visibility Logic
 class DomainDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_description="دریافت لیست دامنه‌ها به همراه تگ‌های مجاز و وضعیت قابلیت افزودن تگ",        responses={
+        operation_description="دریافت لیست دامنه‌ها به همراه تگ‌های مجاز و وضعیت قابلیت افزودن تگ",
+        responses={
             200: DomainRegisterSerializer(many=True),
             401: "Unauthorized",
-            403:"Forbidden"
+            403: "Forbidden"
         }
     )
     def get(self, request):
         user = request.user
-        is_admin = (
-            user.role is not None and
-            user.role.code in ['admin', 'super_admin']
-        )
-        if is_admin or user.is_superuser:
+        role_code = user.role.code if user.role else None
+
+        is_admin = user.is_superuser or (role_code in ['admin', 'super_admin'])
+        is_limited = (role_code in ['limited', 'restricted'])
+
+        if is_admin:
             domains = Domain.objects.filter(deleted_at__isnull=True)
         else:
             user_groups = UserGroup.objects.filter(user=user).values_list('group_id', flat=True)
-            domains =Domain.objects.filter(
-                Q(groups__in=user_groups) | Q(groups = None),
+            domains = Domain.objects.filter(
+                Q(groups__in=user_groups) | Q(groups__isnull=True),
                 deleted_at__isnull=True
             ).distinct()
+
         result = []
         for domain in domains:
-            domain_tags_qs = User_Domain_Tag.objects.filter(domain=domain).select_related('tag','user')
+            domain_tags_qs = User_Domain_Tag.objects.filter(domain=domain).select_related('tag', 'user__role')
 
-            main_tags = [udt.tag for udt in domain_tags_qs if udt.tag.created_by and udt.tag.created_by.role and udt.tag.created_by.role.code in ['admin', 'super_admin']]
+            # 🟢 1. تگ‌های اصلی: تگ‌هایی که توسط یک ادمین روی دامنه ست شده‌اند
+            main_tags = [
+                udt.tag for udt in domain_tags_qs
+                if udt.user and udt.user.role and udt.user.role.code in ['admin', 'super_admin']
+            ]
             has_main_tag = len(main_tags) > 0
 
+            # 🟢 2. تگ‌های خودِ این کاربر جاری
+            user_tags = [
+                udt.tag for udt in domain_tags_qs
+                if udt.user == user
+            ]
+            has_user_tag = len(user_tags) > 0
+
+            # 🟢 3. پیاده‌سازی دقیقا بر اساس نقش‌ها
             if is_admin:
+                # ادمین همه‌چیز را می‌بیند
                 visible_tags = [udt.tag for udt in domain_tags_qs]
                 can_add_tag = True
-            elif has_main_tag:
+
+            elif is_limited:
+                # کاربر محدود فقط تگ‌های اصلی را می‌بیند و اجازه افزودن ندارد
                 visible_tags = main_tags
                 can_add_tag = False
-            else:
-                user_tags = [udt.tag for udt in domain_tags_qs if udt.user == user]
-                visible_tags = list({t.id: t for t  in (main_tags + user_tags)}.values())
 
-                has_user_tag = any(udt.user == user for udt in domain_tags_qs)
+            elif has_main_tag:
+                # اگر دامنه تگ اصلی داشته باشد، کاربر عادی فقط تگ‌های اصلی را می‌بیند
+                visible_tags = main_tags
+                can_add_tag = False
+
+            else:
+                # 🎯 نیازمندی 5.11: کاربر عادی فقط تگ‌های خودش + تگ‌های اصلی را می‌بیند (نه کاربران دیگر)
+                # ترکیب تگ‌های اصلی و تگ‌های خود کاربر (بدون تکرار)
+                unique_tags_dict = {t.id: t for t in (main_tags + user_tags)}
+                visible_tags = list(unique_tags_dict.values())
+
+                # اگر کاربر قبلاً خودش رو این دامنه تگ نزده باشد، می‌تواند تگ اضافه کند
                 can_add_tag = not has_user_tag
 
-        domain_data = DomainRegisterSerializer(domain).data
-        domain_data['tags'] = TagListSerializer(visible_tags, many=True).data
-        domain_data['can_add_tag'] = can_add_tag
-        domain_data['has_main_tag'] = has_main_tag
+            # سریالایز و ساخت خروجی
+            domain_data = DomainRegisterSerializer(domain).data
+            domain_data['tags'] = TagListSerializer(visible_tags, many=True).data
+            domain_data['can_add_tag'] = can_add_tag
+            domain_data['has_main_tag'] = has_main_tag
 
-        result.append(domain_data)
-        return Response(result, status=status.HTTP_200_OK)
+            result.append(domain_data)
+
 
 #3 create tags
 class TagListCreateView(APIView):
@@ -292,6 +319,7 @@ class TagDetailView(APIView):
                 "error_code": 55,
                 "message": f"تگی با شناسه {pk} یافت نشد.",
             },status=status.HTTP_404_NOT_FOUND)
+
         tag.deleted_at = timezone.now()
         tag.is_active = False
         tag.save(update_fields=["is_active", 'deleted_at'])
@@ -305,7 +333,7 @@ class ListOfTagView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_description="لیست تمامی تگ ها",
+        operation_description="لیست تمامی تگ های فعال جهت انتخاب توسط کاربر",
         responses={
             200: TagListSerializer(many=True),
             401: "Unauthorized",
@@ -313,169 +341,262 @@ class ListOfTagView(APIView):
     )
 
     def get(self, request):
-        tag = Tag.objects.filter(is_active=True,deleted_at_isnull=True)
-        serializer = TagListSerializer(tag , many=True)
+        tags= Tag.objects.filter(is_active=True,deleted_at__isnull=True).order_by('title')
+        serializer = TagListSerializer(tags , many=True)
         return Response(serializer.data , status=status.HTTP_200_OK)
 
 
-# 6 Assign a tag to domain by a user
+# 6. Assign / Update / Delete Tags Bulk Sync
 class AssignTagToDomainView(APIView):
-    permission_classes = [IsAuthenticated,IsAllowedUser]
+    permission_classes = [IsAuthenticated, IsAllowedUser]
 
+    def _check_user_access(self, user):
+        """بررسی سطح دسترسی کاربران محدود شده"""
+        role_code = user.role.code if user.role else None
+        if role_code in ['limited']:
+            return False, Response({
+                "error_code": 403,
+                "message": "کاربران محدودشده امکان افزودن، ویرایش یا حذف تگ را ندارند."
+            }, status=status.HTTP_403_FORBIDDEN)
+        return True, None
+
+    def _get_domain_by_name(self, domain_name, index):
+        """یافتن دامنه صرفاً بر اساس domain_name"""
+        if not domain_name:
+            return None, f"آیتم {index}: نام دامنه (domain_name) ارسال نشده است."
+        try:
+            return Domain.objects.get(domain_name=domain_name, deleted_at__isnull=True), None
+        except Domain.DoesNotExist:
+            return None, f"آیتم {index}: دامنه‌ای با نام «{domain_name}» یافت نشد."
+
+    def _get_tag_by_title(self, title, index):
+        """یافتن تگ صرفاً بر اساس title"""
+        if not title:
+            return None, f"آیتم {index}: عنوان تگ (title) ارسال نشده است."
+        try:
+            return Tag.objects.get(title=title, is_active=True, deleted_at__isnull=True), None
+        except Tag.DoesNotExist:
+            return None, f"آیتم {index}: تگی با عنوان «{title}» یافت نشد یا غیرفعال است."
+
+    # =========================================================================
+    # 1. POST: اختصاص و اضافه کردن تگ جدید (Bulk Create)
+    # =========================================================================
     @swagger_auto_schema(
-        operation_description="""
-        انتساب تگ/تگ ها به دامنه‌های موجود
-        توجه در قسمت title
-        کدهای خطای اختصاصی :
-        - code 10: اطلاعات ارسالی ناقص یا فرمت آرایه اشتباه است.
-        - code 60: یک یا چند دامنه از قبل دارای تگ هستند .
-        """,
+        operation_description="افزودن دسته‌جمعی تگ‌های جدید به دامنه‌ها با domain_name و title",
         request_body=UserDomainTagSerializer(many=True),
-        responses={
-            201: UserDomainTagSerializer(many=True),
-            400: "Bad Request (Code 10)",
-            401: "Unauthorized",
-            409: "Conflict (Code 60)",
-        }
+        responses={200: "تگ‌/ تگ های با موفقیت اضافه شدند.", 400: "Bad Request (Code 60)", 403: "Forbidden"}
     )
     def post(self, request):
-        serializer = UserDomainTagSerializer(
-            data=request.data,
-            context={'request': request},
-            many=True
-        )
-        if not serializer.is_valid():
-            return Response({
-                "error_code": 10,
-                "message": "اطلاعات ارسالی برای ثبت تگ‌ها معتبر نیست.",
-                "detail": serializer.errors
-            }, status=status.HTTP_400_BAD_REQUEST)
+        has_access, response = self._check_user_access(request.user)
+        if not has_access:
+            return response
 
         user = request.user
+        is_admin = user.is_superuser or (user.role.code in ['admin', 'super_admin'] if user.role else False)
+        items = request.data if isinstance(request.data, list) else [request.data]
+
         items_to_create = []
-        conflicts = []
+        errors = []
+        pending_creations_per_domain = {}
 
-        for item in serializer.validated_data:
-            domain = item["domain"]
-            tag = item["tag"]
+        for index, item in enumerate(items):
+            domain_name = item.get("domain_name")
+            title = item.get("title")
 
-            existing = User_Domain_Tag.objects.filter(user=user, domain=domain).first()
-            if existing:
-                conflicts.append(f"دامنه «{domain.domain_name}» از قبل تگ دارد.")
-            else:
-                items_to_create.append(User_Domain_Tag(user=user, domain=domain, tag=tag))
+            # 1. یافتن دامنه بر اساس نام
+            domain, err = self._get_domain_by_name(domain_name, index)
+            if err:
+                errors.append(err)
+                continue
 
-        if conflicts:
-            return Response(
-                {
-                    "error_code": 60,
-                    "message": "یک یا تعدادی از دامنه‌ها از قبل دارای تگ هستند. عملیات متوقف شد.",
-                    "detail": {"conflicts": conflicts},
-                },
-                status=status.HTTP_409_CONFLICT
-            )
+            # نیازمندی 5.12: عدم اجازه اضافه کردن تگ برای کاربر عادی در صورت وجود main_tag
+            has_main_tag = User_Domain_Tag.objects.filter(
+                domain=domain,
+                tag__created_by__role__code__in=['admin', 'super_admin']
+            ).exists()
+
+            if has_main_tag and not is_admin:
+                errors.append(f"دامنه «{domain.domain_name}» دارای برچسب اصلی است و امکان افزودن برچسب جدید ندارد.")
+                continue
+
+            # 2. یافتن تگ بر اساس عنوان
+            tag, err = self._get_tag_by_title(title, index)
+            if err:
+                errors.append(err)
+                continue
+
+            user_existing_udts = list(User_Domain_Tag.objects.filter(user=user, domain=domain))
+
+            # جلوگیری از اضافه کردن تگ تکراری
+            if any(udt.tag_id == tag.id for udt in user_existing_udts):
+                errors.append(f"تگ «{tag.title}» قبلاً توسط شما برای دامنه «{domain.domain_name}» ثبت شده است.")
+                continue
+
+            # بررسی سقف تگ (ادمین: ۲ | کاربر عادی: ۱)
+            max_allowed_tags = 2 if is_admin else 1
+            pending_creations = pending_creations_per_domain.get(domain.id, 0)
+            effective_tag_count = len(user_existing_udts) + pending_creations
+
+            if effective_tag_count >= max_allowed_tags:
+                errors.append(f"دامنه «{domain.domain_name}»: به سقف مجاز انتخاب تگ ({max_allowed_tags}) رسیده است.")
+                continue
+
+            items_to_create.append(User_Domain_Tag(user=user, domain=domain, tag=tag))
+            pending_creations_per_domain[domain.id] = pending_creations + 1
+
+        if errors:
+            return Response({"error_code": 60, "message": "خطا در افزودن تگ‌ها.", "detail": errors}, status=status.HTTP_400_BAD_REQUEST)
 
         with transaction.atomic():
-            User_Domain_Tag.objects.bulk_create(items_to_create)
+            if items_to_create:
+                User_Domain_Tag.objects.bulk_create(items_to_create)
 
-        return Response(
-            {
-                "message": f"تعداد {len(items_to_create)} تگ با موفقیت برای دامنه‌ها ثبت شد.",
-                "data": UserDomainTagSerializer(items_to_create, many=True).data
-            },
-            status=status.HTTP_201_CREATED
-        )
+        return Response({"message": "تگ‌های جدید با موفقیت اضافه شدند."}, status=status.HTTP_200_OK)
 
+    # =========================================================================
+    # 2. PATCH: ویرایش و جایگزینی تگ موجود (Bulk Update)
+    # =========================================================================
     @swagger_auto_schema(
-        operation_description="""
-        ویرایش دسته‌جمعی تگ دامنه‌ها با مکانیزم confirm
-
-        کدهای خطای اختصاصی :
-        - code 10: اطلاعات ارسالی ناقص یا فرمت آرایه اشتباه است.
-        - code 61: دامنه‌ای جهت ویرایش فرستاده شده که از قبل تگی ندارد.
-        - code 21: تغییر تگ دامنه‌ها نیاز به تایید نهایی کاربر دارد.
-        """,
-        request_body=UserDomainTagPatchSerializer(many=True),
-        responses={
-            200: UserDomainTagSerializer(many=True),
-            400: "Bad Request (Code 10)",
-            404: "Not Found (Code 61)",
-            409: "Conflict (Code 21)",
-        }
+        operation_description="ویرایش دسته‌جمعی تگ‌های دامنه‌ها بر اساس domain_name و title (نیاز به confirm برای کاربر عادی)",
+        request_body=UserDomainTagSerializer(many=True),
+        responses={200: "ویرایش با موفقیت انجام شد.", 409: "Conflict (Code 21)", 400: "Bad Request"}
     )
     def patch(self, request):
-        serializer = UserDomainTagPatchSerializer(
-            data=request.data,
-            context={'request': request},
-            many=True
-        )
-        if not serializer.is_valid():
-            return Response({
-                "error_code": 10,
-                "message": "اطلاعات ارسالی برای ویرایش تگ‌ها معتبر نیست.",
-                "detail": serializer.errors
-            }, status=status.HTTP_400_BAD_REQUEST)
+        has_access, response = self._check_user_access(request.user)
+        if not has_access:
+            return response
 
         user = request.user
-        requires_confirm_list = []
-        records_to_update = []
-        not_found_domains = []
+        is_admin = user.is_superuser or (user.role.code in ['admin', 'super_admin'] if user.role else False)
+        items = request.data if isinstance(request.data, list) else [request.data]
 
-        for item in serializer.validated_data:
-            domain = item["domain"]
-            new_tag = item["tag"]
+        requires_confirm_list = []
+        items_to_update = []
+        errors = []
+
+        for index, item in enumerate(items):
+            domain_name = item.get("domain_name")
+            title = item.get("title")
             confirm = item.get("confirm", False)
 
-            existing = User_Domain_Tag.objects.filter(user=user, domain=domain).first()
-            if not existing:
-                not_found_domains.append(domain.domain_name)
+            # 1. یافتن دامنه بر اساس نام
+            domain, err = self._get_domain_by_name(domain_name, index)
+            if err:
+                errors.append(err)
                 continue
 
-            if existing.tag == new_tag:
+            # دریافت تگ‌های موجود همین کاربر برای این دامنه
+            user_existing_udts = list(User_Domain_Tag.objects.filter(user=user, domain=domain))
+
+            if not user_existing_udts:
+                errors.append(f"دامنه «{domain.domain_name}»: تگی برای ویرایش وجود ندارد. ابتدا تگ اضافه کنید.")
                 continue
 
-            if not confirm:
+            # 🟢 تغییر اصلی در بررسی main_tag:
+            # چک می‌کنیم آیا این دامنه تگ ادمینی دارد که متعلق به یک ادمین *دیگر* باشد؟
+            # اگر خود فاطمه هم ادمین نباشد و تگ‌های ادمین روی دامنه وجود داشته باشند، بلاک می‌شود.
+            has_main_tag = User_Domain_Tag.objects.filter(
+                domain=domain,
+                user__role__code__in=['admin', 'super_admin']
+            ).exclude(user=user).exists()  # 👈 exclude(user=user) اضافه شد!
+
+            if has_main_tag and not is_admin:
+                errors.append(f"دامنه «{domain.domain_name}» دارای برچسب اصلی است و امکان تغییر تگ ندارد.")
+                continue
+
+            # 2. یافتن تگ جدید بر اساس عنوان
+            tag, err = self._get_tag_by_title(title, index)
+            if err:
+                errors.append(err)
+                continue
+
+            existing_udt = user_existing_udts[0]  # تگ فعلی کاربر
+
+            if existing_udt.tag_id == tag.id:
+                errors.append(
+                    f"دامنه «{domain.domain_name}»: تگ انتخاب شده («{tag.title}») هم‌اکنون برای شما فعال است و تغییری ایجاد نشد.")
+                continue
+
+            # نیازمندی 5.8: دریافت تاییدیه برای ویرایش تگ کاربر عادی
+            if not is_admin and not confirm:
                 requires_confirm_list.append({
                     "domain_name": domain.domain_name,
-                    "old_tag": existing.tag.title,
-                    "new_tag": new_tag.title
+                    "old_tag": existing_udt.tag.title,
+                    "new_tag": tag.title
                 })
             else:
-                existing.tag = new_tag
-                records_to_update.append(existing)
+                existing_udt.tag = tag
+                items_to_update.append(existing_udt)
 
-        if not_found_domains:
-            return Response(
-                {
-                    "error_code": 61,
-                    "message": "برای دامنه‌های زیر تگی ثبت نشده است که مایل به تغییر آن باشید?.",
-                    "detail": {"domains": not_found_domains}
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
+        if errors:
+            return Response({"error_code": 60, "message": "خطا در ویرایش تگ‌ها.", "detail": errors},
+                            status=status.HTTP_400_BAD_REQUEST)
 
+        # ارسال هشدار 409 و دریافت تاییدیه از کاربر
         if requires_confirm_list:
-            return Response(
-                {
-                    "error_code": 21,
-                    "message": "تغییر تگ برای دامنه‌های زیر نیاز به تایید نهایی دارد.",
-                    "detail": {
-                        "requires_confirmation": True,
-                        "conflicts": requires_confirm_list
-                    }
-                },
-                status=status.HTTP_409_CONFLICT
-            )
+            return Response({
+                "error_code": 21,
+                "message": "ویرایش برخی تگ‌ها نیاز به تایید نهایی دارد.",
+                "detail": {
+                    "requires_confirmation": True,
+                    "conflicts": requires_confirm_list
+                }
+            }, status=status.HTTP_409_CONFLICT)
 
-        if records_to_update:
-            with transaction.atomic():
-                for record in records_to_update:
-                    record.save(update_fields=['tag', 'updated_at'])
+        with transaction.atomic():
+            if items_to_update:
+                User_Domain_Tag.objects.bulk_update(items_to_update, fields=['tag', 'updated_at'])
 
-        return Response(
-            {
-                "message": f"تعداد {len(records_to_update)} تگ با موفقیت به‌روزرسانی شد.",
-                "data": UserDomainTagSerializer(records_to_update, many=True).data
-            },
-            status=status.HTTP_200_OK
-        )
+        return Response({"message": "ویرایش تگ‌ها با موفقیت انجام شد."}, status=status.HTTP_200_OK)
+    # =========================================================================
+    # 3. DELETE: حذف تگ‌ها (Bulk Delete)
+    # =========================================================================
+    @swagger_auto_schema(
+        operation_description="حذف دسته‌جمعی تگ‌های کاربر روی دامنه‌ها بر اساس domain_name و title",
+        request_body=UserDomainTagSerializer(many=True),
+        responses={200: "تگ‌ها با موفقیت حذف شدند.", 400: "Bad Request"}
+    )
+    def delete(self, request):
+        has_access, response = self._check_user_access(request.user)
+        if not has_access:
+            return response
+
+        user = request.user
+        items = request.data if isinstance(request.data, list) else [request.data]
+        ids_to_delete = []
+        errors = []
+
+        for index, item in enumerate(items):
+            domain_name = item.get("domain_name")
+            title = item.get("title")
+
+            # 1. یافتن دامنه بر اساس نام
+            domain, err = self._get_domain_by_name(domain_name, index)
+            if err:
+                errors.append(err)
+                continue
+
+            user_existing_udts = User_Domain_Tag.objects.filter(user=user, domain=domain)
+
+            if not user_existing_udts.exists():
+                continue
+
+            # 2. اگر title فرستاده شد، همان تگ خاص حذف می‌شود؛ در غیر این صورت کل تگ‌های کاربر روی آن دامنه
+            if title:
+                tag, err = self._get_tag_by_title(title, index)
+                if err:
+                    errors.append(err)
+                    continue
+                udts = user_existing_udts.filter(tag=tag)
+                ids_to_delete.extend(udts.values_list('id', flat=True))
+            else:
+                ids_to_delete.extend(user_existing_udts.values_list('id', flat=True))
+
+        if errors:
+            return Response({"error_code": 60, "message": "خطا در حذف تگ‌ها.", "detail": errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        with transaction.atomic():
+            if ids_to_delete:
+                User_Domain_Tag.objects.filter(id__in=ids_to_delete).delete()
+
+        return Response({"message": "تگ‌های انتخابی با موفقیت حذف شدند."}, status=status.HTTP_200_OK)

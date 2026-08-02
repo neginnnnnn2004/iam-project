@@ -259,7 +259,10 @@ class User_Domain_Tag(models.Model):
     class Meta:
         constraints = [
             # combine of user & domain should be unique
-            models.UniqueConstraint(fields=['user','domain'], name='unique_user_tag_per_domain')
+            models.UniqueConstraint(
+                fields=['user', 'domain', 'tag'],
+                name='unique_user_tag_per_domain'
+            )
         ]
     def __str__(self):
         return f"{self.user} - {self.domain} - {self.tag}"
