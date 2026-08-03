@@ -19,7 +19,7 @@ class TagListSerializer(serializers.ModelSerializer):
     created_by = serializers.ReadOnlyField(source='created_by.username')
     class Meta:
         model = Tag
-        fields = '__all__'
+        fields = ['id', 'title', 'description', 'is_active', 'created_by']
 
 class TagRegisterSerializer(serializers.ModelSerializer):
     created_by = serializers.ReadOnlyField(source='created_by.username')
@@ -44,6 +44,5 @@ class UserDomainTagSerializer(serializers.ModelSerializer):
 class UserDomainTagPatchSerializer(UserDomainTagSerializer):
     confirm = serializers.BooleanField(required=False, default=False, write_only=True)
 
-    class Meta:
-        model = UserDomainTagSerializer.Meta.model
+    class Meta(UserDomainTagSerializer.Meta):
         fields = UserDomainTagSerializer.Meta.fields + ['confirm']

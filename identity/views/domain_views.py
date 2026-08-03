@@ -1,3 +1,4 @@
+from urllib.parse import urlparse
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -9,17 +10,33 @@ from rest_framework.views import APIView
 
 from identity.models import UserGroup, Domain, Tag, User_Domain_Tag
 from identity.permissions import IsAdminRole,IsAllowedUser
-from identity.serializers.domain_serializers import (DomainRegisterSerializer ,TagRegisterSerializer ,UserDomainTagSerializer , TagListSerializer)
+from identity.serializers.domain_serializers import (DomainRegisterSerializer ,TagRegisterSerializer ,UserDomainTagSerializer , TagListSerializer,UserDomainTagPatchSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
 
+
+def extract_root_domain(url_or_domain: str) -> str:
+    url_or_domain = url_or_domain.strip().lower()
+
+    if not url_or_domain.startswith(("http://", "https://")):
+        url_or_domain = "http://" + url_or_domain
+
+    parsed = urlparse(url_or_domain)
+    domain_name = parsed.netloc or parsed.path
+
+    domain_name = domain_name.split(":")[0]
+
+    parts = domain_name.split(".")
+    if len(parts) > 2:
+        return ".".join(parts[-2:])
+    return domain_name
 
 # 1 import and update domain by admin (Bulk & Single Enabled)
 class ImportOrEditDomainView(APIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
     @swagger_auto_schema(
-        operation_description="اضافه کردن دسته‌جمعی یا تکی دامنه‌ها (Bulk/Single Import)",
+        operation_description="اضافه کردن دسته‌جمعی یا تکی دامنه‌ها (بررسی خودکار و حذف تکراری‌ها / استخراج اصل دامنه)",
         request_body=DomainRegisterSerializer(many=True),
         responses={
             201: DomainRegisterSerializer(many=True),
@@ -27,9 +44,43 @@ class ImportOrEditDomainView(APIView):
         }
     )
     def post(self, request):
-        data = request.data
-        is_many = isinstance(data, list)
-        serializer = DomainRegisterSerializer(data=data, many=is_many)
+        raw_data = request.data
+        is_many = isinstance(raw_data, list)
+        items = raw_data if is_many else [raw_data]
+
+        existing_domains = set(
+            Domain.objects.filter(deleted_at__isnull=True)
+            .values_list('domain_name', flat=True)
+        )
+
+        seen_in_request = set()
+        cleaned_items = []
+        skipped_domains = []
+
+        for item in items:
+            original_name = item.get('domain_name', '')
+            if not original_name:
+                continue
+
+            root_domain = extract_root_domain(original_name)
+
+            if root_domain in existing_domains or root_domain in seen_in_request:
+                skipped_domains.append(original_name)
+                continue
+
+            seen_in_request.add(root_domain)
+            item_copy = item.copy()
+            item_copy['domain_name'] = root_domain
+            cleaned_items.append(item_copy)
+
+        if not cleaned_items:
+            return Response({
+                "message": "تمامی دامنه‌های ارسالی تکراری بوده و از فرآیند ثبت حذف شدند.",
+                "skipped_domains": skipped_domains,
+                "created_domains": []
+            }, status=status.HTTP_200_OK)
+
+        serializer = DomainRegisterSerializer(data=cleaned_items, many=True)
 
         if not serializer.is_valid():
             return Response({
@@ -38,29 +89,34 @@ class ImportOrEditDomainView(APIView):
                 "detail": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        if is_many:
-            domains_to_create = []
-            for validated_data in serializer.validated_data:
-                groups = validated_data.pop('groups', [])
-                domain_instance = Domain(**validated_data, created_by=request.user)
-                domains_to_create.append((domain_instance, groups))
+        domains_to_create = []
+        for validated_data in serializer.validated_data:
+            groups = validated_data.pop('groups', [])
+            domain_instance = Domain(**validated_data, created_by=request.user)
+            domains_to_create.append((domain_instance, groups))
 
-            with transaction.atomic():
-                created_instances = Domain.objects.bulk_create(
-                    [item[0] for item in domains_to_create]
-                )
-                for instance, groups in zip(created_instances, [item[1] for item in domains_to_create]):
-                    if groups:
-                        instance.groups.set(groups)
-                    instance.created_by = request.user
-
-            return Response(
-                DomainRegisterSerializer(created_instances, many=True).data,
-                status=status.HTTP_201_CREATED
+        with transaction.atomic():
+            created_instances = Domain.objects.bulk_create(
+                [item[0] for item in domains_to_create]
             )
-        else:
-            domain = serializer.save(created_by=request.user)
-            return Response(DomainRegisterSerializer(domain).data, status=status.HTTP_201_CREATED)
+            for instance, groups in zip(created_instances, [item[1] for item in domains_to_create]):
+                if groups:
+                    instance.groups.set(groups)
+
+        created_data = DomainRegisterSerializer(created_instances, many=True).data
+
+        response_payload = {
+            "message": "فرآیند ایمپورت با موفقیت انجام شد.",
+            "created_count": len(created_instances),
+            "skipped_count": len(skipped_domains),
+            "skipped_domains": skipped_domains,
+            "created_domains": created_data
+        }
+
+        return Response(
+            response_payload if is_many else (created_data[0] if created_data else {}),
+            status=status.HTTP_201_CREATED
+        )
 
     @swagger_auto_schema(
         operation_description="""
@@ -103,13 +159,13 @@ class ImportOrEditDomainView(APIView):
                     updated_instance = serializer.save()
                     updated_domains.append(updated_instance)
 
-            if errors:
-                transaction.set_rollback(True)
-                return Response({
-                    "error_code": 10,
-                    "message": "برخی از اطلاعات ارسالی برای ویرایش نامعتبر هستند.",
-                    "detail": errors
-                }, status=status.HTTP_400_BAD_REQUEST)
+                if errors:
+                    transaction.set_rollback(True)
+                    return Response({
+                        "error_code": 10,
+                        "message": "برخی از اطلاعات ارسالی برای ویرایش نامعتبر هستند.",
+                        "detail": errors
+                    }, status=status.HTTP_400_BAD_REQUEST)
 
             return Response({
                 "message": f"مشخصات تعداد {len(updated_domains)} دامنه با موفقیت بروزرسانی شد.",
@@ -277,6 +333,7 @@ class TagDetailView(APIView):
             "error_code": 55,
                 "message": f"تگی با شناسه {pk} یافت نشد.",
                 }, status = status.HTTP_404_NOT_FOUND)
+
         serializer = TagRegisterSerializer(tag, data=request.data,partial=True)
         if not serializer.is_valid():
             return Response({
@@ -330,7 +387,7 @@ class ListOfTagView(APIView):
         }
     )
 
-    def get(self, request):
+    def get(self):
         tags= Tag.objects.filter(is_active=True,deleted_at__isnull=True).order_by('title')
         serializer = TagListSerializer(tags , many=True)
         return Response(serializer.data , status=status.HTTP_200_OK)
@@ -400,7 +457,8 @@ class AssignTagToDomainView(APIView):
 
             has_main_tag = User_Domain_Tag.objects.filter(
                 domain=domain,
-                tag__created_by__role__code__in=['admin', 'super_admin']
+                tag__created_by__role__code__in=['admin', 'super_admin'],
+                deleted_at__isnull=True
             ).exists()
 
             if has_main_tag and not is_admin:
@@ -412,7 +470,7 @@ class AssignTagToDomainView(APIView):
                 errors.append(err)
                 continue
 
-            user_existing_udts = list(User_Domain_Tag.objects.filter(user=user, domain=domain))
+            user_existing_udts = list(User_Domain_Tag.objects.filter(user=user, domain=domain,deleted_at__isnull=True))
 
             if any(udt.tag_id == tag.id for udt in user_existing_udts):
                 errors.append(f"تگ «{tag.title}» قبلاً توسط شما برای دامنه «{domain.domain_name}» ثبت شده است.")
@@ -443,16 +501,15 @@ class AssignTagToDomainView(APIView):
     # =========================================================================
     @swagger_auto_schema(
         operation_description="ویرایش دسته‌جمعی تگ‌های دامنه‌ها بر اساس domain_name و title (نیاز به confirm برای کاربر عادی)",
-        request_body=UserDomainTagSerializer(many=True),
+        request_body=UserDomainTagPatchSerializer(many=True),
         responses={200: "ویرایش با موفقیت انجام شد.", 409: "Conflict (Code 21)", 400: "Bad Request"}
     )
     def patch(self, request):
-        has_access, response = self._check_user_access(request.user)
+        has_access,  response = self._check_user_access(request.user)
         if not has_access:
             return response
 
         user = request.user
-        is_admin = user.is_superuser or (user.role.code in ['admin', 'super_admin'] if user.role else False)
         items = request.data if isinstance(request.data, list) else [request.data]
 
         requires_confirm_list = []
@@ -469,15 +526,23 @@ class AssignTagToDomainView(APIView):
                 errors.append(err)
                 continue
 
-            user_existing_udts = list(User_Domain_Tag.objects.filter(user=user, domain=domain))
+            user_existing_udts = list(User_Domain_Tag.objects.filter(
+                user=user,
+                domain=domain,
+                deleted_at__isnull = True
+            ))
 
             if not user_existing_udts:
-                errors.append(f"دامنه «{domain.domain_name}»: تگی برای ویرایش وجود ندارد. ابتدا تگ اضافه کنید.")
+                errors.append(f"دامنه «{domain.domain_name}»: تگی متعلق به شما برای ویرایش وجود ندارد.")
                 continue
+
+            is_admin = user.is_superuser or (
+                user.role.code in ['admin', 'super_admin'] if getattr(user, 'role', None) else False)
 
             has_main_tag = User_Domain_Tag.objects.filter(
                 domain=domain,
-                user__role__code__in=['admin', 'super_admin']
+                user__role__code__in=['admin', 'super_admin'],
+                deleted_at__isnull=True
             ).exclude(user=user).exists()
 
             if has_main_tag and not is_admin:
@@ -496,7 +561,7 @@ class AssignTagToDomainView(APIView):
                     f"دامنه «{domain.domain_name}»: تگ انتخاب شده («{tag.title}») هم‌اکنون برای شما فعال است و تغییری ایجاد نشد.")
                 continue
 
-            if not is_admin and not confirm:
+            if not confirm:
                 requires_confirm_list.append({
                     "domain_name": domain.domain_name,
                     "old_tag": existing_udt.tag.title,
@@ -504,6 +569,7 @@ class AssignTagToDomainView(APIView):
                 })
             else:
                 existing_udt.tag = tag
+                existing_udt.updated_at = timezone.now()
                 items_to_update.append(existing_udt)
 
         if errors:
@@ -525,11 +591,12 @@ class AssignTagToDomainView(APIView):
                 User_Domain_Tag.objects.bulk_update(items_to_update, fields=['tag', 'updated_at'])
 
         return Response({"message": "ویرایش تگ‌ها با موفقیت انجام شد."}, status=status.HTTP_200_OK)
+
     # =========================================================================
-    # 3. DELETE: delete tha tags(Bulk Delete)
+    # 3. DELETE: delete the tags (Bulk Delete)
     # =========================================================================
     @swagger_auto_schema(
-        operation_description="حذف دسته‌جمعی تگ‌های کاربر روی دامنه‌ها بر اساس domain_name و title",
+        operation_description="حذف نرم (Soft Delete) دسته‌جمعی تگ‌های کاربر روی دامنه‌ها بر اساس domain_name و title",
         request_body=UserDomainTagSerializer(many=True),
         responses={200: "تگ‌ها با موفقیت حذف شدند.", 400: "Bad Request"}
     )
@@ -539,8 +606,9 @@ class AssignTagToDomainView(APIView):
             return response
 
         user = request.user
+
         items = request.data if isinstance(request.data, list) else [request.data]
-        ids_to_delete = []
+        ids_to_delete = set()
         errors = []
 
         for index, item in enumerate(items):
@@ -552,9 +620,14 @@ class AssignTagToDomainView(APIView):
                 errors.append(err)
                 continue
 
-            user_existing_udts = User_Domain_Tag.objects.filter(user=user, domain=domain)
+            existing_udts = User_Domain_Tag.objects.filter(
+                user=user,
+                domain=domain,
+                deleted_at__isnull=True
+            )
 
-            if not user_existing_udts.exists():
+            if not existing_udts.exists():
+                errors.append(f"دامنه «{domain.domain_name}»: تگ فعالی متعلق به شما برای حذف یافت نشد.")
                 continue
 
             if title:
@@ -562,16 +635,22 @@ class AssignTagToDomainView(APIView):
                 if err:
                     errors.append(err)
                     continue
-                udts = user_existing_udts.filter(tag=tag)
+
+                udts = existing_udts.filter(tag=tag)
+                if not udts.exists():
+                    errors.append(f"دامنه «{domain.domain_name}»: تگ «{title}» توسط شما روی این دامنه ثبت نشده است.")
+                    continue
+
                 ids_to_delete.extend(udts.values_list('id', flat=True))
             else:
-                ids_to_delete.extend(user_existing_udts.values_list('id', flat=True))
+                ids_to_delete.extend(existing_udts.values_list('id', flat=True))
 
         if errors:
-            return Response({"error_code": 60, "message": "خطا در حذف تگ‌ها.", "detail": errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error_code": 60, "message": "خطا در حذف تگ‌ها.", "detail": errors},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         with transaction.atomic():
             if ids_to_delete:
-                User_Domain_Tag.objects.filter(id__in=ids_to_delete).delete()
+                User_Domain_Tag.objects.filter(id__in=ids_to_delete).update(deleted_at=timezone.now())
 
         return Response({"message": "تگ‌های انتخابی با موفقیت حذف شدند."}, status=status.HTTP_200_OK)
