@@ -266,6 +266,7 @@ class DomainDetailView(APIView):
             domain_data['has_main_tag'] = has_main_tag
 
             result.append(domain_data)
+        return Response(result, status=status.HTTP_200_OK)
 
 
 #3 create tags
