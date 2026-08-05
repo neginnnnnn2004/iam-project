@@ -17,3 +17,146 @@ INFO 2026-08-05 15:28:17,802 autoreload 24168 15352 Watching for file changes wi
 INFO 2026-08-05 15:28:31,173 autoreload 24168 15352 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
 INFO 2026-08-05 15:28:32,075 autoreload 3384 32312 Watching for file changes with StatReloader
 INFO 2026-08-05 15:28:35,227 autoreload 24768 11800 Watching for file changes with StatReloader
+INFO 2026-08-05 15:38:42,963 autoreload 3384 32312 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:38:43,866 autoreload 24064 32540 Watching for file changes with StatReloader
+INFO 2026-08-05 15:39:59,998 autoreload 24064 32540 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:40:01,057 autoreload 24332 10036 Watching for file changes with StatReloader
+INFO 2026-08-05 15:40:12,056 autoreload 24332 10036 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:40:12,839 autoreload 29312 10636 Watching for file changes with StatReloader
+INFO 2026-08-05 15:44:26,962 autoreload 29312 10636 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:44:27,783 autoreload 7380 400 Watching for file changes with StatReloader
+INFO 2026-08-05 15:44:58,932 autoreload 7380 400 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:44:59,838 autoreload 14940 11708 Watching for file changes with StatReloader
+INFO 2026-08-05 15:46:01,039 autoreload 14940 11708 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:46:02,255 autoreload 29704 18424 Watching for file changes with StatReloader
+INFO 2026-08-05 15:48:20,211 autoreload 29704 18424 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:48:21,094 autoreload 20776 11568 Watching for file changes with StatReloader
+INFO 2026-08-05 15:48:34,087 autoreload 20776 11568 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:48:35,057 autoreload 16928 7580 Watching for file changes with StatReloader
+INFO 2026-08-05 15:50:02,198 autoreload 16928 7580 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:50:03,097 autoreload 20960 27512 Watching for file changes with StatReloader
+INFO 2026-08-05 15:50:42,256 autoreload 20960 27512 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:50:43,074 autoreload 27128 28764 Watching for file changes with StatReloader
+INFO 2026-08-05 15:51:44,456 autoreload 27128 28764 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:51:45,409 autoreload 29984 20492 Watching for file changes with StatReloader
+INFO 2026-08-05 15:52:35,316 autoreload 29984 20492 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:52:36,264 autoreload 30756 15336 Watching for file changes with StatReloader
+INFO 2026-08-05 15:53:37,474 autoreload 30756 15336 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:53:38,410 autoreload 26796 23196 Watching for file changes with StatReloader
+INFO 2026-08-05 15:53:59,806 autoreload 26796 23196 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:54:00,582 autoreload 24020 14676 Watching for file changes with StatReloader
+INFO 2026-08-05 15:54:32,676 autoreload 24020 14676 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:54:33,784 autoreload 32036 26404 Watching for file changes with StatReloader
+INFO 2026-08-05 15:54:47,994 autoreload 32036 26404 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:54:48,918 autoreload 29932 10508 Watching for file changes with StatReloader
+INFO 2026-08-05 15:55:06,097 autoreload 29932 10508 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:55:06,946 autoreload 29984 24680 Watching for file changes with StatReloader
+INFO 2026-08-05 15:57:03,348 autoreload 29984 24680 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:57:04,206 autoreload 10456 12024 Watching for file changes with StatReloader
+INFO 2026-08-05 15:58:50,642 autoreload 10456 12024 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 15:58:51,379 autoreload 22928 27592 Watching for file changes with StatReloader
+INFO 2026-08-05 16:00:02,843 autoreload 22928 27592 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:00:03,685 autoreload 2996 8848 Watching for file changes with StatReloader
+INFO 2026-08-05 16:02:17,628 autoreload 2996 8848 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:02:18,902 autoreload 5972 21780 Watching for file changes with StatReloader
+INFO 2026-08-05 16:03:08,478 autoreload 5972 21780 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:03:09,365 autoreload 13060 25664 Watching for file changes with StatReloader
+INFO 2026-08-05 16:03:20,587 autoreload 13060 25664 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:03:21,340 autoreload 20608 32676 Watching for file changes with StatReloader
+INFO 2026-08-05 16:04:08,803 autoreload 20608 32676 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:04:09,678 autoreload 18284 29660 Watching for file changes with StatReloader
+INFO 2026-08-05 16:05:00,326 autoreload 18284 29660 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:05:01,180 autoreload 32008 19700 Watching for file changes with StatReloader
+INFO 2026-08-05 16:07:26,311 autoreload 32008 19700 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:07:27,044 autoreload 29868 20444 Watching for file changes with StatReloader
+INFO 2026-08-05 16:07:51,502 autoreload 29868 20444 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:07:52,528 autoreload 26064 23584 Watching for file changes with StatReloader
+INFO 2026-08-05 16:08:24,408 autoreload 26064 23584 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:08:25,150 autoreload 20120 31872 Watching for file changes with StatReloader
+INFO 2026-08-05 16:08:43,344 autoreload 20120 31872 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:08:44,170 autoreload 27728 22464 Watching for file changes with StatReloader
+INFO 2026-08-05 16:09:43,134 autoreload 27728 22464 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:09:43,976 autoreload 27252 9916 Watching for file changes with StatReloader
+INFO 2026-08-05 16:09:54,094 autoreload 27252 9916 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:09:54,915 autoreload 19088 10800 Watching for file changes with StatReloader
+INFO 2026-08-05 16:10:43,533 autoreload 19088 10800 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:10:44,455 autoreload 10268 25820 Watching for file changes with StatReloader
+INFO 2026-08-05 16:11:46,370 autoreload 10268 25820 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:11:47,382 autoreload 7628 27776 Watching for file changes with StatReloader
+INFO 2026-08-05 16:12:49,821 autoreload 7628 27776 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:12:50,868 autoreload 24040 32764 Watching for file changes with StatReloader
+INFO 2026-08-05 16:13:10,451 autoreload 24040 32764 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:13:11,284 autoreload 22644 26072 Watching for file changes with StatReloader
+INFO 2026-08-05 16:14:07,461 autoreload 22644 26072 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:14:08,410 autoreload 32560 21604 Watching for file changes with StatReloader
+INFO 2026-08-05 16:14:34,666 autoreload 32560 21604 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:14:35,592 autoreload 27080 21752 Watching for file changes with StatReloader
+INFO 2026-08-05 16:15:47,161 autoreload 27080 21752 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:15:48,019 autoreload 10248 27604 Watching for file changes with StatReloader
+INFO 2026-08-05 16:16:13,603 autoreload 10248 27604 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:16:14,595 autoreload 29252 23716 Watching for file changes with StatReloader
+INFO 2026-08-05 16:18:01,392 autoreload 29252 23716 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:18:02,281 autoreload 25996 9476 Watching for file changes with StatReloader
+INFO 2026-08-05 16:19:35,301 autoreload 25996 9476 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:19:36,185 autoreload 22100 2764 Watching for file changes with StatReloader
+INFO 2026-08-05 16:21:15,343 autoreload 22100 2764 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:21:16,224 autoreload 26336 24160 Watching for file changes with StatReloader
+INFO 2026-08-05 16:23:35,574 autoreload 26336 24160 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:23:36,437 autoreload 20064 29464 Watching for file changes with StatReloader
+INFO 2026-08-05 16:25:41,006 autoreload 20064 29464 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-05 16:25:41,887 autoreload 23888 22884 Watching for file changes with StatReloader
+INFO 2026-08-05 16:26:23,308 autoreload 25848 12184 Watching for file changes with StatReloader
+WARNING 2026-08-05 16:26:30,410 logging_middleware 23888 27480  Response Error: {"method": "GET", "path": "/", "status_code": 404, "duration": "0.125s", "user": "anonymous"}
+INFO 2026-08-05 16:26:46,835 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.091s", "user": "anonymous"}
+INFO 2026-08-05 16:26:47,199 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.099s", "user": "anonymous"}
+INFO 2026-08-05 16:28:34,134 auth_views 23888 27480 ============================================================
+INFO 2026-08-05 16:28:34,177 auth_views 23888 27480  IP: 127.0.0.1
+INFO 2026-08-05 16:28:34,179 auth_views 23888 27480  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+INFO 2026-08-05 16:28:47,000 auth_views 23888 27480 Email: test83@example.com
+INFO 2026-08-05 16:28:47,002 auth_views 23888 27480 Phone: 09123456789
+INFO 2026-08-05 16:28:47,074 auth_views 23888 27480 ============================================================
+INFO 2026-08-05 16:28:47,087 logging_middleware 23888 27480  Response: {"method": "POST", "path": "/identity/register/", "status_code": 201, "duration": "12.969s", "user": "anonymous"}
+INFO 2026-08-05 16:29:59,328 auth_views 23888 27480 ============================================================
+INFO 2026-08-05 16:29:59,366 auth_views 23888 27480  IP: 127.0.0.1
+INFO 2026-08-05 16:29:59,368 auth_views 23888 27480  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+INFO 2026-08-05 16:29:59,691 auth_views 23888 27480 ============================================================
+WARNING 2026-08-05 16:29:59,692 logging_middleware 23888 27480  Response Error: {"method": "POST", "path": "/identity/register/", "status_code": 400, "duration": "0.386s", "user": "anonymous"}
+INFO 2026-08-05 16:30:53,383 auth_views 23888 27480 ============================================================
+INFO 2026-08-05 16:30:53,411 auth_views 23888 27480  IP: 127.0.0.1
+INFO 2026-08-05 16:30:53,412 auth_views 23888 27480  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+INFO 2026-08-05 16:30:53,713 auth_views 23888 27480 ============================================================
+WARNING 2026-08-05 16:30:53,713 logging_middleware 23888 27480  Response Error: {"method": "POST", "path": "/identity/register/", "status_code": 400, "duration": "0.349s", "user": "anonymous"}
+INFO 2026-08-05 16:32:09,761 auth_views 23888 27480 ============================================================
+INFO 2026-08-05 16:32:09,795 auth_views 23888 27480  IP: 127.0.0.1
+INFO 2026-08-05 16:32:09,796 auth_views 23888 27480  Username: testuser
+WARNING 2026-08-05 16:32:11,448 auth_views 23888 27480  IP: 127.0.0.1
+INFO 2026-08-05 16:32:11,449 auth_views 23888 27480 ============================================================
+WARNING 2026-08-05 16:32:11,450 logging_middleware 23888 27480  Response Error: {"method": "POST", "path": "/identity/login/", "status_code": 401, "duration": "1.709s", "user": "anonymous"}
+INFO 2026-08-05 16:32:56,646 auth_views 23888 27480 ============================================================
+INFO 2026-08-05 16:32:56,674 auth_views 23888 27480  IP: 127.0.0.1
+INFO 2026-08-05 16:32:56,676 auth_views 23888 27480  Username: test83user
+INFO 2026-08-05 16:32:58,378 auth_views 23888 27480 ============================================================
+WARNING 2026-08-05 16:32:58,379 logging_middleware 23888 27480  Response Error: {"method": "POST", "path": "/identity/login/", "status_code": 401, "duration": "1.751s", "user": "anonymous"}
+INFO 2026-08-05 16:34:05,948 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 302, "duration": "0.031s", "user": "anonymous"}
+INFO 2026-08-05 16:34:06,052 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/admin/login/", "status_code": 200, "duration": "0.081s", "user": "anonymous"}
+INFO 2026-08-05 16:34:11,177 logging_middleware 23888 27480  Response: {"method": "POST", "path": "/admin/login/", "status_code": 302, "duration": "1.653s", "user": "admin"}
+INFO 2026-08-05 16:34:11,535 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.332s", "user": "admin"}
+INFO 2026-08-05 16:34:11,814 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.182s", "user": "admin"}
+INFO 2026-08-05 16:34:14,385 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/admin/identity/user/17/change/", "status_code": 200, "duration": "0.491s", "user": "admin"}
+INFO 2026-08-05 16:34:14,754 logging_middleware 23888 30604  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.159s", "user": "admin"}
+INFO 2026-08-05 16:34:36,501 logging_middleware 23888 27480  Response: {"method": "POST", "path": "/admin/identity/user/17/change/", "status_code": 302, "duration": "0.238s", "user": "admin"}
+INFO 2026-08-05 16:34:36,746 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.225s", "user": "admin"}
+INFO 2026-08-05 16:34:37,071 logging_middleware 23888 30604  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.247s", "user": "admin"}
+INFO 2026-08-05 16:34:40,266 auth_views 23888 27480 ============================================================
+INFO 2026-08-05 16:34:40,297 auth_views 23888 27480  IP: 127.0.0.1
+INFO 2026-08-05 16:34:40,298 auth_views 23888 27480  Username: test83user
+INFO 2026-08-05 16:34:41,785 auth_views 23888 27480 ============================================================
+INFO 2026-08-05 16:34:41,842 logging_middleware 23888 27480  Response: {"method": "POST", "path": "/identity/login/", "status_code": 200, "duration": "1.748s", "user": "anonymous"}
+INFO 2026-08-05 16:36:27,175 auth_views 23888 27480 ============================================================
+INFO 2026-08-05 16:36:27,222 auth_views 23888 27480  IP: 127.0.0.1
+INFO 2026-08-05 16:36:27,299 auth_views 23888 27480 ============================================================
+INFO 2026-08-05 16:36:27,301 logging_middleware 23888 27480  Response: {"method": "PATCH", "path": "/identity/update/", "status_code": 200, "duration": "0.328s", "user": "test83user"}
+INFO 2026-08-05 16:37:00,771 auth_views 23888 27480 ============================================================
+INFO 2026-08-05 16:37:00,794 auth_views 23888 27480  IP: 127.0.0.1
+INFO 2026-08-05 16:37:00,878 auth_views 23888 27480 ============================================================
+WARNING 2026-08-05 16:37:00,879 logging_middleware 23888 27480  Response Error: {"method": "PATCH", "path": "/identity/update/", "status_code": 400, "duration": "0.351s", "user": "test83user"}

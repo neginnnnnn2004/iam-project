@@ -1,0 +1,6 @@
+WARNING 2026-08-05 16:26:30,416 Not Found: /
+WARNING 2026-08-05 16:29:59,693 Bad Request: /identity/register/
+WARNING 2026-08-05 16:30:53,717 Bad Request: /identity/register/
+WARNING 2026-08-05 16:32:11,452 Unauthorized: /identity/login/
+WARNING 2026-08-05 16:32:58,380 Unauthorized: /identity/login/
+WARNING 2026-08-05 16:37:00,881 Bad Request: /identity/update/

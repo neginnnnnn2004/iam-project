@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+import json
 from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.response import Response
@@ -15,6 +16,25 @@ from identity.utils import create_user_backup_codes
 
 from typing import Optional
 from identity.models import User
+
+import logging
+
+logger = logging.getLogger('myapp')
+
+# ================== help full def =====================
+def get_client_ip(request):
+    """دریافت IP واقعی کاربر"""
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        return x_forwarded_for.split(',')[0]
+    return request.META.get('REMOTE_ADDR')
+
+def safe_json_dumps(data):
+    """تبدیل به JSON با مدیریت خطا"""
+    try:
+        return json.dumps(data, ensure_ascii=False)
+    except:
+        return str(data)
 
 # 1 registration
 class UserRegisterView(APIView):
@@ -50,13 +70,29 @@ class UserRegisterView(APIView):
         }
     )
     def post(self, request):
+        logger.info("=" * 60)
+        logger.info(f"شروع فرآیند ثبت نام کاربر جدید")
+        logger.info(f" IP: {get_client_ip(request)}")
+        logger.info(f" User-Agent: {request.META.get('HTTP_USER_AGENT', 'unknown')}")
+
+        safe_data = {k: v for k, v in request.data.items() if k != 'password' and k != 'confirm_password'}
+        logger.info(f"اطلاعات ثبت نام: {safe_json_dumps(safe_data)}")
+
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
+            logger.info(f" اطلاعات ثبت نام معتبر است")
+
             user = serializer.save()
             raw_codes = create_user_backup_codes(user, count=8)
+            logger.info(f" کاربر جدید ایجاد شد: ID={user.id}, Username={user.username}")
+            logger.info(f"Email: {user.email}")
+            logger.info(f"Phone: {user.phone}")
+            logger.info(f"{len(raw_codes)}کد پشتیبان ایجاد شد ")
 
             user_data = serializer.data
             user_data.pop('confirm_password', None)
+            logger.info(" ثبت نام با موفقیت کامل شد")
+            logger.info("=" * 60)
 
             return Response({
                 "message": "ثبت نام شما با موفقیت انجام شد. لطفاً کدهای پشتیبان خود را در جایی امن ذخیره کنید.",
@@ -74,21 +110,40 @@ class UserRegisterView(APIView):
 
         if  is_missing_required:
             error_code = 12
+            logger.warning(f" فیلدهای اجباری ارسال نشده: {list(errors.keys())}")
+
         elif 'phone' in errors:
             error_code = 14
+            logger.warning(f"شماره تلفن تکراری یا نامعتبر: {request.data.get('phone')}")
+
         elif 'email' in errors:
             error_code = 15
+            logger.warning(f" ایمیل تکراری یا نامعتبر: {request.data.get('email')}")
+
         elif 'username' in errors:
             err_str = str(errors['username']).lower()
-            error_code  = 11 if ('unique' in err_str or 'exist' in err_str)else 10
+            if 'unique' in err_str or 'exist' in err_str:
+                error_code = 11
+                logger.warning(f" نام کاربری تکراری: {request.data.get('username')}")
+            else:
+                error_code = 10
+                logger.warning(f" فرمت نام کاربری اشتباه: {errors['username']}")
+
+
         elif 'password' in errors or 'confirm_password' in errors or 'non_field_errors' in errors:
             error_code = 13
+            logger.warning(f" خطا در رمز عبور: {errors}")
+
+        logger.error(f" ثبت نام ناموفق - Error Code: {error_code}")
+        logger.error(f" جزئیات خطا: {safe_json_dumps(errors)}")
+        logger.info("=" * 60)
 
         return Response({
             "error_code": error_code,
             "message": "ثبت نام با خطا مواجه شد. لطفاً ورودی‌ها را بررسی کنید.",
             'detail': errors
         }, status=status.HTTP_400_BAD_REQUEST)
+
 
 # 2 Login
 class UserLoginView(APIView):
@@ -118,9 +173,17 @@ class UserLoginView(APIView):
         }
     )
     def post(self, request):
+        logger.info("=" * 60)
+        logger.info(f" تلاش برای ورود کاربر")
+        logger.info(f" IP: {get_client_ip(request)}")
+        logger.info(f" Username: {request.data.get('username', 'unknown')}")
+
         serializer = UserLoginSerializer(data=request.data)
         # check the fields
         if not serializer.is_valid():
+            logger.warning(f" اطلاعات ورود ناقص یا نامعتبر: {serializer.errors}")
+            logger.info("=" * 60)
+
             return Response({
                 "error_code": 10,
                 "message": "اطلاعات ارسالی برای ورود ناقص یا نامعتبر است.",
@@ -134,47 +197,52 @@ class UserLoginView(APIView):
         )
         # if user not found
         if user is None or user.status == 'deleted':
+            logger.warning(f" تلاش ناموفق برای ورود - کاربر یافت نشد: {serializer.validated_data['username']}")
+            logger.warning(f" IP: {get_client_ip(request)}")
+            logger.info("=" * 60)
+
             return Response({
                 "error_code": 20,
                 "message": "نام کاربری یا رمز عبور اشتباه است.",
                 "detail": None
             }, status=status.HTTP_401_UNAUTHORIZED)
+        logger.info(f" کاربر پیدا شد: ID={user.id}, Username={user.username}, Status={user.status}")
 
-        if user.status == 'unverified':
+        if user.status in ['unverified', 'pending', 'suspended']:
+            status_messages = {
+                'unverified': "حساب کاربری شما توسط ادمین تایید نشده است",
+                'pending': "حساب کاربری شما در انتظار بررسی است",
+                'suspended': "حساب کاربری شما مسدود شده است"
+            }
+
+            logger.warning(f" تلاش برای ورود کاربر با وضعیت {user.status}: {user.username}")
+            logger.info("=" * 60)
+
             return Response({
                 "error_code": 21,
-                "message": "حساب کاربری شما توسط ادمین تایید نشده است و اجازه ورود ندارید",
+                "message": status_messages.get(user.status, "وضعیت حساب نامعتبر"),
                 "detail": None
-            }, status=status.HTTP_401_UNAUTHORIZED)
+            },status=status.HTTP_401_UNAUTHORIZED)
 
-        if user.status == 'pending':
-            return Response({
-                "error_code": 21,
-                "message": "حساب کاربری شما در انتظار بررسی است و هنوز فعال نشده است.",
-                "detail": None
-            }, status=status.HTTP_401_UNAUTHORIZED)
-
-        if user.status == 'suspended':
-            return Response({
-                "error_code": 21,
-                "message": "حساب کاربری شما مسدود شده است و اجازه ورود ندارید",
-                "detail": None
-            }, status=status.HTTP_401_UNAUTHORIZED)
 
         # create token
         elif user.status == 'active':
             refresh = RefreshToken.for_user(user)
+            logger.info(f" ورود موفق کاربر: {user.username} (ID: {user.id})")
+            logger.info("=" * 60)
+
             return Response({
                 'access_token': str(refresh.access_token),
                 'refresh': str(refresh),
             }, status=status.HTTP_200_OK)
 
-        else:
-            return Response({
-                "error_code": 21,
-                "message": "وضعیت حساب کاربری شما نامعتبر است.",
-                "detail": None
-            }, status=status.HTTP_401_UNAUTHORIZED)
+        logger.error(f" وضعیت نامشخص برای کاربر: {user.username}, Status: {user.status}")
+        logger.info("=" * 60)
+        return Response({
+            "error_code": 21,
+            "message": "وضعیت حساب کاربری شما نامعتبر است.",
+            "detail": None
+        }, status=status.HTTP_401_UNAUTHORIZED)
 
 
 # 3 ProfileUpdate
@@ -183,13 +251,28 @@ class ProfileUpdateView(APIView):
 
     def update(self, request, partial=False):
         user = request.user
+
+        logger.info("=" * 60)
+        logger.info("️ شروع بروزرسانی پروفایل")
+        logger.info(f" کاربر: {user.username} (ID: {user.id})")
+        logger.info(f" IP: {get_client_ip(request)}")
+        logger.info(f" متد: {'PATCH' if partial else 'PUT'}")
+
+        safe_data = {k: v for k, v in request.data.items() if k != 'password'}
+        logger.info(f" داده‌های جدید: {safe_json_dumps(safe_data)}")
+
         serializer = ProfileUpdateSerializer(
             instance=user,
             data=request.data,
             partial=partial
         )
+
         if serializer.is_valid():
             serializer.save()
+            changed_fields = list(request.data.keys())
+            logger.info(f" پروفایل {user.username} با موفقیت بروزرسانی شد")
+            logger.info(f" فیلدهای تغییر یافته: {changed_fields}")
+            logger.info("=" * 60)
             return Response({
                 'message': 'پروفایل با موفقیت بروزرسانی شد',
                 'data': serializer.data
@@ -197,8 +280,14 @@ class ProfileUpdateView(APIView):
 
         errors = serializer.errors
         error_code = 10
+
         if 'password' in errors:
             error_code = 30
+            logger.warning(f" خطا در رمز عبور")
+
+        logger.error(f" بروزرسانی پروفایل ناموفق - Error Code: {error_code}")
+        logger.error(f" جزئیات خطا: {safe_json_dumps(errors)}")
+        logger.info("=" * 60)
 
         return Response({
             "error_code":  error_code,
