@@ -1,7 +1,10 @@
 from django.urls import path
-from .views import user_views, auth_views, group_views, domain_views, reset_pass_views
+from .views import user_views, auth_views, group_views, domain_views, reset_pass_views, test_view
 
 urlpatterns = [
+    path('test/',test_view.TestView.as_view(), name='test'),
+
+
     path('register/', auth_views.UserRegisterView.as_view(), name='user-register'),
     path('login/', auth_views.UserLoginView.as_view(), name='user-login'),
     path('update/', auth_views.ProfileUpdateView.as_view(), name='update-profile'),

@@ -69,21 +69,29 @@ phone_regex = RegexValidator(
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=False, allow_blank=False, trim_whitespace=True)
     last_name = serializers.CharField(required=False, allow_blank=False, trim_whitespace=True)
-    password = serializers.CharField(write_only=True, required=False, min_length=8)
+    password = serializers.CharField(write_only=True,required=True,style={'input_type': 'password'})
+    confirm_password = serializers.CharField(write_only=True,required=True,style={'input_type': 'password'})
     phone= serializers.CharField(
-        required=False,
-        trim_whitespace=True,
-        allow_blank=False,
-        validators=[phone_regex]
-    )
+    required=False,
+    trim_whitespace=True,
+    allow_blank=False,
+    validators=[phone_regex]
+)
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'password','phone')
+        fields = ('first_name', 'last_name', 'password','confirm_password','phone')
 
     def validate_password(self, value):
         validate_password(value)
         return value
+
+    def validate(self, attrs):
+        if attrs.get('password') != attrs.get('confirm_password'):
+            raise serializers.ValidationError({
+                "confirm_password": "رمز عبور و تکرار آن مطابقت ندارند"
+            })
+        return attrs
 
     def validate_phone(self, value):
         query = User.objects.filter(phone=value)

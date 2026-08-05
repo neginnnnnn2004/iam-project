@@ -1,0 +1,19 @@
+INFO 2026-08-05 15:16:10,638 autoreload 25152 21668 Watching for file changes with StatReloader
+INFO 2026-08-05 15:16:10,719 autoreload 23344 11512 Watching for file changes with StatReloader
+INFO 2026-08-05 15:26:03,790 autoreload 23344 11512 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
+INFO 2026-08-05 15:26:04,838 autoreload 26696 3956 Watching for file changes with StatReloader
+INFO 2026-08-05 15:26:45,938 autoreload 26696 3956 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
+INFO 2026-08-05 15:26:46,765 autoreload 21232 2276 Watching for file changes with StatReloader
+INFO 2026-08-05 15:26:50,469 autoreload 21232 2276 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
+INFO 2026-08-05 15:26:51,367 autoreload 5028 28096 Watching for file changes with StatReloader
+INFO 2026-08-05 15:27:14,896 autoreload 5028 28096 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
+INFO 2026-08-05 15:27:15,804 autoreload 6964 18576 Watching for file changes with StatReloader
+INFO 2026-08-05 15:27:34,089 autoreload 6964 18576 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
+INFO 2026-08-05 15:27:35,063 autoreload 18844 10284 Watching for file changes with StatReloader
+INFO 2026-08-05 15:27:54,318 autoreload 18844 10284 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
+INFO 2026-08-05 15:27:55,351 autoreload 31128 12480 Watching for file changes with StatReloader
+INFO 2026-08-05 15:28:16,799 autoreload 31128 12480 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
+INFO 2026-08-05 15:28:17,802 autoreload 24168 15352 Watching for file changes with StatReloader
+INFO 2026-08-05 15:28:31,173 autoreload 24168 15352 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
+INFO 2026-08-05 15:28:32,075 autoreload 3384 32312 Watching for file changes with StatReloader
+INFO 2026-08-05 15:28:35,227 autoreload 24768 11800 Watching for file changes with StatReloader
