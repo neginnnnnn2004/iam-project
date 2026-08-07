@@ -6,3 +6,14 @@ WARNING 2026-08-05 16:32:58,380 Unauthorized: /identity/login/
 WARNING 2026-08-05 16:37:00,881 Bad Request: /identity/update/
 WARNING 2026-08-07 15:21:38,734 Unauthorized: /identity/listOfUsers
 WARNING 2026-08-07 15:24:24,811 Forbidden: /identity/listOfUsers
+WARNING 2026-08-07 18:03:59,076 Bad Request: /identity/auth/password-reset/
+WARNING 2026-08-07 18:04:15,184 Bad Request: /identity/auth/password-reset/
+WARNING 2026-08-07 18:04:42,060 Bad Request: /identity/auth/password-reset/
+WARNING 2026-08-07 18:05:02,015 Bad Request: /identity/auth/password-reset/
+WARNING 2026-08-07 18:05:28,286 Bad Request: /identity/auth/password-reset/
+WARNING 2026-08-07 18:05:44,280 Bad Request: /identity/auth/password-reset/
+WARNING 2026-08-07 18:05:53,347 Bad Request: /identity/auth/password-reset/
+WARNING 2026-08-07 18:15:20,276 Bad Request: /identity/auth/password-reset/
+WARNING 2026-08-07 18:15:25,643 Bad Request: /identity/auth/password-reset/
+WARNING 2026-08-07 18:18:36,453 Bad Request: /identity/auth/password-reset/
+WARNING 2026-08-07 18:28:01,479 Bad Request: /identity/auth/password-reset/

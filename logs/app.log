@@ -383,3 +383,150 @@ INFO 2026-08-07 16:25:22,586 autoreload 31340 27944 C:\Users\Top\iam2\identity\v
 INFO 2026-08-07 16:25:22,590 autoreload 30228 26716 C:\Users\Top\iam2\identity\views\domain_views.py changed, reloading.
 INFO 2026-08-07 16:25:23,858 autoreload 27232 13820 Watching for file changes with StatReloader
 INFO 2026-08-07 16:25:24,477 autoreload 18084 19600 Watching for file changes with StatReloader
+INFO 2026-08-07 17:23:46,543 autoreload 27232 13820 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 17:23:47,765 autoreload 21684 26776 Watching for file changes with StatReloader
+INFO 2026-08-07 17:25:14,294 autoreload 21684 26776 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 17:25:15,098 autoreload 27780 5520 Watching for file changes with StatReloader
+INFO 2026-08-07 17:51:41,495 autoreload 27780 5520 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 17:51:43,025 autoreload 5640 22724 Watching for file changes with StatReloader
+INFO 2026-08-07 17:52:07,870 autoreload 5640 22724 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 17:52:08,846 autoreload 32008 9600 Watching for file changes with StatReloader
+INFO 2026-08-07 17:53:15,821 autoreload 32008 9600 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 17:53:16,660 autoreload 30148 7228 Watching for file changes with StatReloader
+INFO 2026-08-07 17:53:46,714 autoreload 30148 7228 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 17:53:47,509 autoreload 26324 29164 Watching for file changes with StatReloader
+INFO 2026-08-07 17:54:30,646 autoreload 26324 29164 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 17:54:31,371 autoreload 28492 26088 Watching for file changes with StatReloader
+INFO 2026-08-07 17:55:30,513 autoreload 28492 26088 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 17:55:31,334 autoreload 16176 25356 Watching for file changes with StatReloader
+INFO 2026-08-07 17:56:24,635 autoreload 16176 25356 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 17:56:25,666 autoreload 3752 412 Watching for file changes with StatReloader
+INFO 2026-08-07 17:57:01,704 autoreload 3752 412 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 17:57:02,657 autoreload 12584 24592 Watching for file changes with StatReloader
+INFO 2026-08-07 17:58:05,008 autoreload 12584 24592 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 17:58:06,048 autoreload 23980 19952 Watching for file changes with StatReloader
+INFO 2026-08-07 17:58:46,511 autoreload 23980 19952 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 17:58:47,384 autoreload 15084 28508 Watching for file changes with StatReloader
+INFO 2026-08-07 17:59:10,245 autoreload 15084 28508 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 17:59:11,143 autoreload 28528 9872 Watching for file changes with StatReloader
+INFO 2026-08-07 18:00:10,326 autoreload 28528 9872 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 18:00:11,192 autoreload 7464 26204 Watching for file changes with StatReloader
+INFO 2026-08-07 18:00:16,576 logging_middleware 7464 21084  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.141s", "user": "anonymous"}
+INFO 2026-08-07 18:00:17,004 logging_middleware 7464 21084  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.187s", "user": "anonymous"}
+INFO 2026-08-07 18:01:55,933 auth_views 7464 21084 ============================================================
+INFO 2026-08-07 18:01:55,965 auth_views 7464 21084  IP: 127.0.0.1
+INFO 2026-08-07 18:01:55,965 auth_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+INFO 2026-08-07 18:02:08,198 auth_views 7464 21084 Email: sara.mohseni@yahoo.com
+INFO 2026-08-07 18:02:08,199 auth_views 7464 21084 Phone: 09123456789
+INFO 2026-08-07 18:02:08,230 auth_views 7464 21084 ============================================================
+INFO 2026-08-07 18:02:08,231 logging_middleware 7464 21084  Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "12.471s", "user": "anonymous"}
+INFO 2026-08-07 18:03:58,927 reset_pass_views 7464 21084 ============================================================
+INFO 2026-08-07 18:03:58,958 reset_pass_views 7464 21084  IP: 127.0.0.1
+INFO 2026-08-07 18:03:58,961 reset_pass_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+WARNING 2026-08-07 18:03:59,074 logging_middleware 7464 21084  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.347s", "user": "anonymous"}
+INFO 2026-08-07 18:04:15,073 reset_pass_views 7464 21084 ============================================================
+INFO 2026-08-07 18:04:15,093 reset_pass_views 7464 21084  IP: 127.0.0.1
+INFO 2026-08-07 18:04:15,094 reset_pass_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+WARNING 2026-08-07 18:04:15,182 logging_middleware 7464 21084  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.275s", "user": "anonymous"}
+INFO 2026-08-07 18:04:41,956 reset_pass_views 7464 21084 ============================================================
+INFO 2026-08-07 18:04:41,977 reset_pass_views 7464 21084  IP: 127.0.0.1
+INFO 2026-08-07 18:04:41,980 reset_pass_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+WARNING 2026-08-07 18:04:42,059 logging_middleware 7464 21084  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.272s", "user": "anonymous"}
+INFO 2026-08-07 18:05:01,902 reset_pass_views 7464 21084 ============================================================
+INFO 2026-08-07 18:05:01,923 reset_pass_views 7464 21084  IP: 127.0.0.1
+INFO 2026-08-07 18:05:01,924 reset_pass_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+WARNING 2026-08-07 18:05:02,014 logging_middleware 7464 21084  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.283s", "user": "anonymous"}
+INFO 2026-08-07 18:05:28,146 reset_pass_views 7464 21084 ============================================================
+INFO 2026-08-07 18:05:28,174 reset_pass_views 7464 21084  IP: 127.0.0.1
+INFO 2026-08-07 18:05:28,175 reset_pass_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+WARNING 2026-08-07 18:05:28,284 logging_middleware 7464 21084  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.334s", "user": "anonymous"}
+INFO 2026-08-07 18:05:44,166 reset_pass_views 7464 21084 ============================================================
+INFO 2026-08-07 18:05:44,191 reset_pass_views 7464 21084  IP: 127.0.0.1
+INFO 2026-08-07 18:05:44,192 reset_pass_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+WARNING 2026-08-07 18:05:44,278 logging_middleware 7464 21084  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.295s", "user": "anonymous"}
+INFO 2026-08-07 18:05:53,195 reset_pass_views 7464 21084 ============================================================
+INFO 2026-08-07 18:05:53,223 reset_pass_views 7464 21084  IP: 127.0.0.1
+INFO 2026-08-07 18:05:53,225 reset_pass_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+WARNING 2026-08-07 18:05:53,344 logging_middleware 7464 21084  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.283s", "user": "anonymous"}
+INFO 2026-08-07 18:12:21,405 autoreload 7464 26204 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 18:12:22,209 autoreload 18452 9916 Watching for file changes with StatReloader
+INFO 2026-08-07 18:12:51,863 autoreload 18452 9916 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 18:12:52,737 autoreload 9380 30948 Watching for file changes with StatReloader
+INFO 2026-08-07 18:14:40,478 autoreload 9380 30948 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 18:14:41,459 autoreload 17708 17112 Watching for file changes with StatReloader
+INFO 2026-08-07 18:14:46,855 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.303s", "user": "admin"}
+INFO 2026-08-07 18:14:47,092 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.168s", "user": "admin"}
+INFO 2026-08-07 18:14:49,190 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/identity/user/18/change/", "status_code": 200, "duration": "0.455s", "user": "admin"}
+INFO 2026-08-07 18:14:49,419 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.147s", "user": "admin"}
+INFO 2026-08-07 18:14:55,865 logging_middleware 17708 30148  Response: {"method": "POST", "path": "/admin/identity/user/18/change/", "status_code": 302, "duration": "0.764s", "user": "admin"}
+INFO 2026-08-07 18:14:56,076 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.187s", "user": "admin"}
+INFO 2026-08-07 18:14:56,348 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.181s", "user": "admin"}
+INFO 2026-08-07 18:15:04,303 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/identity/user/18/change/", "status_code": 200, "duration": "0.456s", "user": "admin"}
+INFO 2026-08-07 18:15:04,576 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.133s", "user": "admin"}
+INFO 2026-08-07 18:15:11,054 logging_middleware 17708 30148  Response: {"method": "POST", "path": "/admin/identity/user/18/change/", "status_code": 302, "duration": "0.222s", "user": "admin"}
+INFO 2026-08-07 18:15:11,195 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.127s", "user": "admin"}
+INFO 2026-08-07 18:15:11,358 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.110s", "user": "admin"}
+INFO 2026-08-07 18:15:20,011 reset_pass_views 17708 30148 ============================================================
+INFO 2026-08-07 18:15:20,053 reset_pass_views 17708 30148  IP: 127.0.0.1
+INFO 2026-08-07 18:15:20,055 reset_pass_views 17708 30148  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+INFO 2026-08-07 18:15:20,274 reset_pass_views 17708 30148 ============================================================
+WARNING 2026-08-07 18:15:20,275 logging_middleware 17708 30148  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.450s", "user": "anonymous"}
+INFO 2026-08-07 18:15:24,814 reset_pass_views 17708 30148 ============================================================
+INFO 2026-08-07 18:15:24,836 reset_pass_views 17708 30148  IP: 127.0.0.1
+INFO 2026-08-07 18:15:24,838 reset_pass_views 17708 30148  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+INFO 2026-08-07 18:15:25,640 reset_pass_views 17708 30148 ============================================================
+WARNING 2026-08-07 18:15:25,641 logging_middleware 17708 30148  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "1.033s", "user": "anonymous"}
+INFO 2026-08-07 18:15:30,004 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.205s", "user": "anonymous"}
+INFO 2026-08-07 18:15:30,454 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.202s", "user": "anonymous"}
+INFO 2026-08-07 18:17:06,715 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.288s", "user": "anonymous"}
+INFO 2026-08-07 18:17:07,063 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.172s", "user": "anonymous"}
+INFO 2026-08-07 18:18:36,175 reset_pass_views 17708 30148 ============================================================
+INFO 2026-08-07 18:18:36,216 reset_pass_views 17708 30148  IP: 127.0.0.1
+INFO 2026-08-07 18:18:36,219 reset_pass_views 17708 30148  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+INFO 2026-08-07 18:18:36,451 reset_pass_views 17708 30148 ============================================================
+WARNING 2026-08-07 18:18:36,452 logging_middleware 17708 30148  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.483s", "user": "anonymous"}
+INFO 2026-08-07 18:18:49,647 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/identity/user/18/change/", "status_code": 200, "duration": "0.210s", "user": "admin"}
+INFO 2026-08-07 18:18:49,842 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.118s", "user": "admin"}
+INFO 2026-08-07 18:18:55,706 logging_middleware 17708 30148  Response: {"method": "POST", "path": "/admin/identity/user/18/change/", "status_code": 302, "duration": "0.322s", "user": "admin"}
+INFO 2026-08-07 18:18:55,910 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.177s", "user": "admin"}
+INFO 2026-08-07 18:18:56,225 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.141s", "user": "admin"}
+INFO 2026-08-07 18:19:01,081 reset_pass_views 17708 30148 ============================================================
+INFO 2026-08-07 18:19:01,103 reset_pass_views 17708 30148  IP: 127.0.0.1
+INFO 2026-08-07 18:19:01,104 reset_pass_views 17708 30148  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+INFO 2026-08-07 18:19:05,367 reset_pass_views 17708 30148 ============================================================
+INFO 2026-08-07 18:19:05,369 logging_middleware 17708 30148  Response: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 200, "duration": "4.495s", "user": "anonymous"}
+INFO 2026-08-07 18:27:47,817 autoreload 17708 17112 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 18:27:48,990 autoreload 26576 12444 Watching for file changes with StatReloader
+INFO 2026-08-07 18:27:52,762 autoreload 26576 12444 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 18:27:53,591 autoreload 9528 10552 Watching for file changes with StatReloader
+INFO 2026-08-07 18:27:56,272 reset_pass_views 9528 19356 ============================================================
+INFO 2026-08-07 18:27:56,287 reset_pass_views 9528 19356 IP: 127.0.0.1
+INFO 2026-08-07 18:27:56,288 reset_pass_views 9528 19356 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+INFO 2026-08-07 18:28:01,473 reset_pass_views 9528 19356 ============================================================
+WARNING 2026-08-07 18:28:01,475 logging_middleware 9528 19356  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "5.346s", "user": "anonymous"}
+INFO 2026-08-07 18:28:25,286 reset_pass_views 9528 19356 ============================================================
+INFO 2026-08-07 18:28:25,304 reset_pass_views 9528 19356 IP: 127.0.0.1
+INFO 2026-08-07 18:28:25,307 reset_pass_views 9528 19356 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+INFO 2026-08-07 18:28:32,631 reset_pass_views 9528 19356 ============================================================
+INFO 2026-08-07 18:28:32,632 logging_middleware 9528 19356  Response: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 200, "duration": "7.472s", "user": "anonymous"}
+INFO 2026-08-07 18:29:18,897 autoreload 27524 26324 Watching for file changes with StatReloader
+INFO 2026-08-07 18:29:31,031 logging_middleware 9528 19356  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.198s", "user": "anonymous"}
+INFO 2026-08-07 18:29:31,526 logging_middleware 9528 19356  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.199s", "user": "anonymous"}
+INFO 2026-08-07 18:30:01,704 reset_pass_views 9528 19356 ============================================================
+INFO 2026-08-07 18:30:01,733 reset_pass_views 9528 19356 IP: 127.0.0.1
+INFO 2026-08-07 18:30:01,736 reset_pass_views 9528 19356 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+INFO 2026-08-07 18:30:12,478 reset_pass_views 9528 19356 ============================================================
+INFO 2026-08-07 18:30:12,479 logging_middleware 9528 19356  Response: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 200, "duration": "10.972s", "user": "anonymous"}
+INFO 2026-08-07 18:31:05,431 autoreload 27524 26324 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 18:31:05,487 autoreload 9528 10552 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 18:31:06,573 autoreload 21112 19404 Watching for file changes with StatReloader
+INFO 2026-08-07 18:31:06,649 autoreload 16488 10428 Watching for file changes with StatReloader
+INFO 2026-08-07 18:31:35,944 reset_pass_views 21112 31448 ============================================================
+INFO 2026-08-07 18:31:35,975 reset_pass_views 21112 31448 IP: 127.0.0.1
+INFO 2026-08-07 18:31:35,976 reset_pass_views 21112 31448 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
+INFO 2026-08-07 18:31:45,617 reset_pass_views 21112 31448 ============================================================
+INFO 2026-08-07 18:31:45,619 logging_middleware 21112 31448  Response: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 200, "duration": "9.914s", "user": "anonymous"}
+INFO 2026-08-07 18:32:19,710 autoreload 16488 10428 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 18:32:19,740 autoreload 21112 19404 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
+INFO 2026-08-07 18:32:20,791 autoreload 25332 13548 Watching for file changes with StatReloader
+INFO 2026-08-07 18:32:20,807 autoreload 8016 17372 Watching for file changes with StatReloader
