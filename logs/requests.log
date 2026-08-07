@@ -4,3 +4,5 @@ WARNING 2026-08-05 16:30:53,717 Bad Request: /identity/register/
 WARNING 2026-08-05 16:32:11,452 Unauthorized: /identity/login/
 WARNING 2026-08-05 16:32:58,380 Unauthorized: /identity/login/
 WARNING 2026-08-05 16:37:00,881 Bad Request: /identity/update/
+WARNING 2026-08-07 15:21:38,734 Unauthorized: /identity/listOfUsers
+WARNING 2026-08-07 15:24:24,811 Forbidden: /identity/listOfUsers

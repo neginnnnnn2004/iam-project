@@ -160,3 +160,226 @@ INFO 2026-08-05 16:37:00,771 auth_views 23888 27480 ============================
 INFO 2026-08-05 16:37:00,794 auth_views 23888 27480  IP: 127.0.0.1
 INFO 2026-08-05 16:37:00,878 auth_views 23888 27480 ============================================================
 WARNING 2026-08-05 16:37:00,879 logging_middleware 23888 27480  Response Error: {"method": "PATCH", "path": "/identity/update/", "status_code": 400, "duration": "0.351s", "user": "test83user"}
+INFO 2026-08-05 17:48:45,869 autoreload 23888 22884 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 17:48:47,599 autoreload 30728 17376 Watching for file changes with StatReloader
+INFO 2026-08-05 17:51:43,547 autoreload 30728 17376 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 17:51:44,659 autoreload 22496 29348 Watching for file changes with StatReloader
+INFO 2026-08-05 17:52:02,898 autoreload 22496 29348 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 17:52:03,806 autoreload 20924 13124 Watching for file changes with StatReloader
+INFO 2026-08-05 17:52:19,989 autoreload 20924 13124 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 17:52:20,920 autoreload 22392 1688 Watching for file changes with StatReloader
+INFO 2026-08-05 17:52:33,940 autoreload 22392 1688 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 17:52:34,780 autoreload 16484 29364 Watching for file changes with StatReloader
+INFO 2026-08-05 17:53:28,458 autoreload 16484 29364 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 17:53:29,359 autoreload 17968 22820 Watching for file changes with StatReloader
+INFO 2026-08-05 17:55:18,308 autoreload 17968 22820 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 17:55:19,325 autoreload 24524 22524 Watching for file changes with StatReloader
+INFO 2026-08-05 17:56:13,109 autoreload 24524 22524 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 17:56:13,904 autoreload 19524 28432 Watching for file changes with StatReloader
+INFO 2026-08-05 17:56:59,011 autoreload 19524 28432 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 17:56:59,825 autoreload 28648 27428 Watching for file changes with StatReloader
+INFO 2026-08-05 17:57:28,334 autoreload 28648 27428 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 17:57:29,255 autoreload 19804 21616 Watching for file changes with StatReloader
+INFO 2026-08-05 17:59:09,782 autoreload 19804 21616 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 17:59:10,651 autoreload 19812 24548 Watching for file changes with StatReloader
+INFO 2026-08-05 17:59:34,021 autoreload 19812 24548 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 17:59:35,081 autoreload 29116 32240 Watching for file changes with StatReloader
+INFO 2026-08-05 17:59:45,915 autoreload 29116 32240 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 17:59:46,786 autoreload 10104 20136 Watching for file changes with StatReloader
+INFO 2026-08-05 18:00:25,731 autoreload 10104 20136 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:00:26,604 autoreload 3140 27744 Watching for file changes with StatReloader
+INFO 2026-08-05 18:00:56,083 autoreload 3140 27744 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:00:57,027 autoreload 26268 30728 Watching for file changes with StatReloader
+INFO 2026-08-05 18:01:25,602 autoreload 26268 30728 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:01:26,525 autoreload 5696 30200 Watching for file changes with StatReloader
+INFO 2026-08-05 18:03:42,208 autoreload 5696 30200 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:03:43,156 autoreload 14440 25768 Watching for file changes with StatReloader
+INFO 2026-08-05 18:05:19,060 autoreload 14440 25768 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:05:19,923 autoreload 32448 15964 Watching for file changes with StatReloader
+INFO 2026-08-05 18:05:49,843 autoreload 32448 15964 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:05:50,628 autoreload 3752 27152 Watching for file changes with StatReloader
+INFO 2026-08-05 18:06:14,857 autoreload 3752 27152 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:06:15,687 autoreload 7668 4552 Watching for file changes with StatReloader
+INFO 2026-08-05 18:06:43,268 autoreload 7668 4552 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:06:44,068 autoreload 29612 25852 Watching for file changes with StatReloader
+INFO 2026-08-05 18:07:19,972 autoreload 29612 25852 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:07:20,776 autoreload 29856 17940 Watching for file changes with StatReloader
+INFO 2026-08-05 18:07:38,867 autoreload 29856 17940 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:07:39,966 autoreload 10248 32540 Watching for file changes with StatReloader
+INFO 2026-08-05 18:08:15,750 autoreload 10248 32540 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:08:16,588 autoreload 17496 6604 Watching for file changes with StatReloader
+INFO 2026-08-05 18:08:40,938 autoreload 17496 6604 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:08:42,126 autoreload 29688 32064 Watching for file changes with StatReloader
+INFO 2026-08-05 18:09:02,367 autoreload 29688 32064 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:09:03,389 autoreload 22468 13116 Watching for file changes with StatReloader
+INFO 2026-08-05 18:09:20,389 autoreload 22468 13116 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:09:21,346 autoreload 3192 32628 Watching for file changes with StatReloader
+INFO 2026-08-05 18:09:51,822 autoreload 3192 32628 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:09:52,729 autoreload 1736 13908 Watching for file changes with StatReloader
+INFO 2026-08-05 18:11:14,793 autoreload 1736 13908 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:11:15,640 autoreload 7592 24680 Watching for file changes with StatReloader
+INFO 2026-08-05 18:12:16,364 autoreload 7592 24680 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:12:17,379 autoreload 30296 23128 Watching for file changes with StatReloader
+INFO 2026-08-05 18:13:40,981 autoreload 30296 23128 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:13:41,958 autoreload 30460 26232 Watching for file changes with StatReloader
+INFO 2026-08-05 18:15:57,441 autoreload 30460 26232 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:15:58,178 autoreload 25884 13588 Watching for file changes with StatReloader
+INFO 2026-08-05 18:16:15,322 autoreload 25884 13588 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:16:16,156 autoreload 20796 31044 Watching for file changes with StatReloader
+INFO 2026-08-05 18:17:03,652 autoreload 20796 31044 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:17:04,502 autoreload 16484 10964 Watching for file changes with StatReloader
+INFO 2026-08-05 18:17:19,571 autoreload 16484 10964 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:17:20,626 autoreload 19700 17892 Watching for file changes with StatReloader
+INFO 2026-08-05 18:18:21,401 autoreload 19700 17892 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:18:22,412 autoreload 18296 29516 Watching for file changes with StatReloader
+INFO 2026-08-05 18:19:49,650 autoreload 18296 29516 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-05 18:19:50,415 autoreload 28452 14892 Watching for file changes with StatReloader
+INFO 2026-08-07 15:17:02,542 autoreload 28452 14892 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-07 15:17:04,264 autoreload 32224 12968 Watching for file changes with StatReloader
+INFO 2026-08-07 15:17:12,082 autoreload 24016 412 Watching for file changes with StatReloader
+INFO 2026-08-07 15:19:41,028 autoreload 32224 12968 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-07 15:19:41,319 autoreload 24016 412 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-07 15:19:42,418 autoreload 19832 9488 Watching for file changes with StatReloader
+INFO 2026-08-07 15:19:42,700 autoreload 29616 28448 Watching for file changes with StatReloader
+INFO 2026-08-07 15:19:53,211 logging_middleware 19832 31304  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.411s", "user": "anonymous"}
+INFO 2026-08-07 15:19:53,736 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.206s", "user": "anonymous"}
+WARNING 2026-08-07 15:21:38,733 logging_middleware 19832 22844  Response Error: {"method": "GET", "path": "/identity/listOfUsers", "status_code": 401, "duration": "0.128s", "user": "anonymous"}
+INFO 2026-08-07 15:22:21,520 auth_views 19832 22844 ============================================================
+INFO 2026-08-07 15:22:21,546 auth_views 19832 22844  IP: 127.0.0.1
+INFO 2026-08-07 15:22:21,547 auth_views 19832 22844  Username: admin
+INFO 2026-08-07 15:22:22,910 auth_views 19832 22844 ============================================================
+INFO 2026-08-07 15:22:23,074 logging_middleware 19832 22844  Response: {"method": "POST", "path": "/identity/login/", "status_code": 200, "duration": "1.699s", "user": "anonymous"}
+INFO 2026-08-07 15:23:02,674 user_views 19832 22844 ============================================================
+INFO 2026-08-07 15:23:02,712 user_views 19832 22844 IP: 127.0.0.1
+INFO 2026-08-07 15:23:02,780 user_views 19832 22844 ============================================================
+INFO 2026-08-07 15:23:02,787 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/identity/listOfUsers", "status_code": 200, "duration": "0.333s", "user": "admin"}
+INFO 2026-08-07 15:23:39,336 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/admin/identity/user/12/change/", "status_code": 200, "duration": "0.569s", "user": "admin"}
+INFO 2026-08-07 15:23:39,571 logging_middleware 19832 16416  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.133s", "user": "admin"}
+INFO 2026-08-07 15:23:57,507 auth_views 19832 22844 ============================================================
+INFO 2026-08-07 15:23:57,542 auth_views 19832 22844  IP: 127.0.0.1
+INFO 2026-08-07 15:23:57,544 auth_views 19832 22844  Username: fatemeh
+INFO 2026-08-07 15:23:58,938 auth_views 19832 22844 ============================================================
+INFO 2026-08-07 15:23:58,950 logging_middleware 19832 22844  Response: {"method": "POST", "path": "/identity/login/", "status_code": 200, "duration": "1.637s", "user": "anonymous"}
+WARNING 2026-08-07 15:24:24,809 logging_middleware 19832 22844  Response Error: {"method": "GET", "path": "/identity/listOfUsers", "status_code": 403, "duration": "0.235s", "user": "fatemeh"}
+INFO 2026-08-07 15:25:42,867 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.244s", "user": "admin"}
+INFO 2026-08-07 15:25:43,050 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.120s", "user": "admin"}
+INFO 2026-08-07 15:25:51,214 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/admin/identity/user/17/change/", "status_code": 200, "duration": "0.422s", "user": "admin"}
+INFO 2026-08-07 15:25:51,396 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.113s", "user": "admin"}
+INFO 2026-08-07 15:26:04,362 logging_middleware 19832 22844  Response: {"method": "POST", "path": "/admin/identity/user/17/change/", "status_code": 302, "duration": "0.454s", "user": "admin"}
+INFO 2026-08-07 15:26:04,503 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.130s", "user": "admin"}
+INFO 2026-08-07 15:26:04,693 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.123s", "user": "admin"}
+INFO 2026-08-07 15:27:44,049 logging_middleware 19832 22844  Response: {"method": "POST", "path": "/identity/password-reset/confirm/", "status_code": 200, "duration": "4.246s", "user": "anonymous"}
+INFO 2026-08-07 15:29:08,446 auth_views 19832 22844 ============================================================
+INFO 2026-08-07 15:29:08,462 auth_views 19832 22844  IP: 127.0.0.1
+INFO 2026-08-07 15:29:08,463 auth_views 19832 22844  Username: test83user
+INFO 2026-08-07 15:29:09,749 auth_views 19832 22844 ============================================================
+INFO 2026-08-07 15:29:09,758 logging_middleware 19832 22844  Response: {"method": "POST", "path": "/identity/login/", "status_code": 200, "duration": "1.453s", "user": "anonymous"}
+INFO 2026-08-07 15:30:03,461 user_views 19832 22844 ============================================================
+INFO 2026-08-07 15:30:03,482 user_views 19832 22844 IP: 127.0.0.1
+INFO 2026-08-07 15:30:03,526 user_views 19832 22844 ============================================================
+INFO 2026-08-07 15:30:03,536 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/identity/pending/", "status_code": 200, "duration": "0.278s", "user": "test83user"}
+INFO 2026-08-07 15:31:53,008 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/identity/me/", "status_code": 200, "duration": "0.215s", "user": "test83user"}
+INFO 2026-08-07 15:43:59,634 autoreload 29616 28448 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 15:43:59,637 autoreload 19832 9488 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 15:44:01,535 autoreload 25344 24132 Watching for file changes with StatReloader
+INFO 2026-08-07 15:44:01,536 autoreload 6392 9100 Watching for file changes with StatReloader
+INFO 2026-08-07 15:44:02,608 logging_middleware 25344 13660  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.245s", "user": "anonymous"}
+INFO 2026-08-07 15:44:02,952 logging_middleware 25344 28084  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.135s", "user": "anonymous"}
+INFO 2026-08-07 15:44:34,656 autoreload 6392 9100 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 15:44:34,660 autoreload 25344 24132 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 15:44:35,687 autoreload 18804 4664 Watching for file changes with StatReloader
+INFO 2026-08-07 15:44:35,687 autoreload 9960 5764 Watching for file changes with StatReloader
+INFO 2026-08-07 15:44:36,305 logging_middleware 9960 9656  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.110s", "user": "anonymous"}
+INFO 2026-08-07 15:44:36,611 logging_middleware 9960 9264  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.137s", "user": "anonymous"}
+INFO 2026-08-07 15:44:55,896 autoreload 9960 5764 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 15:44:55,898 autoreload 18804 4664 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 15:44:56,813 autoreload 22436 32580 Watching for file changes with StatReloader
+INFO 2026-08-07 15:44:56,821 autoreload 21772 23304 Watching for file changes with StatReloader
+INFO 2026-08-07 15:44:57,589 logging_middleware 21772 14128  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.174s", "user": "anonymous"}
+INFO 2026-08-07 15:44:57,915 logging_middleware 21772 20112  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.133s", "user": "anonymous"}
+INFO 2026-08-07 15:47:17,757 autoreload 22436 32580 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 15:47:17,764 autoreload 21772 23304 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 15:47:18,925 autoreload 27500 12352 Watching for file changes with StatReloader
+INFO 2026-08-07 15:47:18,943 autoreload 5676 5572 Watching for file changes with StatReloader
+INFO 2026-08-07 15:47:19,727 logging_middleware 27500 13912  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.163s", "user": "anonymous"}
+INFO 2026-08-07 15:47:20,114 logging_middleware 27500 23684  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.168s", "user": "anonymous"}
+INFO 2026-08-07 15:49:49,775 autoreload 27500 12352 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 15:49:49,788 autoreload 5676 5572 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
+INFO 2026-08-07 15:49:50,811 autoreload 12656 25332 Watching for file changes with StatReloader
+INFO 2026-08-07 15:49:50,826 autoreload 17488 19676 Watching for file changes with StatReloader
+INFO 2026-08-07 15:49:51,670 logging_middleware 12656 12692  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.154s", "user": "anonymous"}
+INFO 2026-08-07 15:49:51,999 logging_middleware 12656 10748  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.123s", "user": "anonymous"}
+INFO 2026-08-07 15:50:39,900 autoreload 12656 25332 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 15:50:39,900 autoreload 17488 19676 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 15:50:40,929 autoreload 5516 22832 Watching for file changes with StatReloader
+INFO 2026-08-07 15:50:40,930 autoreload 30236 19480 Watching for file changes with StatReloader
+INFO 2026-08-07 15:50:41,794 logging_middleware 5516 24064  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.140s", "user": "anonymous"}
+INFO 2026-08-07 15:50:42,107 logging_middleware 5516 29936  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.122s", "user": "anonymous"}
+INFO 2026-08-07 15:51:25,242 autoreload 30236 19480 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
+INFO 2026-08-07 15:51:25,261 autoreload 5516 22832 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
+INFO 2026-08-07 15:51:26,127 autoreload 5028 27292 Watching for file changes with StatReloader
+INFO 2026-08-07 15:51:26,142 autoreload 9292 26472 Watching for file changes with StatReloader
+INFO 2026-08-07 15:51:26,889 logging_middleware 5028 25128  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.154s", "user": "anonymous"}
+INFO 2026-08-07 15:51:27,191 logging_middleware 5028 27440  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.128s", "user": "anonymous"}
+INFO 2026-08-07 15:54:11,097 autoreload 9292 26472 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 15:54:11,119 autoreload 5028 27292 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
+INFO 2026-08-07 15:54:12,041 autoreload 31164 2868 Watching for file changes with StatReloader
+INFO 2026-08-07 15:54:12,043 autoreload 29936 29504 Watching for file changes with StatReloader
+INFO 2026-08-07 15:54:12,879 logging_middleware 29936 30172  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.176s", "user": "anonymous"}
+INFO 2026-08-07 15:54:13,220 logging_middleware 29936 30908  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.133s", "user": "anonymous"}
+INFO 2026-08-07 15:55:29,312 autoreload 31164 2868 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 15:55:29,313 autoreload 29936 29504 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 15:55:30,279 autoreload 31928 8620 Watching for file changes with StatReloader
+INFO 2026-08-07 15:55:30,300 autoreload 25516 1416 Watching for file changes with StatReloader
+INFO 2026-08-07 15:55:31,144 logging_middleware 31928 20996  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.141s", "user": "anonymous"}
+INFO 2026-08-07 15:55:31,440 logging_middleware 31928 2528  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.134s", "user": "anonymous"}
+INFO 2026-08-07 15:58:44,411 autoreload 31928 8620 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
+INFO 2026-08-07 15:58:44,724 autoreload 25516 1416 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
+INFO 2026-08-07 15:58:45,458 autoreload 28064 23908 Watching for file changes with StatReloader
+INFO 2026-08-07 15:58:45,600 autoreload 20432 4548 Watching for file changes with StatReloader
+INFO 2026-08-07 15:59:56,255 autoreload 28064 23908 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
+INFO 2026-08-07 15:59:56,267 autoreload 20432 4548 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
+INFO 2026-08-07 15:59:57,147 autoreload 22420 32576 Watching for file changes with StatReloader
+INFO 2026-08-07 15:59:57,148 autoreload 23796 26044 Watching for file changes with StatReloader
+INFO 2026-08-07 16:00:00,401 logging_middleware 23796 29000  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.131s", "user": "anonymous"}
+INFO 2026-08-07 16:00:01,547 logging_middleware 23796 29000  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.934s", "user": "anonymous"}
+INFO 2026-08-07 16:02:53,937 autoreload 23796 26044 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 16:02:54,089 autoreload 22420 32576 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 16:02:54,977 autoreload 11384 2948 Watching for file changes with StatReloader
+INFO 2026-08-07 16:02:55,063 autoreload 13508 1416 Watching for file changes with StatReloader
+INFO 2026-08-07 16:10:21,732 logging_middleware 11384 12792  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.321s", "user": "anonymous"}
+INFO 2026-08-07 16:10:21,998 autoreload 13508 1416 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
+INFO 2026-08-07 16:10:22,173 logging_middleware 11384 12792  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.169s", "user": "anonymous"}
+INFO 2026-08-07 16:10:22,412 autoreload 11384 2948 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 16:10:23,345 autoreload 1432 9780 Watching for file changes with StatReloader
+INFO 2026-08-07 16:10:23,345 autoreload 27500 13108 Watching for file changes with StatReloader
+INFO 2026-08-07 16:10:31,264 logging_middleware 1432 28616  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.245s", "user": "anonymous"}
+INFO 2026-08-07 16:10:31,698 logging_middleware 1432 28616  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.218s", "user": "anonymous"}
+INFO 2026-08-07 16:12:03,790 autoreload 1432 9780 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 16:12:04,204 logging_middleware 27500 29124  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.229s", "user": "anonymous"}
+INFO 2026-08-07 16:12:04,455 autoreload 27500 13108 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 16:12:04,922 autoreload 32380 11252 Watching for file changes with StatReloader
+INFO 2026-08-07 16:12:05,365 autoreload 31312 6184 Watching for file changes with StatReloader
+INFO 2026-08-07 16:12:05,505 logging_middleware 32380 24776  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.126s", "user": "anonymous"}
+INFO 2026-08-07 16:12:33,980 logging_middleware 32380 24776  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.259s", "user": "anonymous"}
+INFO 2026-08-07 16:12:34,415 logging_middleware 32380 24776  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.218s", "user": "anonymous"}
+INFO 2026-08-07 16:12:45,969 autoreload 32380 11252 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 16:12:46,274 logging_middleware 31312 5868  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.143s", "user": "anonymous"}
+INFO 2026-08-07 16:12:46,704 logging_middleware 31312 5868  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.150s", "user": "anonymous"}
+INFO 2026-08-07 16:12:46,739 autoreload 31312 6184 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 16:12:47,099 autoreload 14920 2772 Watching for file changes with StatReloader
+INFO 2026-08-07 16:12:47,695 autoreload 21144 32092 Watching for file changes with StatReloader
+INFO 2026-08-07 16:12:51,716 logging_middleware 14920 9268  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.268s", "user": "anonymous"}
+INFO 2026-08-07 16:12:52,048 logging_middleware 14920 9268  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.134s", "user": "anonymous"}
+INFO 2026-08-07 16:15:36,678 autoreload 14920 2772 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 16:15:36,702 autoreload 21144 32092 C:\Users\Top\iam2\identity\urls.py changed, reloading.
+INFO 2026-08-07 16:15:37,741 autoreload 29144 22372 Watching for file changes with StatReloader
+INFO 2026-08-07 16:15:37,769 autoreload 28308 16716 Watching for file changes with StatReloader
+INFO 2026-08-07 16:19:14,662 autoreload 28308 16716 C:\Users\Top\iam2\identity\views\domain_views.py changed, reloading.
+INFO 2026-08-07 16:19:14,662 autoreload 29144 22372 C:\Users\Top\iam2\identity\views\domain_views.py changed, reloading.
+INFO 2026-08-07 16:19:15,742 autoreload 31340 27944 Watching for file changes with StatReloader
+INFO 2026-08-07 16:19:15,744 autoreload 30228 26716 Watching for file changes with StatReloader
+INFO 2026-08-07 16:25:22,586 autoreload 31340 27944 C:\Users\Top\iam2\identity\views\domain_views.py changed, reloading.
+INFO 2026-08-07 16:25:22,590 autoreload 30228 26716 C:\Users\Top\iam2\identity\views\domain_views.py changed, reloading.
+INFO 2026-08-07 16:25:23,858 autoreload 27232 13820 Watching for file changes with StatReloader
+INFO 2026-08-07 16:25:24,477 autoreload 18084 19600 Watching for file changes with StatReloader
