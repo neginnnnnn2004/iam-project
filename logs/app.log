@@ -1,532 +1,156 @@
-INFO 2026-08-05 15:16:10,638 autoreload 25152 21668 Watching for file changes with StatReloader
-INFO 2026-08-05 15:16:10,719 autoreload 23344 11512 Watching for file changes with StatReloader
-INFO 2026-08-05 15:26:03,790 autoreload 23344 11512 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
-INFO 2026-08-05 15:26:04,838 autoreload 26696 3956 Watching for file changes with StatReloader
-INFO 2026-08-05 15:26:45,938 autoreload 26696 3956 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
-INFO 2026-08-05 15:26:46,765 autoreload 21232 2276 Watching for file changes with StatReloader
-INFO 2026-08-05 15:26:50,469 autoreload 21232 2276 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
-INFO 2026-08-05 15:26:51,367 autoreload 5028 28096 Watching for file changes with StatReloader
-INFO 2026-08-05 15:27:14,896 autoreload 5028 28096 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
-INFO 2026-08-05 15:27:15,804 autoreload 6964 18576 Watching for file changes with StatReloader
-INFO 2026-08-05 15:27:34,089 autoreload 6964 18576 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
-INFO 2026-08-05 15:27:35,063 autoreload 18844 10284 Watching for file changes with StatReloader
-INFO 2026-08-05 15:27:54,318 autoreload 18844 10284 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
-INFO 2026-08-05 15:27:55,351 autoreload 31128 12480 Watching for file changes with StatReloader
-INFO 2026-08-05 15:28:16,799 autoreload 31128 12480 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
-INFO 2026-08-05 15:28:17,802 autoreload 24168 15352 Watching for file changes with StatReloader
-INFO 2026-08-05 15:28:31,173 autoreload 24168 15352 C:\Users\Top\iam2\identity\views\test_view.py changed, reloading.
-INFO 2026-08-05 15:28:32,075 autoreload 3384 32312 Watching for file changes with StatReloader
-INFO 2026-08-05 15:28:35,227 autoreload 24768 11800 Watching for file changes with StatReloader
-INFO 2026-08-05 15:38:42,963 autoreload 3384 32312 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:38:43,866 autoreload 24064 32540 Watching for file changes with StatReloader
-INFO 2026-08-05 15:39:59,998 autoreload 24064 32540 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:40:01,057 autoreload 24332 10036 Watching for file changes with StatReloader
-INFO 2026-08-05 15:40:12,056 autoreload 24332 10036 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:40:12,839 autoreload 29312 10636 Watching for file changes with StatReloader
-INFO 2026-08-05 15:44:26,962 autoreload 29312 10636 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:44:27,783 autoreload 7380 400 Watching for file changes with StatReloader
-INFO 2026-08-05 15:44:58,932 autoreload 7380 400 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:44:59,838 autoreload 14940 11708 Watching for file changes with StatReloader
-INFO 2026-08-05 15:46:01,039 autoreload 14940 11708 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:46:02,255 autoreload 29704 18424 Watching for file changes with StatReloader
-INFO 2026-08-05 15:48:20,211 autoreload 29704 18424 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:48:21,094 autoreload 20776 11568 Watching for file changes with StatReloader
-INFO 2026-08-05 15:48:34,087 autoreload 20776 11568 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:48:35,057 autoreload 16928 7580 Watching for file changes with StatReloader
-INFO 2026-08-05 15:50:02,198 autoreload 16928 7580 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:50:03,097 autoreload 20960 27512 Watching for file changes with StatReloader
-INFO 2026-08-05 15:50:42,256 autoreload 20960 27512 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:50:43,074 autoreload 27128 28764 Watching for file changes with StatReloader
-INFO 2026-08-05 15:51:44,456 autoreload 27128 28764 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:51:45,409 autoreload 29984 20492 Watching for file changes with StatReloader
-INFO 2026-08-05 15:52:35,316 autoreload 29984 20492 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:52:36,264 autoreload 30756 15336 Watching for file changes with StatReloader
-INFO 2026-08-05 15:53:37,474 autoreload 30756 15336 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:53:38,410 autoreload 26796 23196 Watching for file changes with StatReloader
-INFO 2026-08-05 15:53:59,806 autoreload 26796 23196 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:54:00,582 autoreload 24020 14676 Watching for file changes with StatReloader
-INFO 2026-08-05 15:54:32,676 autoreload 24020 14676 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:54:33,784 autoreload 32036 26404 Watching for file changes with StatReloader
-INFO 2026-08-05 15:54:47,994 autoreload 32036 26404 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:54:48,918 autoreload 29932 10508 Watching for file changes with StatReloader
-INFO 2026-08-05 15:55:06,097 autoreload 29932 10508 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:55:06,946 autoreload 29984 24680 Watching for file changes with StatReloader
-INFO 2026-08-05 15:57:03,348 autoreload 29984 24680 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:57:04,206 autoreload 10456 12024 Watching for file changes with StatReloader
-INFO 2026-08-05 15:58:50,642 autoreload 10456 12024 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 15:58:51,379 autoreload 22928 27592 Watching for file changes with StatReloader
-INFO 2026-08-05 16:00:02,843 autoreload 22928 27592 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:00:03,685 autoreload 2996 8848 Watching for file changes with StatReloader
-INFO 2026-08-05 16:02:17,628 autoreload 2996 8848 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:02:18,902 autoreload 5972 21780 Watching for file changes with StatReloader
-INFO 2026-08-05 16:03:08,478 autoreload 5972 21780 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:03:09,365 autoreload 13060 25664 Watching for file changes with StatReloader
-INFO 2026-08-05 16:03:20,587 autoreload 13060 25664 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:03:21,340 autoreload 20608 32676 Watching for file changes with StatReloader
-INFO 2026-08-05 16:04:08,803 autoreload 20608 32676 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:04:09,678 autoreload 18284 29660 Watching for file changes with StatReloader
-INFO 2026-08-05 16:05:00,326 autoreload 18284 29660 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:05:01,180 autoreload 32008 19700 Watching for file changes with StatReloader
-INFO 2026-08-05 16:07:26,311 autoreload 32008 19700 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:07:27,044 autoreload 29868 20444 Watching for file changes with StatReloader
-INFO 2026-08-05 16:07:51,502 autoreload 29868 20444 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:07:52,528 autoreload 26064 23584 Watching for file changes with StatReloader
-INFO 2026-08-05 16:08:24,408 autoreload 26064 23584 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:08:25,150 autoreload 20120 31872 Watching for file changes with StatReloader
-INFO 2026-08-05 16:08:43,344 autoreload 20120 31872 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:08:44,170 autoreload 27728 22464 Watching for file changes with StatReloader
-INFO 2026-08-05 16:09:43,134 autoreload 27728 22464 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:09:43,976 autoreload 27252 9916 Watching for file changes with StatReloader
-INFO 2026-08-05 16:09:54,094 autoreload 27252 9916 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:09:54,915 autoreload 19088 10800 Watching for file changes with StatReloader
-INFO 2026-08-05 16:10:43,533 autoreload 19088 10800 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:10:44,455 autoreload 10268 25820 Watching for file changes with StatReloader
-INFO 2026-08-05 16:11:46,370 autoreload 10268 25820 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:11:47,382 autoreload 7628 27776 Watching for file changes with StatReloader
-INFO 2026-08-05 16:12:49,821 autoreload 7628 27776 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:12:50,868 autoreload 24040 32764 Watching for file changes with StatReloader
-INFO 2026-08-05 16:13:10,451 autoreload 24040 32764 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:13:11,284 autoreload 22644 26072 Watching for file changes with StatReloader
-INFO 2026-08-05 16:14:07,461 autoreload 22644 26072 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:14:08,410 autoreload 32560 21604 Watching for file changes with StatReloader
-INFO 2026-08-05 16:14:34,666 autoreload 32560 21604 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:14:35,592 autoreload 27080 21752 Watching for file changes with StatReloader
-INFO 2026-08-05 16:15:47,161 autoreload 27080 21752 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:15:48,019 autoreload 10248 27604 Watching for file changes with StatReloader
-INFO 2026-08-05 16:16:13,603 autoreload 10248 27604 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:16:14,595 autoreload 29252 23716 Watching for file changes with StatReloader
-INFO 2026-08-05 16:18:01,392 autoreload 29252 23716 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:18:02,281 autoreload 25996 9476 Watching for file changes with StatReloader
-INFO 2026-08-05 16:19:35,301 autoreload 25996 9476 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:19:36,185 autoreload 22100 2764 Watching for file changes with StatReloader
-INFO 2026-08-05 16:21:15,343 autoreload 22100 2764 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:21:16,224 autoreload 26336 24160 Watching for file changes with StatReloader
-INFO 2026-08-05 16:23:35,574 autoreload 26336 24160 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:23:36,437 autoreload 20064 29464 Watching for file changes with StatReloader
-INFO 2026-08-05 16:25:41,006 autoreload 20064 29464 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
-INFO 2026-08-05 16:25:41,887 autoreload 23888 22884 Watching for file changes with StatReloader
-INFO 2026-08-05 16:26:23,308 autoreload 25848 12184 Watching for file changes with StatReloader
-WARNING 2026-08-05 16:26:30,410 logging_middleware 23888 27480  Response Error: {"method": "GET", "path": "/", "status_code": 404, "duration": "0.125s", "user": "anonymous"}
-INFO 2026-08-05 16:26:46,835 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.091s", "user": "anonymous"}
-INFO 2026-08-05 16:26:47,199 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.099s", "user": "anonymous"}
-INFO 2026-08-05 16:28:34,134 auth_views 23888 27480 ============================================================
-INFO 2026-08-05 16:28:34,177 auth_views 23888 27480  IP: 127.0.0.1
-INFO 2026-08-05 16:28:34,179 auth_views 23888 27480  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-INFO 2026-08-05 16:28:47,000 auth_views 23888 27480 Email: test83@example.com
-INFO 2026-08-05 16:28:47,002 auth_views 23888 27480 Phone: 09123456789
-INFO 2026-08-05 16:28:47,074 auth_views 23888 27480 ============================================================
-INFO 2026-08-05 16:28:47,087 logging_middleware 23888 27480  Response: {"method": "POST", "path": "/identity/register/", "status_code": 201, "duration": "12.969s", "user": "anonymous"}
-INFO 2026-08-05 16:29:59,328 auth_views 23888 27480 ============================================================
-INFO 2026-08-05 16:29:59,366 auth_views 23888 27480  IP: 127.0.0.1
-INFO 2026-08-05 16:29:59,368 auth_views 23888 27480  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-INFO 2026-08-05 16:29:59,691 auth_views 23888 27480 ============================================================
-WARNING 2026-08-05 16:29:59,692 logging_middleware 23888 27480  Response Error: {"method": "POST", "path": "/identity/register/", "status_code": 400, "duration": "0.386s", "user": "anonymous"}
-INFO 2026-08-05 16:30:53,383 auth_views 23888 27480 ============================================================
-INFO 2026-08-05 16:30:53,411 auth_views 23888 27480  IP: 127.0.0.1
-INFO 2026-08-05 16:30:53,412 auth_views 23888 27480  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-INFO 2026-08-05 16:30:53,713 auth_views 23888 27480 ============================================================
-WARNING 2026-08-05 16:30:53,713 logging_middleware 23888 27480  Response Error: {"method": "POST", "path": "/identity/register/", "status_code": 400, "duration": "0.349s", "user": "anonymous"}
-INFO 2026-08-05 16:32:09,761 auth_views 23888 27480 ============================================================
-INFO 2026-08-05 16:32:09,795 auth_views 23888 27480  IP: 127.0.0.1
-INFO 2026-08-05 16:32:09,796 auth_views 23888 27480  Username: testuser
-WARNING 2026-08-05 16:32:11,448 auth_views 23888 27480  IP: 127.0.0.1
-INFO 2026-08-05 16:32:11,449 auth_views 23888 27480 ============================================================
-WARNING 2026-08-05 16:32:11,450 logging_middleware 23888 27480  Response Error: {"method": "POST", "path": "/identity/login/", "status_code": 401, "duration": "1.709s", "user": "anonymous"}
-INFO 2026-08-05 16:32:56,646 auth_views 23888 27480 ============================================================
-INFO 2026-08-05 16:32:56,674 auth_views 23888 27480  IP: 127.0.0.1
-INFO 2026-08-05 16:32:56,676 auth_views 23888 27480  Username: test83user
-INFO 2026-08-05 16:32:58,378 auth_views 23888 27480 ============================================================
-WARNING 2026-08-05 16:32:58,379 logging_middleware 23888 27480  Response Error: {"method": "POST", "path": "/identity/login/", "status_code": 401, "duration": "1.751s", "user": "anonymous"}
-INFO 2026-08-05 16:34:05,948 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 302, "duration": "0.031s", "user": "anonymous"}
-INFO 2026-08-05 16:34:06,052 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/admin/login/", "status_code": 200, "duration": "0.081s", "user": "anonymous"}
-INFO 2026-08-05 16:34:11,177 logging_middleware 23888 27480  Response: {"method": "POST", "path": "/admin/login/", "status_code": 302, "duration": "1.653s", "user": "admin"}
-INFO 2026-08-05 16:34:11,535 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.332s", "user": "admin"}
-INFO 2026-08-05 16:34:11,814 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.182s", "user": "admin"}
-INFO 2026-08-05 16:34:14,385 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/admin/identity/user/17/change/", "status_code": 200, "duration": "0.491s", "user": "admin"}
-INFO 2026-08-05 16:34:14,754 logging_middleware 23888 30604  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.159s", "user": "admin"}
-INFO 2026-08-05 16:34:36,501 logging_middleware 23888 27480  Response: {"method": "POST", "path": "/admin/identity/user/17/change/", "status_code": 302, "duration": "0.238s", "user": "admin"}
-INFO 2026-08-05 16:34:36,746 logging_middleware 23888 27480  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.225s", "user": "admin"}
-INFO 2026-08-05 16:34:37,071 logging_middleware 23888 30604  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.247s", "user": "admin"}
-INFO 2026-08-05 16:34:40,266 auth_views 23888 27480 ============================================================
-INFO 2026-08-05 16:34:40,297 auth_views 23888 27480  IP: 127.0.0.1
-INFO 2026-08-05 16:34:40,298 auth_views 23888 27480  Username: test83user
-INFO 2026-08-05 16:34:41,785 auth_views 23888 27480 ============================================================
-INFO 2026-08-05 16:34:41,842 logging_middleware 23888 27480  Response: {"method": "POST", "path": "/identity/login/", "status_code": 200, "duration": "1.748s", "user": "anonymous"}
-INFO 2026-08-05 16:36:27,175 auth_views 23888 27480 ============================================================
-INFO 2026-08-05 16:36:27,222 auth_views 23888 27480  IP: 127.0.0.1
-INFO 2026-08-05 16:36:27,299 auth_views 23888 27480 ============================================================
-INFO 2026-08-05 16:36:27,301 logging_middleware 23888 27480  Response: {"method": "PATCH", "path": "/identity/update/", "status_code": 200, "duration": "0.328s", "user": "test83user"}
-INFO 2026-08-05 16:37:00,771 auth_views 23888 27480 ============================================================
-INFO 2026-08-05 16:37:00,794 auth_views 23888 27480  IP: 127.0.0.1
-INFO 2026-08-05 16:37:00,878 auth_views 23888 27480 ============================================================
-WARNING 2026-08-05 16:37:00,879 logging_middleware 23888 27480  Response Error: {"method": "PATCH", "path": "/identity/update/", "status_code": 400, "duration": "0.351s", "user": "test83user"}
-INFO 2026-08-05 17:48:45,869 autoreload 23888 22884 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 17:48:47,599 autoreload 30728 17376 Watching for file changes with StatReloader
-INFO 2026-08-05 17:51:43,547 autoreload 30728 17376 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 17:51:44,659 autoreload 22496 29348 Watching for file changes with StatReloader
-INFO 2026-08-05 17:52:02,898 autoreload 22496 29348 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 17:52:03,806 autoreload 20924 13124 Watching for file changes with StatReloader
-INFO 2026-08-05 17:52:19,989 autoreload 20924 13124 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 17:52:20,920 autoreload 22392 1688 Watching for file changes with StatReloader
-INFO 2026-08-05 17:52:33,940 autoreload 22392 1688 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 17:52:34,780 autoreload 16484 29364 Watching for file changes with StatReloader
-INFO 2026-08-05 17:53:28,458 autoreload 16484 29364 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 17:53:29,359 autoreload 17968 22820 Watching for file changes with StatReloader
-INFO 2026-08-05 17:55:18,308 autoreload 17968 22820 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 17:55:19,325 autoreload 24524 22524 Watching for file changes with StatReloader
-INFO 2026-08-05 17:56:13,109 autoreload 24524 22524 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 17:56:13,904 autoreload 19524 28432 Watching for file changes with StatReloader
-INFO 2026-08-05 17:56:59,011 autoreload 19524 28432 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 17:56:59,825 autoreload 28648 27428 Watching for file changes with StatReloader
-INFO 2026-08-05 17:57:28,334 autoreload 28648 27428 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 17:57:29,255 autoreload 19804 21616 Watching for file changes with StatReloader
-INFO 2026-08-05 17:59:09,782 autoreload 19804 21616 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 17:59:10,651 autoreload 19812 24548 Watching for file changes with StatReloader
-INFO 2026-08-05 17:59:34,021 autoreload 19812 24548 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 17:59:35,081 autoreload 29116 32240 Watching for file changes with StatReloader
-INFO 2026-08-05 17:59:45,915 autoreload 29116 32240 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 17:59:46,786 autoreload 10104 20136 Watching for file changes with StatReloader
-INFO 2026-08-05 18:00:25,731 autoreload 10104 20136 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:00:26,604 autoreload 3140 27744 Watching for file changes with StatReloader
-INFO 2026-08-05 18:00:56,083 autoreload 3140 27744 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:00:57,027 autoreload 26268 30728 Watching for file changes with StatReloader
-INFO 2026-08-05 18:01:25,602 autoreload 26268 30728 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:01:26,525 autoreload 5696 30200 Watching for file changes with StatReloader
-INFO 2026-08-05 18:03:42,208 autoreload 5696 30200 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:03:43,156 autoreload 14440 25768 Watching for file changes with StatReloader
-INFO 2026-08-05 18:05:19,060 autoreload 14440 25768 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:05:19,923 autoreload 32448 15964 Watching for file changes with StatReloader
-INFO 2026-08-05 18:05:49,843 autoreload 32448 15964 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:05:50,628 autoreload 3752 27152 Watching for file changes with StatReloader
-INFO 2026-08-05 18:06:14,857 autoreload 3752 27152 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:06:15,687 autoreload 7668 4552 Watching for file changes with StatReloader
-INFO 2026-08-05 18:06:43,268 autoreload 7668 4552 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:06:44,068 autoreload 29612 25852 Watching for file changes with StatReloader
-INFO 2026-08-05 18:07:19,972 autoreload 29612 25852 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:07:20,776 autoreload 29856 17940 Watching for file changes with StatReloader
-INFO 2026-08-05 18:07:38,867 autoreload 29856 17940 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:07:39,966 autoreload 10248 32540 Watching for file changes with StatReloader
-INFO 2026-08-05 18:08:15,750 autoreload 10248 32540 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:08:16,588 autoreload 17496 6604 Watching for file changes with StatReloader
-INFO 2026-08-05 18:08:40,938 autoreload 17496 6604 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:08:42,126 autoreload 29688 32064 Watching for file changes with StatReloader
-INFO 2026-08-05 18:09:02,367 autoreload 29688 32064 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:09:03,389 autoreload 22468 13116 Watching for file changes with StatReloader
-INFO 2026-08-05 18:09:20,389 autoreload 22468 13116 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:09:21,346 autoreload 3192 32628 Watching for file changes with StatReloader
-INFO 2026-08-05 18:09:51,822 autoreload 3192 32628 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:09:52,729 autoreload 1736 13908 Watching for file changes with StatReloader
-INFO 2026-08-05 18:11:14,793 autoreload 1736 13908 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:11:15,640 autoreload 7592 24680 Watching for file changes with StatReloader
-INFO 2026-08-05 18:12:16,364 autoreload 7592 24680 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:12:17,379 autoreload 30296 23128 Watching for file changes with StatReloader
-INFO 2026-08-05 18:13:40,981 autoreload 30296 23128 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:13:41,958 autoreload 30460 26232 Watching for file changes with StatReloader
-INFO 2026-08-05 18:15:57,441 autoreload 30460 26232 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:15:58,178 autoreload 25884 13588 Watching for file changes with StatReloader
-INFO 2026-08-05 18:16:15,322 autoreload 25884 13588 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:16:16,156 autoreload 20796 31044 Watching for file changes with StatReloader
-INFO 2026-08-05 18:17:03,652 autoreload 20796 31044 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:17:04,502 autoreload 16484 10964 Watching for file changes with StatReloader
-INFO 2026-08-05 18:17:19,571 autoreload 16484 10964 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:17:20,626 autoreload 19700 17892 Watching for file changes with StatReloader
-INFO 2026-08-05 18:18:21,401 autoreload 19700 17892 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:18:22,412 autoreload 18296 29516 Watching for file changes with StatReloader
-INFO 2026-08-05 18:19:49,650 autoreload 18296 29516 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-05 18:19:50,415 autoreload 28452 14892 Watching for file changes with StatReloader
-INFO 2026-08-07 15:17:02,542 autoreload 28452 14892 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-07 15:17:04,264 autoreload 32224 12968 Watching for file changes with StatReloader
-INFO 2026-08-07 15:17:12,082 autoreload 24016 412 Watching for file changes with StatReloader
-INFO 2026-08-07 15:19:41,028 autoreload 32224 12968 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-07 15:19:41,319 autoreload 24016 412 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-07 15:19:42,418 autoreload 19832 9488 Watching for file changes with StatReloader
-INFO 2026-08-07 15:19:42,700 autoreload 29616 28448 Watching for file changes with StatReloader
-INFO 2026-08-07 15:19:53,211 logging_middleware 19832 31304  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.411s", "user": "anonymous"}
-INFO 2026-08-07 15:19:53,736 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.206s", "user": "anonymous"}
-WARNING 2026-08-07 15:21:38,733 logging_middleware 19832 22844  Response Error: {"method": "GET", "path": "/identity/listOfUsers", "status_code": 401, "duration": "0.128s", "user": "anonymous"}
-INFO 2026-08-07 15:22:21,520 auth_views 19832 22844 ============================================================
-INFO 2026-08-07 15:22:21,546 auth_views 19832 22844  IP: 127.0.0.1
-INFO 2026-08-07 15:22:21,547 auth_views 19832 22844  Username: admin
-INFO 2026-08-07 15:22:22,910 auth_views 19832 22844 ============================================================
-INFO 2026-08-07 15:22:23,074 logging_middleware 19832 22844  Response: {"method": "POST", "path": "/identity/login/", "status_code": 200, "duration": "1.699s", "user": "anonymous"}
-INFO 2026-08-07 15:23:02,674 user_views 19832 22844 ============================================================
-INFO 2026-08-07 15:23:02,712 user_views 19832 22844 IP: 127.0.0.1
-INFO 2026-08-07 15:23:02,780 user_views 19832 22844 ============================================================
-INFO 2026-08-07 15:23:02,787 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/identity/listOfUsers", "status_code": 200, "duration": "0.333s", "user": "admin"}
-INFO 2026-08-07 15:23:39,336 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/admin/identity/user/12/change/", "status_code": 200, "duration": "0.569s", "user": "admin"}
-INFO 2026-08-07 15:23:39,571 logging_middleware 19832 16416  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.133s", "user": "admin"}
-INFO 2026-08-07 15:23:57,507 auth_views 19832 22844 ============================================================
-INFO 2026-08-07 15:23:57,542 auth_views 19832 22844  IP: 127.0.0.1
-INFO 2026-08-07 15:23:57,544 auth_views 19832 22844  Username: fatemeh
-INFO 2026-08-07 15:23:58,938 auth_views 19832 22844 ============================================================
-INFO 2026-08-07 15:23:58,950 logging_middleware 19832 22844  Response: {"method": "POST", "path": "/identity/login/", "status_code": 200, "duration": "1.637s", "user": "anonymous"}
-WARNING 2026-08-07 15:24:24,809 logging_middleware 19832 22844  Response Error: {"method": "GET", "path": "/identity/listOfUsers", "status_code": 403, "duration": "0.235s", "user": "fatemeh"}
-INFO 2026-08-07 15:25:42,867 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.244s", "user": "admin"}
-INFO 2026-08-07 15:25:43,050 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.120s", "user": "admin"}
-INFO 2026-08-07 15:25:51,214 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/admin/identity/user/17/change/", "status_code": 200, "duration": "0.422s", "user": "admin"}
-INFO 2026-08-07 15:25:51,396 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.113s", "user": "admin"}
-INFO 2026-08-07 15:26:04,362 logging_middleware 19832 22844  Response: {"method": "POST", "path": "/admin/identity/user/17/change/", "status_code": 302, "duration": "0.454s", "user": "admin"}
-INFO 2026-08-07 15:26:04,503 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.130s", "user": "admin"}
-INFO 2026-08-07 15:26:04,693 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.123s", "user": "admin"}
-INFO 2026-08-07 15:27:44,049 logging_middleware 19832 22844  Response: {"method": "POST", "path": "/identity/password-reset/confirm/", "status_code": 200, "duration": "4.246s", "user": "anonymous"}
-INFO 2026-08-07 15:29:08,446 auth_views 19832 22844 ============================================================
-INFO 2026-08-07 15:29:08,462 auth_views 19832 22844  IP: 127.0.0.1
-INFO 2026-08-07 15:29:08,463 auth_views 19832 22844  Username: test83user
-INFO 2026-08-07 15:29:09,749 auth_views 19832 22844 ============================================================
-INFO 2026-08-07 15:29:09,758 logging_middleware 19832 22844  Response: {"method": "POST", "path": "/identity/login/", "status_code": 200, "duration": "1.453s", "user": "anonymous"}
-INFO 2026-08-07 15:30:03,461 user_views 19832 22844 ============================================================
-INFO 2026-08-07 15:30:03,482 user_views 19832 22844 IP: 127.0.0.1
-INFO 2026-08-07 15:30:03,526 user_views 19832 22844 ============================================================
-INFO 2026-08-07 15:30:03,536 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/identity/pending/", "status_code": 200, "duration": "0.278s", "user": "test83user"}
-INFO 2026-08-07 15:31:53,008 logging_middleware 19832 22844  Response: {"method": "GET", "path": "/identity/me/", "status_code": 200, "duration": "0.215s", "user": "test83user"}
-INFO 2026-08-07 15:43:59,634 autoreload 29616 28448 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 15:43:59,637 autoreload 19832 9488 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 15:44:01,535 autoreload 25344 24132 Watching for file changes with StatReloader
-INFO 2026-08-07 15:44:01,536 autoreload 6392 9100 Watching for file changes with StatReloader
-INFO 2026-08-07 15:44:02,608 logging_middleware 25344 13660  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.245s", "user": "anonymous"}
-INFO 2026-08-07 15:44:02,952 logging_middleware 25344 28084  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.135s", "user": "anonymous"}
-INFO 2026-08-07 15:44:34,656 autoreload 6392 9100 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 15:44:34,660 autoreload 25344 24132 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 15:44:35,687 autoreload 18804 4664 Watching for file changes with StatReloader
-INFO 2026-08-07 15:44:35,687 autoreload 9960 5764 Watching for file changes with StatReloader
-INFO 2026-08-07 15:44:36,305 logging_middleware 9960 9656  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.110s", "user": "anonymous"}
-INFO 2026-08-07 15:44:36,611 logging_middleware 9960 9264  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.137s", "user": "anonymous"}
-INFO 2026-08-07 15:44:55,896 autoreload 9960 5764 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 15:44:55,898 autoreload 18804 4664 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 15:44:56,813 autoreload 22436 32580 Watching for file changes with StatReloader
-INFO 2026-08-07 15:44:56,821 autoreload 21772 23304 Watching for file changes with StatReloader
-INFO 2026-08-07 15:44:57,589 logging_middleware 21772 14128  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.174s", "user": "anonymous"}
-INFO 2026-08-07 15:44:57,915 logging_middleware 21772 20112  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.133s", "user": "anonymous"}
-INFO 2026-08-07 15:47:17,757 autoreload 22436 32580 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 15:47:17,764 autoreload 21772 23304 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 15:47:18,925 autoreload 27500 12352 Watching for file changes with StatReloader
-INFO 2026-08-07 15:47:18,943 autoreload 5676 5572 Watching for file changes with StatReloader
-INFO 2026-08-07 15:47:19,727 logging_middleware 27500 13912  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.163s", "user": "anonymous"}
-INFO 2026-08-07 15:47:20,114 logging_middleware 27500 23684  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.168s", "user": "anonymous"}
-INFO 2026-08-07 15:49:49,775 autoreload 27500 12352 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 15:49:49,788 autoreload 5676 5572 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
-INFO 2026-08-07 15:49:50,811 autoreload 12656 25332 Watching for file changes with StatReloader
-INFO 2026-08-07 15:49:50,826 autoreload 17488 19676 Watching for file changes with StatReloader
-INFO 2026-08-07 15:49:51,670 logging_middleware 12656 12692  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.154s", "user": "anonymous"}
-INFO 2026-08-07 15:49:51,999 logging_middleware 12656 10748  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.123s", "user": "anonymous"}
-INFO 2026-08-07 15:50:39,900 autoreload 12656 25332 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 15:50:39,900 autoreload 17488 19676 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 15:50:40,929 autoreload 5516 22832 Watching for file changes with StatReloader
-INFO 2026-08-07 15:50:40,930 autoreload 30236 19480 Watching for file changes with StatReloader
-INFO 2026-08-07 15:50:41,794 logging_middleware 5516 24064  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.140s", "user": "anonymous"}
-INFO 2026-08-07 15:50:42,107 logging_middleware 5516 29936  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.122s", "user": "anonymous"}
-INFO 2026-08-07 15:51:25,242 autoreload 30236 19480 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
-INFO 2026-08-07 15:51:25,261 autoreload 5516 22832 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
-INFO 2026-08-07 15:51:26,127 autoreload 5028 27292 Watching for file changes with StatReloader
-INFO 2026-08-07 15:51:26,142 autoreload 9292 26472 Watching for file changes with StatReloader
-INFO 2026-08-07 15:51:26,889 logging_middleware 5028 25128  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.154s", "user": "anonymous"}
-INFO 2026-08-07 15:51:27,191 logging_middleware 5028 27440  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.128s", "user": "anonymous"}
-INFO 2026-08-07 15:54:11,097 autoreload 9292 26472 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 15:54:11,119 autoreload 5028 27292 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
-INFO 2026-08-07 15:54:12,041 autoreload 31164 2868 Watching for file changes with StatReloader
-INFO 2026-08-07 15:54:12,043 autoreload 29936 29504 Watching for file changes with StatReloader
-INFO 2026-08-07 15:54:12,879 logging_middleware 29936 30172  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.176s", "user": "anonymous"}
-INFO 2026-08-07 15:54:13,220 logging_middleware 29936 30908  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.133s", "user": "anonymous"}
-INFO 2026-08-07 15:55:29,312 autoreload 31164 2868 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 15:55:29,313 autoreload 29936 29504 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 15:55:30,279 autoreload 31928 8620 Watching for file changes with StatReloader
-INFO 2026-08-07 15:55:30,300 autoreload 25516 1416 Watching for file changes with StatReloader
-INFO 2026-08-07 15:55:31,144 logging_middleware 31928 20996  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.141s", "user": "anonymous"}
-INFO 2026-08-07 15:55:31,440 logging_middleware 31928 2528  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.134s", "user": "anonymous"}
-INFO 2026-08-07 15:58:44,411 autoreload 31928 8620 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
-INFO 2026-08-07 15:58:44,724 autoreload 25516 1416 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
-INFO 2026-08-07 15:58:45,458 autoreload 28064 23908 Watching for file changes with StatReloader
-INFO 2026-08-07 15:58:45,600 autoreload 20432 4548 Watching for file changes with StatReloader
-INFO 2026-08-07 15:59:56,255 autoreload 28064 23908 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
-INFO 2026-08-07 15:59:56,267 autoreload 20432 4548 C:\Users\Top\iam2\identity\views\group_views.py changed, reloading.
-INFO 2026-08-07 15:59:57,147 autoreload 22420 32576 Watching for file changes with StatReloader
-INFO 2026-08-07 15:59:57,148 autoreload 23796 26044 Watching for file changes with StatReloader
-INFO 2026-08-07 16:00:00,401 logging_middleware 23796 29000  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.131s", "user": "anonymous"}
-INFO 2026-08-07 16:00:01,547 logging_middleware 23796 29000  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.934s", "user": "anonymous"}
-INFO 2026-08-07 16:02:53,937 autoreload 23796 26044 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 16:02:54,089 autoreload 22420 32576 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 16:02:54,977 autoreload 11384 2948 Watching for file changes with StatReloader
-INFO 2026-08-07 16:02:55,063 autoreload 13508 1416 Watching for file changes with StatReloader
-INFO 2026-08-07 16:10:21,732 logging_middleware 11384 12792  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.321s", "user": "anonymous"}
-INFO 2026-08-07 16:10:21,998 autoreload 13508 1416 C:\Users\Top\iam2\identity\views\user_views.py changed, reloading.
-INFO 2026-08-07 16:10:22,173 logging_middleware 11384 12792  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.169s", "user": "anonymous"}
-INFO 2026-08-07 16:10:22,412 autoreload 11384 2948 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 16:10:23,345 autoreload 1432 9780 Watching for file changes with StatReloader
-INFO 2026-08-07 16:10:23,345 autoreload 27500 13108 Watching for file changes with StatReloader
-INFO 2026-08-07 16:10:31,264 logging_middleware 1432 28616  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.245s", "user": "anonymous"}
-INFO 2026-08-07 16:10:31,698 logging_middleware 1432 28616  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.218s", "user": "anonymous"}
-INFO 2026-08-07 16:12:03,790 autoreload 1432 9780 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 16:12:04,204 logging_middleware 27500 29124  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.229s", "user": "anonymous"}
-INFO 2026-08-07 16:12:04,455 autoreload 27500 13108 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 16:12:04,922 autoreload 32380 11252 Watching for file changes with StatReloader
-INFO 2026-08-07 16:12:05,365 autoreload 31312 6184 Watching for file changes with StatReloader
-INFO 2026-08-07 16:12:05,505 logging_middleware 32380 24776  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.126s", "user": "anonymous"}
-INFO 2026-08-07 16:12:33,980 logging_middleware 32380 24776  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.259s", "user": "anonymous"}
-INFO 2026-08-07 16:12:34,415 logging_middleware 32380 24776  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.218s", "user": "anonymous"}
-INFO 2026-08-07 16:12:45,969 autoreload 32380 11252 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 16:12:46,274 logging_middleware 31312 5868  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.143s", "user": "anonymous"}
-INFO 2026-08-07 16:12:46,704 logging_middleware 31312 5868  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.150s", "user": "anonymous"}
-INFO 2026-08-07 16:12:46,739 autoreload 31312 6184 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 16:12:47,099 autoreload 14920 2772 Watching for file changes with StatReloader
-INFO 2026-08-07 16:12:47,695 autoreload 21144 32092 Watching for file changes with StatReloader
-INFO 2026-08-07 16:12:51,716 logging_middleware 14920 9268  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.268s", "user": "anonymous"}
-INFO 2026-08-07 16:12:52,048 logging_middleware 14920 9268  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.134s", "user": "anonymous"}
-INFO 2026-08-07 16:15:36,678 autoreload 14920 2772 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 16:15:36,702 autoreload 21144 32092 C:\Users\Top\iam2\identity\urls.py changed, reloading.
-INFO 2026-08-07 16:15:37,741 autoreload 29144 22372 Watching for file changes with StatReloader
-INFO 2026-08-07 16:15:37,769 autoreload 28308 16716 Watching for file changes with StatReloader
-INFO 2026-08-07 16:19:14,662 autoreload 28308 16716 C:\Users\Top\iam2\identity\views\domain_views.py changed, reloading.
-INFO 2026-08-07 16:19:14,662 autoreload 29144 22372 C:\Users\Top\iam2\identity\views\domain_views.py changed, reloading.
-INFO 2026-08-07 16:19:15,742 autoreload 31340 27944 Watching for file changes with StatReloader
-INFO 2026-08-07 16:19:15,744 autoreload 30228 26716 Watching for file changes with StatReloader
-INFO 2026-08-07 16:25:22,586 autoreload 31340 27944 C:\Users\Top\iam2\identity\views\domain_views.py changed, reloading.
-INFO 2026-08-07 16:25:22,590 autoreload 30228 26716 C:\Users\Top\iam2\identity\views\domain_views.py changed, reloading.
-INFO 2026-08-07 16:25:23,858 autoreload 27232 13820 Watching for file changes with StatReloader
-INFO 2026-08-07 16:25:24,477 autoreload 18084 19600 Watching for file changes with StatReloader
-INFO 2026-08-07 17:23:46,543 autoreload 27232 13820 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 17:23:47,765 autoreload 21684 26776 Watching for file changes with StatReloader
-INFO 2026-08-07 17:25:14,294 autoreload 21684 26776 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 17:25:15,098 autoreload 27780 5520 Watching for file changes with StatReloader
-INFO 2026-08-07 17:51:41,495 autoreload 27780 5520 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 17:51:43,025 autoreload 5640 22724 Watching for file changes with StatReloader
-INFO 2026-08-07 17:52:07,870 autoreload 5640 22724 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 17:52:08,846 autoreload 32008 9600 Watching for file changes with StatReloader
-INFO 2026-08-07 17:53:15,821 autoreload 32008 9600 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 17:53:16,660 autoreload 30148 7228 Watching for file changes with StatReloader
-INFO 2026-08-07 17:53:46,714 autoreload 30148 7228 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 17:53:47,509 autoreload 26324 29164 Watching for file changes with StatReloader
-INFO 2026-08-07 17:54:30,646 autoreload 26324 29164 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 17:54:31,371 autoreload 28492 26088 Watching for file changes with StatReloader
-INFO 2026-08-07 17:55:30,513 autoreload 28492 26088 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 17:55:31,334 autoreload 16176 25356 Watching for file changes with StatReloader
-INFO 2026-08-07 17:56:24,635 autoreload 16176 25356 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 17:56:25,666 autoreload 3752 412 Watching for file changes with StatReloader
-INFO 2026-08-07 17:57:01,704 autoreload 3752 412 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 17:57:02,657 autoreload 12584 24592 Watching for file changes with StatReloader
-INFO 2026-08-07 17:58:05,008 autoreload 12584 24592 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 17:58:06,048 autoreload 23980 19952 Watching for file changes with StatReloader
-INFO 2026-08-07 17:58:46,511 autoreload 23980 19952 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 17:58:47,384 autoreload 15084 28508 Watching for file changes with StatReloader
-INFO 2026-08-07 17:59:10,245 autoreload 15084 28508 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 17:59:11,143 autoreload 28528 9872 Watching for file changes with StatReloader
-INFO 2026-08-07 18:00:10,326 autoreload 28528 9872 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 18:00:11,192 autoreload 7464 26204 Watching for file changes with StatReloader
-INFO 2026-08-07 18:00:16,576 logging_middleware 7464 21084  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.141s", "user": "anonymous"}
-INFO 2026-08-07 18:00:17,004 logging_middleware 7464 21084  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.187s", "user": "anonymous"}
-INFO 2026-08-07 18:01:55,933 auth_views 7464 21084 ============================================================
-INFO 2026-08-07 18:01:55,965 auth_views 7464 21084  IP: 127.0.0.1
-INFO 2026-08-07 18:01:55,965 auth_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-INFO 2026-08-07 18:02:08,198 auth_views 7464 21084 Email: sara.mohseni@yahoo.com
-INFO 2026-08-07 18:02:08,199 auth_views 7464 21084 Phone: 09123456789
-INFO 2026-08-07 18:02:08,230 auth_views 7464 21084 ============================================================
-INFO 2026-08-07 18:02:08,231 logging_middleware 7464 21084  Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "12.471s", "user": "anonymous"}
-INFO 2026-08-07 18:03:58,927 reset_pass_views 7464 21084 ============================================================
-INFO 2026-08-07 18:03:58,958 reset_pass_views 7464 21084  IP: 127.0.0.1
-INFO 2026-08-07 18:03:58,961 reset_pass_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-WARNING 2026-08-07 18:03:59,074 logging_middleware 7464 21084  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.347s", "user": "anonymous"}
-INFO 2026-08-07 18:04:15,073 reset_pass_views 7464 21084 ============================================================
-INFO 2026-08-07 18:04:15,093 reset_pass_views 7464 21084  IP: 127.0.0.1
-INFO 2026-08-07 18:04:15,094 reset_pass_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-WARNING 2026-08-07 18:04:15,182 logging_middleware 7464 21084  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.275s", "user": "anonymous"}
-INFO 2026-08-07 18:04:41,956 reset_pass_views 7464 21084 ============================================================
-INFO 2026-08-07 18:04:41,977 reset_pass_views 7464 21084  IP: 127.0.0.1
-INFO 2026-08-07 18:04:41,980 reset_pass_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-WARNING 2026-08-07 18:04:42,059 logging_middleware 7464 21084  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.272s", "user": "anonymous"}
-INFO 2026-08-07 18:05:01,902 reset_pass_views 7464 21084 ============================================================
-INFO 2026-08-07 18:05:01,923 reset_pass_views 7464 21084  IP: 127.0.0.1
-INFO 2026-08-07 18:05:01,924 reset_pass_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-WARNING 2026-08-07 18:05:02,014 logging_middleware 7464 21084  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.283s", "user": "anonymous"}
-INFO 2026-08-07 18:05:28,146 reset_pass_views 7464 21084 ============================================================
-INFO 2026-08-07 18:05:28,174 reset_pass_views 7464 21084  IP: 127.0.0.1
-INFO 2026-08-07 18:05:28,175 reset_pass_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-WARNING 2026-08-07 18:05:28,284 logging_middleware 7464 21084  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.334s", "user": "anonymous"}
-INFO 2026-08-07 18:05:44,166 reset_pass_views 7464 21084 ============================================================
-INFO 2026-08-07 18:05:44,191 reset_pass_views 7464 21084  IP: 127.0.0.1
-INFO 2026-08-07 18:05:44,192 reset_pass_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-WARNING 2026-08-07 18:05:44,278 logging_middleware 7464 21084  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.295s", "user": "anonymous"}
-INFO 2026-08-07 18:05:53,195 reset_pass_views 7464 21084 ============================================================
-INFO 2026-08-07 18:05:53,223 reset_pass_views 7464 21084  IP: 127.0.0.1
-INFO 2026-08-07 18:05:53,225 reset_pass_views 7464 21084  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-WARNING 2026-08-07 18:05:53,344 logging_middleware 7464 21084  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.283s", "user": "anonymous"}
-INFO 2026-08-07 18:12:21,405 autoreload 7464 26204 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 18:12:22,209 autoreload 18452 9916 Watching for file changes with StatReloader
-INFO 2026-08-07 18:12:51,863 autoreload 18452 9916 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 18:12:52,737 autoreload 9380 30948 Watching for file changes with StatReloader
-INFO 2026-08-07 18:14:40,478 autoreload 9380 30948 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 18:14:41,459 autoreload 17708 17112 Watching for file changes with StatReloader
-INFO 2026-08-07 18:14:46,855 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.303s", "user": "admin"}
-INFO 2026-08-07 18:14:47,092 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.168s", "user": "admin"}
-INFO 2026-08-07 18:14:49,190 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/identity/user/18/change/", "status_code": 200, "duration": "0.455s", "user": "admin"}
-INFO 2026-08-07 18:14:49,419 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.147s", "user": "admin"}
-INFO 2026-08-07 18:14:55,865 logging_middleware 17708 30148  Response: {"method": "POST", "path": "/admin/identity/user/18/change/", "status_code": 302, "duration": "0.764s", "user": "admin"}
-INFO 2026-08-07 18:14:56,076 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.187s", "user": "admin"}
-INFO 2026-08-07 18:14:56,348 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.181s", "user": "admin"}
-INFO 2026-08-07 18:15:04,303 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/identity/user/18/change/", "status_code": 200, "duration": "0.456s", "user": "admin"}
-INFO 2026-08-07 18:15:04,576 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.133s", "user": "admin"}
-INFO 2026-08-07 18:15:11,054 logging_middleware 17708 30148  Response: {"method": "POST", "path": "/admin/identity/user/18/change/", "status_code": 302, "duration": "0.222s", "user": "admin"}
-INFO 2026-08-07 18:15:11,195 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.127s", "user": "admin"}
-INFO 2026-08-07 18:15:11,358 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.110s", "user": "admin"}
-INFO 2026-08-07 18:15:20,011 reset_pass_views 17708 30148 ============================================================
-INFO 2026-08-07 18:15:20,053 reset_pass_views 17708 30148  IP: 127.0.0.1
-INFO 2026-08-07 18:15:20,055 reset_pass_views 17708 30148  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-INFO 2026-08-07 18:15:20,274 reset_pass_views 17708 30148 ============================================================
-WARNING 2026-08-07 18:15:20,275 logging_middleware 17708 30148  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.450s", "user": "anonymous"}
-INFO 2026-08-07 18:15:24,814 reset_pass_views 17708 30148 ============================================================
-INFO 2026-08-07 18:15:24,836 reset_pass_views 17708 30148  IP: 127.0.0.1
-INFO 2026-08-07 18:15:24,838 reset_pass_views 17708 30148  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-INFO 2026-08-07 18:15:25,640 reset_pass_views 17708 30148 ============================================================
-WARNING 2026-08-07 18:15:25,641 logging_middleware 17708 30148  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "1.033s", "user": "anonymous"}
-INFO 2026-08-07 18:15:30,004 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.205s", "user": "anonymous"}
-INFO 2026-08-07 18:15:30,454 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.202s", "user": "anonymous"}
-INFO 2026-08-07 18:17:06,715 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.288s", "user": "anonymous"}
-INFO 2026-08-07 18:17:07,063 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.172s", "user": "anonymous"}
-INFO 2026-08-07 18:18:36,175 reset_pass_views 17708 30148 ============================================================
-INFO 2026-08-07 18:18:36,216 reset_pass_views 17708 30148  IP: 127.0.0.1
-INFO 2026-08-07 18:18:36,219 reset_pass_views 17708 30148  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-INFO 2026-08-07 18:18:36,451 reset_pass_views 17708 30148 ============================================================
-WARNING 2026-08-07 18:18:36,452 logging_middleware 17708 30148  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "0.483s", "user": "anonymous"}
-INFO 2026-08-07 18:18:49,647 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/identity/user/18/change/", "status_code": 200, "duration": "0.210s", "user": "admin"}
-INFO 2026-08-07 18:18:49,842 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.118s", "user": "admin"}
-INFO 2026-08-07 18:18:55,706 logging_middleware 17708 30148  Response: {"method": "POST", "path": "/admin/identity/user/18/change/", "status_code": 302, "duration": "0.322s", "user": "admin"}
-INFO 2026-08-07 18:18:55,910 logging_middleware 17708 30148  Response: {"method": "GET", "path": "/admin/identity/user/", "status_code": 200, "duration": "0.177s", "user": "admin"}
-INFO 2026-08-07 18:18:56,225 logging_middleware 17708 12748  Response: {"method": "GET", "path": "/admin/jsi18n/", "status_code": 200, "duration": "0.141s", "user": "admin"}
-INFO 2026-08-07 18:19:01,081 reset_pass_views 17708 30148 ============================================================
-INFO 2026-08-07 18:19:01,103 reset_pass_views 17708 30148  IP: 127.0.0.1
-INFO 2026-08-07 18:19:01,104 reset_pass_views 17708 30148  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-INFO 2026-08-07 18:19:05,367 reset_pass_views 17708 30148 ============================================================
-INFO 2026-08-07 18:19:05,369 logging_middleware 17708 30148  Response: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 200, "duration": "4.495s", "user": "anonymous"}
-INFO 2026-08-07 18:27:47,817 autoreload 17708 17112 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 18:27:48,990 autoreload 26576 12444 Watching for file changes with StatReloader
-INFO 2026-08-07 18:27:52,762 autoreload 26576 12444 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 18:27:53,591 autoreload 9528 10552 Watching for file changes with StatReloader
-INFO 2026-08-07 18:27:56,272 reset_pass_views 9528 19356 ============================================================
-INFO 2026-08-07 18:27:56,287 reset_pass_views 9528 19356 IP: 127.0.0.1
-INFO 2026-08-07 18:27:56,288 reset_pass_views 9528 19356 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-INFO 2026-08-07 18:28:01,473 reset_pass_views 9528 19356 ============================================================
-WARNING 2026-08-07 18:28:01,475 logging_middleware 9528 19356  Response Error: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 400, "duration": "5.346s", "user": "anonymous"}
-INFO 2026-08-07 18:28:25,286 reset_pass_views 9528 19356 ============================================================
-INFO 2026-08-07 18:28:25,304 reset_pass_views 9528 19356 IP: 127.0.0.1
-INFO 2026-08-07 18:28:25,307 reset_pass_views 9528 19356 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-INFO 2026-08-07 18:28:32,631 reset_pass_views 9528 19356 ============================================================
-INFO 2026-08-07 18:28:32,632 logging_middleware 9528 19356  Response: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 200, "duration": "7.472s", "user": "anonymous"}
-INFO 2026-08-07 18:29:18,897 autoreload 27524 26324 Watching for file changes with StatReloader
-INFO 2026-08-07 18:29:31,031 logging_middleware 9528 19356  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.198s", "user": "anonymous"}
-INFO 2026-08-07 18:29:31,526 logging_middleware 9528 19356  Response: {"method": "GET", "path": "/swagger/", "status_code": 200, "duration": "0.199s", "user": "anonymous"}
-INFO 2026-08-07 18:30:01,704 reset_pass_views 9528 19356 ============================================================
-INFO 2026-08-07 18:30:01,733 reset_pass_views 9528 19356 IP: 127.0.0.1
-INFO 2026-08-07 18:30:01,736 reset_pass_views 9528 19356 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-INFO 2026-08-07 18:30:12,478 reset_pass_views 9528 19356 ============================================================
-INFO 2026-08-07 18:30:12,479 logging_middleware 9528 19356  Response: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 200, "duration": "10.972s", "user": "anonymous"}
-INFO 2026-08-07 18:31:05,431 autoreload 27524 26324 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 18:31:05,487 autoreload 9528 10552 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 18:31:06,573 autoreload 21112 19404 Watching for file changes with StatReloader
-INFO 2026-08-07 18:31:06,649 autoreload 16488 10428 Watching for file changes with StatReloader
-INFO 2026-08-07 18:31:35,944 reset_pass_views 21112 31448 ============================================================
-INFO 2026-08-07 18:31:35,975 reset_pass_views 21112 31448 IP: 127.0.0.1
-INFO 2026-08-07 18:31:35,976 reset_pass_views 21112 31448 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0
-INFO 2026-08-07 18:31:45,617 reset_pass_views 21112 31448 ============================================================
-INFO 2026-08-07 18:31:45,619 logging_middleware 21112 31448  Response: {"method": "POST", "path": "/identity/auth/password-reset/", "status_code": 200, "duration": "9.914s", "user": "anonymous"}
-INFO 2026-08-07 18:32:19,710 autoreload 16488 10428 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 18:32:19,740 autoreload 21112 19404 C:\Users\Top\iam2\identity\views\reset_pass_views.py changed, reloading.
-INFO 2026-08-07 18:32:20,791 autoreload 25332 13548 Watching for file changes with StatReloader
-INFO 2026-08-07 18:32:20,807 autoreload 8016 17372 Watching for file changes with StatReloader
+WARNING 2026-08-07 23:39:49,352 logging_middleware 19796 26604  Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.282s", "user": "anonymous"}
+WARNING 2026-08-07 23:39:49,946 logging_middleware 19796 26604  Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.019s", "user": "anonymous"}
+WARNING 2026-08-07 23:39:49,974 logging_middleware 19796 26604  Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.024s", "user": "anonymous"}
+INFO 2026-08-07 23:40:55,442 autoreload 31236 16964 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-07 23:40:56,452 autoreload 13916 8016 Watching for file changes with StatReloader
+WARNING 2026-08-07 23:41:12,809 logging_middleware 30156 1064  Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.017s", "user": "anonymous"}
+INFO 2026-08-07 23:41:18,003 auth_views 30156 1064 {"action": "register", "status": "success", "timestamp": 1786133478.0032563, "user_id": 1, "extra": {"username": "samira", "email": "samira@test.com", "phone": "+989100825689"}}
+INFO 2026-08-07 23:41:18,004 logging_middleware 30156 1064  Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "5.161s", "user": "anonymous"}
+INFO 2026-08-07 23:41:23,353 auth_views 30156 1064 {"action": "register", "status": "success", "timestamp": 1786133483.3539383, "user_id": 2, "extra": {"username": "alireza", "email": "alrz@test.com", "phone": "+989123456789"}}
+INFO 2026-08-07 23:41:23,354 logging_middleware 30156 1064  Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "5.349s", "user": "anonymous"}
+ERROR 2026-08-07 23:41:23,931 auth_views 30156 1064 {"action": "register", "status": "failed", "timestamp": 1786133483.9315178, "error_code": 11, "extra": {"username": "dara", "email": "dra@test.com", "phone": "+989188325689"}}
+WARNING 2026-08-07 23:41:23,932 logging_middleware 30156 1064  Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.011s", "user": "anonymous"}
+WARNING 2026-08-07 23:41:23,947 logging_middleware 30156 1064  Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.012s", "user": "anonymous"}
+INFO 2026-08-07 23:43:58,240 autoreload 13916 8016 C:\Users\Top\iam2\middleware\logging_middleware.py changed, reloading.
+INFO 2026-08-07 23:43:59,047 autoreload 22460 19180 Watching for file changes with StatReloader
+INFO 2026-08-07 23:44:01,469 logging_middleware 31856 944 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "", "password": "******", "confirm_password": "", "email": "", "phone": ""}}
+WARNING 2026-08-07 23:44:01,471 logging_middleware 31856 944 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.002s", "user": "anonymous"}
+INFO 2026-08-07 23:44:01,476 logging_middleware 31856 944 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "samira", "password": "******", "confirm_password": "8!4J8&kj", "email": "samira@test.com", "phone": "+989100825689", "first_name": "Samira", "last_name": "Mehrgo"}}
+INFO 2026-08-07 23:44:06,436 auth_views 31856 944 {"action": "register", "status": "success", "timestamp": 1786133646.4361045, "user_id": 1, "extra": {"username": "samira", "email": "samira@test.com", "phone": "+989100825689"}}
+INFO 2026-08-07 23:44:06,437 logging_middleware 31856 944 Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "4.960s", "user": "anonymous"}
+INFO 2026-08-07 23:44:06,440 logging_middleware 31856 944 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "alireza", "password": "******", "confirm_password": "!Mp4t4)4", "email": "alrz@test.com", "phone": "+989123456789", "first_name": "Alireza", "last_name": "Jamee"}}
+INFO 2026-08-07 23:44:11,426 auth_views 31856 944 {"action": "register", "status": "success", "timestamp": 1786133651.4262056, "user_id": 2, "extra": {"username": "alireza", "email": "alrz@test.com", "phone": "+989123456789"}}
+INFO 2026-08-07 23:44:11,427 logging_middleware 31856 944 Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "4.987s", "user": "anonymous"}
+INFO 2026-08-07 23:44:11,978 logging_middleware 31856 944 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "dara", "password": "******", "confirm_password": "pa", "email": "dra@test.com", "phone": "+989188325689", "first_name": "Dara", "last_name": "Zamani"}}
+ERROR 2026-08-07 23:44:11,981 auth_views 31856 944 {"action": "register", "status": "failed", "timestamp": 1786133651.9819462, "error_code": 11, "extra": {"username": "dara", "email": "dra@test.com", "phone": "+989188325689"}}
+WARNING 2026-08-07 23:44:11,983 logging_middleware 31856 944 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.005s", "user": "anonymous"}
+INFO 2026-08-07 23:44:11,987 logging_middleware 31856 944 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "user83", "password": "******", "confirm_password": "pass", "email": "invalid-email-format", "phone": "+123456789"}}
+WARNING 2026-08-07 23:44:11,993 logging_middleware 31856 944 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.006s", "user": "anonymous"}
+INFO 2026-08-08 00:00:03,422 autoreload 22460 19180 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-08 00:00:04,631 autoreload 20000 20692 Watching for file changes with StatReloader
+INFO 2026-08-08 00:09:28,295 autoreload 20000 20692 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-08 00:09:29,390 autoreload 9420 12372 Watching for file changes with StatReloader
+INFO 2026-08-08 00:10:08,531 autoreload 9420 12372 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-08 00:10:09,645 autoreload 10072 23196 Watching for file changes with StatReloader
+INFO 2026-08-08 00:13:28,860 autoreload 10072 23196 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-08 00:13:29,896 autoreload 23124 15132 Watching for file changes with StatReloader
+INFO 2026-08-08 00:27:18,044 autoreload 23124 15132 C:\Users\Top\iam2\identity\views\auth_views.py changed, reloading.
+INFO 2026-08-08 00:27:19,409 autoreload 3936 24464 Watching for file changes with StatReloader
+INFO 2026-08-08 00:45:16,756 logging_middleware 26196 18128 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "samira", "password": "******", "confirm_password": "60A9gvNT", "email": "samira@test.com", "phone": "+989100825689", "first_name": "Samira", "last_name": "Mehrgo"}}
+INFO 2026-08-08 00:45:21,765 auth_views 26196 18128 {"action": "register", "status": "success", "timestamp": 1786137321.7658286, "user_id": 1, "extra": {"username": "samira", "email": "samira@test.com", "phone": "+989100825689"}}
+INFO 2026-08-08 00:45:21,766 logging_middleware 26196 18128 Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "5.011s", "user": "anonymous"}
+INFO 2026-08-08 00:45:21,767 logging_middleware 26196 18128 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "alireza", "password": "******", "confirm_password": "hkhKaVPv", "email": "alrz@test.com", "phone": "+989123456789", "first_name": "Alireza", "last_name": "Jamee"}}
+INFO 2026-08-08 00:45:26,765 auth_views 26196 18128 {"action": "register", "status": "success", "timestamp": 1786137326.765574, "user_id": 2, "extra": {"username": "alireza", "email": "alrz@test.com", "phone": "+989123456789"}}
+INFO 2026-08-08 00:45:26,765 logging_middleware 26196 18128 Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "4.998s", "user": "anonymous"}
+INFO 2026-08-08 00:45:26,769 logging_middleware 26196 18128 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "11111", "password": "******", "confirm_password": "1234Aa@QqWw", "email": "dra@test.com", "phone": "+989188325689", "first_name": "Dara", "last_name": "Zamani"}}
+WARNING 2026-08-08 00:45:26,775 logging_middleware 26196 18128 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.006s", "user": "anonymous"}
+INFO 2026-08-08 00:45:27,330 logging_middleware 26196 18128 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "dara", "password": "******", "confirm_password": "123Aa@QqWw", "email": "ddr@test.com", "phone": "+989188325559", "first_name": "Dara", "last_name": "Moahmmadi"}}
+ERROR 2026-08-08 00:45:27,336 auth_views 26196 18128 {"action": "register", "status": "failed", "timestamp": 1786137327.3360822, "error_code": 11, "extra": {"username": "dara", "email": "ddr@test.com", "phone": "+989188325559", "error": {"username": ["user with this username already exists.", "Ensure this field has at least 5 characters."]}}}
+WARNING 2026-08-08 00:45:27,339 logging_middleware 26196 18128 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.009s", "user": "anonymous"}
+INFO 2026-08-08 00:45:27,342 logging_middleware 26196 18128 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "", "password": "******", "confirm_password": "", "email": "", "phone": "", "first_name": "", "last_name": ""}}
+WARNING 2026-08-08 00:45:27,343 logging_middleware 26196 18128 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.002s", "user": "anonymous"}
+INFO 2026-08-08 00:45:27,346 logging_middleware 26196 18128 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "dara", "password": "******", "confirm_password": "1234", "email": "ddr@test.com", "phone": "+989188325559", "first_name": "Dara", "last_name": "Moahmmadi"}}
+WARNING 2026-08-08 00:45:27,351 logging_middleware 26196 18128 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.005s", "user": "anonymous"}
+INFO 2026-08-08 00:45:27,905 logging_middleware 26196 18128 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "new_user2", "password": "******", "confirm_password": "Test@1234", "email": "existing@test.com", "phone": "+989222222222", "first_name": "New", "last_name": "User"}}
+ERROR 2026-08-08 00:45:27,910 auth_views 26196 18128 {"action": "register", "status": "failed", "timestamp": 1786137327.9100757, "error_code": 15, "extra": {"username": "new_user2", "email": "existing@test.com", "phone": "+989222222222", "error": {"email": ["user with this email already exists."]}}}
+WARNING 2026-08-08 00:45:27,911 logging_middleware 26196 18128 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.007s", "user": "anonymous"}
+INFO 2026-08-08 00:45:27,916 logging_middleware 26196 18128 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "user_test", "password": "******", "confirm_password": "Test@1234", "email": "invalid-email", "phone": "+989333333333", "first_name": "Test", "last_name": "User"}}
+WARNING 2026-08-08 00:45:27,921 logging_middleware 26196 18128 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.006s", "user": "anonymous"}
+INFO 2026-08-08 00:45:27,925 logging_middleware 26196 18128 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "user_test2", "password": "******", "confirm_password": "Test@1234", "email": "user@test.com", "phone": "123456789", "first_name": "Test", "last_name": "User"}}
+INFO 2026-08-08 00:45:32,872 auth_views 26196 18128 {"action": "register", "status": "success", "timestamp": 1786137332.8724809, "user_id": 5, "extra": {"username": "user_test2", "email": "user@test.com", "phone": "123456789"}}
+INFO 2026-08-08 00:45:32,872 logging_middleware 26196 18128 Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "4.947s", "user": "anonymous"}
+INFO 2026-08-08 00:47:16,447 logging_middleware 412 23240 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "samira", "password": "******", "confirm_password": "60A9gvNT", "email": "samira@test.com", "phone": "+989100825689", "first_name": "Samira", "last_name": "Mehrgo"}}
+INFO 2026-08-08 00:47:21,525 auth_views 412 23240 {"action": "register", "status": "success", "timestamp": 1786137441.5252154, "user_id": 1, "extra": {"username": "samira", "email": "samira@test.com", "phone": "+989100825689"}}
+INFO 2026-08-08 00:47:21,526 logging_middleware 412 23240 Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "5.079s", "user": "anonymous"}
+INFO 2026-08-08 00:47:21,529 logging_middleware 412 23240 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "alireza", "password": "******", "confirm_password": "hkhKaVPv", "email": "alrz@test.com", "phone": "+989123456789", "first_name": "Alireza", "last_name": "Jamee"}}
+INFO 2026-08-08 00:47:26,578 auth_views 412 23240 {"action": "register", "status": "success", "timestamp": 1786137446.5780084, "user_id": 2, "extra": {"username": "alireza", "email": "alrz@test.com", "phone": "+989123456789"}}
+INFO 2026-08-08 00:47:26,579 logging_middleware 412 23240 Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "5.049s", "user": "anonymous"}
+INFO 2026-08-08 00:47:26,583 logging_middleware 412 23240 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "11111", "password": "******", "confirm_password": "1234Aa@QqWw", "email": "dra@test.com", "phone": "+989188325689", "first_name": "Dara", "last_name": "Zamani"}}
+WARNING 2026-08-08 00:47:26,587 logging_middleware 412 23240 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.005s", "user": "anonymous"}
+INFO 2026-08-08 00:47:27,143 logging_middleware 412 23240 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "dara", "password": "******", "confirm_password": "123Aa@QqWw", "email": "ddr@test.com", "phone": "+989188325559", "first_name": "Dara", "last_name": "Moahmmadi"}}
+ERROR 2026-08-08 00:47:27,148 auth_views 412 23240 {"action": "register", "status": "failed", "timestamp": 1786137447.1485856, "error_code": 11, "extra": {"username": "dara", "email": "ddr@test.com", "phone": "+989188325559", "error": {"username": ["user with this username already exists.", "Ensure this field has at least 5 characters."]}}}
+WARNING 2026-08-08 00:47:27,149 logging_middleware 412 23240 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.007s", "user": "anonymous"}
+INFO 2026-08-08 00:47:27,152 logging_middleware 412 23240 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "", "password": "******", "confirm_password": "", "email": "", "phone": "", "first_name": "", "last_name": ""}}
+WARNING 2026-08-08 00:47:27,153 logging_middleware 412 23240 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.001s", "user": "anonymous"}
+INFO 2026-08-08 00:47:27,157 logging_middleware 412 23240 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "dara", "password": "******", "confirm_password": "1234", "email": "ddr@test.com", "phone": "+989188325559", "first_name": "Dara", "last_name": "Moahmmadi"}}
+WARNING 2026-08-08 00:47:27,163 logging_middleware 412 23240 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.006s", "user": "anonymous"}
+INFO 2026-08-08 00:47:27,717 logging_middleware 412 23240 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "new_user", "password": "******", "confirm_password": "Test@1234", "email": "new@test.com", "phone": "+989111111111", "first_name": "New", "last_name": "User"}}
+ERROR 2026-08-08 00:47:27,725 auth_views 412 23240 {"action": "register", "status": "failed", "timestamp": 1786137447.7250543, "error_code": 14, "extra": {"username": "new_user", "email": "new@test.com", "phone": "+989111111111", "error": {"phone": ["user with this phone already exists."]}}}
+WARNING 2026-08-08 00:47:27,726 logging_middleware 412 23240 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.008s", "user": "anonymous"}
+INFO 2026-08-08 00:47:28,276 logging_middleware 412 23240 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "new_user2", "password": "******", "confirm_password": "Test@1234", "email": "existing@test.com", "phone": "+989222222222", "first_name": "New", "last_name": "User"}}
+ERROR 2026-08-08 00:47:28,282 auth_views 412 23240 {"action": "register", "status": "failed", "timestamp": 1786137448.2826662, "error_code": 15, "extra": {"username": "new_user2", "email": "existing@test.com", "phone": "+989222222222", "error": {"email": ["user with this email already exists."]}}}
+WARNING 2026-08-08 00:47:28,282 logging_middleware 412 23240 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.006s", "user": "anonymous"}
+INFO 2026-08-08 00:47:28,287 logging_middleware 412 23240 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "user_test", "password": "******", "confirm_password": "Test@1234", "email": "invalid-email", "phone": "+989333333333", "first_name": "Test", "last_name": "User"}}
+WARNING 2026-08-08 00:47:28,291 logging_middleware 412 23240 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.005s", "user": "anonymous"}
+INFO 2026-08-08 00:47:28,294 logging_middleware 412 23240 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "user_test2", "password": "******", "confirm_password": "Test@1234", "email": "user@test.com", "phone": "123456789", "first_name": "Test", "last_name": "User"}}
+INFO 2026-08-08 00:47:33,467 auth_views 412 23240 {"action": "register", "status": "success", "timestamp": 1786137453.4670117, "user_id": 6, "extra": {"username": "user_test2", "email": "user@test.com", "phone": "123456789"}}
+INFO 2026-08-08 00:47:33,467 logging_middleware 412 23240 Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "5.174s", "user": "anonymous"}
+INFO 2026-08-08 01:00:49,449 logging_middleware 25612 30032 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "samira", "password": "******", "confirm_password": "60A9gvNT", "email": "samira@test.com", "phone": "+989100825689", "first_name": "Samira", "last_name": "Mehrgo"}}
+WARNING 2026-08-08 01:00:49,528 logging_middleware 25612 30032 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.078s", "user": "anonymous"}
+INFO 2026-08-08 01:00:49,535 logging_middleware 25612 30032 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "11111", "password": "******", "confirm_password": "1234Aa@QqWw", "email": "dra@test.com", "phone": "+989188325689", "first_name": "Dara", "last_name": "Zamani"}}
+WARNING 2026-08-08 01:00:49,558 logging_middleware 25612 30032 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.024s", "user": "anonymous"}
+INFO 2026-08-08 01:00:50,120 logging_middleware 25612 30032 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "dara", "password": "******", "confirm_password": "123Aa@QqWw", "email": "ddr@test.com", "phone": "+989188325559", "first_name": "Dara", "last_name": "Moahmmadi"}}
+WARNING 2026-08-08 01:00:50,137 logging_middleware 25612 30032 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.017s", "user": "anonymous"}
+INFO 2026-08-08 01:00:50,141 logging_middleware 25612 30032 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "", "password": "******", "confirm_password": "", "email": "", "phone": "", "first_name": "", "last_name": ""}}
+WARNING 2026-08-08 01:00:50,143 logging_middleware 25612 30032 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.002s", "user": "anonymous"}
+INFO 2026-08-08 01:00:50,145 logging_middleware 25612 30032 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "dara", "password": "******", "confirm_password": "12341234", "email": "ddr@test.com", "phone": "+989188325559", "first_name": "Dara", "last_name": "Moahmmadi"}}
+WARNING 2026-08-08 01:00:50,168 logging_middleware 25612 30032 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.023s", "user": "anonymous"}
+INFO 2026-08-08 01:00:50,726 logging_middleware 25612 30032 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "new_user", "password": "******", "confirm_password": "Test@1234", "email": "new@test.com", "phone": "+989111111111", "first_name": "New", "last_name": "User"}}
+WARNING 2026-08-08 01:00:50,741 logging_middleware 25612 30032 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.017s", "user": "anonymous"}
+INFO 2026-08-08 01:00:51,306 logging_middleware 25612 30032 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "new_user2", "password": "******", "confirm_password": "Test@1234", "email": "existing@test.com", "phone": "+989222222222", "first_name": "New", "last_name": "User"}}
+WARNING 2026-08-08 01:00:51,323 logging_middleware 25612 30032 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.017s", "user": "anonymous"}
+INFO 2026-08-08 01:00:51,330 logging_middleware 25612 30032 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "user_test", "password": "******", "confirm_password": "Test@1234", "email": "invalid-email", "phone": "+989333333333", "first_name": "Test", "last_name": "User"}}
+WARNING 2026-08-08 01:00:51,363 logging_middleware 25612 30032 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.034s", "user": "anonymous"}
+INFO 2026-08-08 01:00:51,368 logging_middleware 25612 30032 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "user_test2", "password": "******", "confirm_password": "Test@1234", "email": "user@test.com", "phone": "123456789", "first_name": "Test", "last_name": "User"}}
+WARNING 2026-08-08 01:00:51,394 logging_middleware 25612 30032 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.026s", "user": "anonymous"}
+INFO 2026-08-08 01:02:55,857 logging_middleware 11636 10552 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "samira", "password": "******", "confirm_password": "60A9gvNT", "email": "samira@test.com", "phone": "09100825689", "first_name": "Samira", "last_name": "Mehrgo"}}
+INFO 2026-08-08 01:03:00,924 auth_views 11636 10552 {"action": "register", "status": "success", "timestamp": 1786138380.9249191, "user_id": 1, "extra": {"username": "samira", "email": "samira@test.com", "phone": "09100825689"}}
+INFO 2026-08-08 01:03:00,926 logging_middleware 11636 10552 Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "5.069s", "user": "anonymous"}
+INFO 2026-08-08 01:03:00,929 logging_middleware 11636 10552 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "alireza", "password": "******", "confirm_password": "hkhKaVPv", "email": "alrz@test.com", "phone": "09123456789", "first_name": "Alireza", "last_name": "Jamee"}}
+INFO 2026-08-08 01:03:06,006 auth_views 11636 10552 {"action": "register", "status": "success", "timestamp": 1786138386.006545, "user_id": 2, "extra": {"username": "alireza", "email": "alrz@test.com", "phone": "09123456789"}}
+INFO 2026-08-08 01:03:06,007 logging_middleware 11636 10552 Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "5.078s", "user": "anonymous"}
+INFO 2026-08-08 01:03:06,012 logging_middleware 11636 10552 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "11111", "password": "******", "confirm_password": "1234Aa@QqWw", "email": "dra@test.com", "phone": "09188325689", "first_name": "Dara", "last_name": "Zamani"}}
+WARNING 2026-08-08 01:03:06,018 logging_middleware 11636 10552 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.006s", "user": "anonymous"}
+INFO 2026-08-08 01:03:06,596 logging_middleware 11636 10552 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "dara", "password": "******", "confirm_password": "123Aa@QqWw", "email": "ddr@test.com", "phone": "09188325559", "first_name": "Dara", "last_name": "Moahmmadi"}}
+ERROR 2026-08-08 01:03:06,601 auth_views 11636 10552 {"action": "register", "status": "failed", "timestamp": 1786138386.6010168, "error_code": 11, "extra": {"username": "dara", "email": "ddr@test.com", "phone": "09188325559", "error": {"username": ["user with this username already exists.", "Ensure this field has at least 5 characters."]}}}
+WARNING 2026-08-08 01:03:06,602 logging_middleware 11636 10552 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.006s", "user": "anonymous"}
+INFO 2026-08-08 01:03:06,605 logging_middleware 11636 10552 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "", "password": "******", "confirm_password": "", "email": "", "phone": "", "first_name": "", "last_name": ""}}
+WARNING 2026-08-08 01:03:06,606 logging_middleware 11636 10552 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.001s", "user": "anonymous"}
+INFO 2026-08-08 01:03:06,609 logging_middleware 11636 10552 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "dara", "password": "******", "confirm_password": "12341234", "email": "ddr@test.com", "phone": "09188325559", "first_name": "Dara", "last_name": "Moahmmadi"}}
+WARNING 2026-08-08 01:03:06,614 logging_middleware 11636 10552 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.005s", "user": "anonymous"}
+INFO 2026-08-08 01:03:07,183 logging_middleware 11636 10552 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "new_user", "password": "******", "confirm_password": "Test@1234", "email": "new@test.com", "phone": "09111111111", "first_name": "New", "last_name": "User"}}
+ERROR 2026-08-08 01:03:07,188 auth_views 11636 10552 {"action": "register", "status": "failed", "timestamp": 1786138387.18857, "error_code": 14, "extra": {"username": "new_user", "email": "new@test.com", "phone": "09111111111", "error": {"phone": ["user with this phone already exists."]}}}
+WARNING 2026-08-08 01:03:07,189 logging_middleware 11636 10552 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.006s", "user": "anonymous"}
+INFO 2026-08-08 01:03:07,759 logging_middleware 11636 10552 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "new_user2", "password": "******", "confirm_password": "Test@1234", "email": "existing@test.com", "phone": "09222222222", "first_name": "New", "last_name": "User"}}
+ERROR 2026-08-08 01:03:07,763 auth_views 11636 10552 {"action": "register", "status": "failed", "timestamp": 1786138387.7639768, "error_code": 15, "extra": {"username": "new_user2", "email": "existing@test.com", "phone": "09222222222", "error": {"email": ["user with this email already exists."]}}}
+WARNING 2026-08-08 01:03:07,764 logging_middleware 11636 10552 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.005s", "user": "anonymous"}
+INFO 2026-08-08 01:03:07,767 logging_middleware 11636 10552 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "user_test", "password": "******", "confirm_password": "Test@1234", "email": "invalid-email", "phone": "09333333333", "first_name": "Test", "last_name": "User"}}
+WARNING 2026-08-08 01:03:07,773 logging_middleware 11636 10552 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.006s", "user": "anonymous"}
+INFO 2026-08-08 01:03:07,775 logging_middleware 11636 10552 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "user_test2", "password": "******", "confirm_password": "Test@1234", "email": "user@test.com", "phone": "123456789", "first_name": "Test", "last_name": "User"}}
+WARNING 2026-08-08 01:03:07,805 logging_middleware 11636 10552 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.031s", "user": "anonymous"}
+INFO 2026-08-08 01:11:27,293 logging_middleware 29280 17036 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "samira", "password": "******", "confirm_password": "60A9gvNT", "email": "samira@test.com", "phone": "09100825689", "first_name": "Samira", "last_name": "Mehrgo"}}
+INFO 2026-08-08 01:11:32,380 auth_views 29280 17036 {"action": "register", "status": "success", "timestamp": 1786138892.37999, "user_id": 1, "extra": {"username": "samira", "email": "samira@test.com", "phone": "09100825689"}}
+INFO 2026-08-08 01:11:32,380 logging_middleware 29280 17036 Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "5.089s", "user": "anonymous"}
+INFO 2026-08-08 01:11:32,384 logging_middleware 29280 17036 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "alireza", "password": "******", "confirm_password": "hkhKaVPv", "email": "alrz@test.com", "phone": "09123456789", "first_name": "Alireza", "last_name": "Jamee"}}
+INFO 2026-08-08 01:11:37,369 auth_views 29280 17036 {"action": "register", "status": "success", "timestamp": 1786138897.369271, "user_id": 2, "extra": {"username": "alireza", "email": "alrz@test.com", "phone": "09123456789"}}
+INFO 2026-08-08 01:11:37,370 logging_middleware 29280 17036 Response: {"method": "POST", "path": "/identity/auth/register/", "status_code": 201, "duration": "4.986s", "user": "anonymous"}
+INFO 2026-08-08 01:11:37,374 logging_middleware 29280 17036 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "11111", "password": "******", "confirm_password": "1234Aa@QqWw", "email": "dra@test.com", "phone": "09188325689", "first_name": "Dara", "last_name": "Zamani"}}
+WARNING 2026-08-08 01:11:37,379 logging_middleware 29280 17036 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.005s", "user": "anonymous"}
+INFO 2026-08-08 01:11:37,940 logging_middleware 29280 17036 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "dara", "password": "******", "confirm_password": "123Aa@QqWw", "email": "ddr@test.com", "phone": "09188325559", "first_name": "Dara", "last_name": "Moahmmadi"}}
+ERROR 2026-08-08 01:11:37,946 auth_views 29280 17036 {"action": "register", "status": "failed", "timestamp": 1786138897.9461625, "error_code": 11, "extra": {"username": "dara", "email": "ddr@test.com", "phone": "09188325559", "error": {"username": ["user with this username already exists.", "Ensure this field has at least 5 characters."]}}}
+WARNING 2026-08-08 01:11:37,946 logging_middleware 29280 17036 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.006s", "user": "anonymous"}
+INFO 2026-08-08 01:11:37,949 logging_middleware 29280 17036 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "", "password": "******", "confirm_password": "", "email": "", "phone": "", "first_name": "", "last_name": ""}}
+WARNING 2026-08-08 01:11:37,951 logging_middleware 29280 17036 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.002s", "user": "anonymous"}
+INFO 2026-08-08 01:11:37,954 logging_middleware 29280 17036 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "dara", "password": "******", "confirm_password": "12341234", "email": "ddr@test.com", "phone": "09188325559", "first_name": "Dara", "last_name": "Moahmmadi"}}
+ERROR 2026-08-08 01:11:37,960 auth_views 29280 17036 {"action": "register", "status": "failed", "timestamp": 1786138897.9601977, "error_code": 13, "extra": {"username": "dara", "email": "ddr@test.com", "phone": "09188325559", "error": {"username": ["Ensure this field has at least 5 characters."], "password": ["This password is too common.", "This password is entirely numeric."]}}}
+WARNING 2026-08-08 01:11:37,960 logging_middleware 29280 17036 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.006s", "user": "anonymous"}
+INFO 2026-08-08 01:11:38,532 logging_middleware 29280 17036 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "new_user", "password": "******", "confirm_password": "Test@1234", "email": "new@test.com", "phone": "09111111111", "first_name": "New", "last_name": "User"}}
+ERROR 2026-08-08 01:11:38,536 auth_views 29280 17036 {"action": "register", "status": "failed", "timestamp": 1786138898.536646, "error_code": 14, "extra": {"username": "new_user", "email": "new@test.com", "phone": "09111111111", "error": {"phone": ["user with this phone already exists."]}}}
+WARNING 2026-08-08 01:11:38,537 logging_middleware 29280 17036 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.005s", "user": "anonymous"}
+INFO 2026-08-08 01:11:39,094 logging_middleware 29280 17036 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "new_user2", "password": "******", "confirm_password": "Test@1234", "email": "existing@test.com", "phone": "09222222222", "first_name": "New", "last_name": "User"}}
+ERROR 2026-08-08 01:11:39,098 auth_views 29280 17036 {"action": "register", "status": "failed", "timestamp": 1786138899.098248, "error_code": 15, "extra": {"username": "new_user2", "email": "existing@test.com", "phone": "09222222222", "error": {"email": ["user with this email already exists."]}}}
+WARNING 2026-08-08 01:11:39,099 logging_middleware 29280 17036 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.005s", "user": "anonymous"}
+INFO 2026-08-08 01:11:39,102 logging_middleware 29280 17036 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "user_test", "password": "******", "confirm_password": "Test@1234", "email": "invalid-email", "phone": "09333333333", "first_name": "Test", "last_name": "User"}}
+WARNING 2026-08-08 01:11:39,108 logging_middleware 29280 17036 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.007s", "user": "anonymous"}
+INFO 2026-08-08 01:11:39,113 logging_middleware 29280 17036 Request: {"method": "POST", "path": "/identity/auth/register/", "full_path": "/identity/auth/register/", "user": "anonymous", "ip": "127.0.0.1", "user_agent": "", "referer": "", "body": {"username": "user_test2", "password": "******", "confirm_password": "Test@1234", "email": "user@test.com", "phone": "123456789", "first_name": "Test", "last_name": "User"}}
+WARNING 2026-08-08 01:11:39,120 logging_middleware 29280 17036 Response Error: {"method": "POST", "path": "/identity/auth/register/", "status_code": 400, "duration": "0.007s", "user": "anonymous"}

@@ -3,8 +3,9 @@ import json
 import time
 from django.utils.deprecation import MiddlewareMixin
 import traceback
+import sys
 
-logger = logging.getLogger('myapp.requests')  # یا هر اسم دیگه‌ای
+logger = logging.getLogger('myapp.requests')
 
 
 class RequestLogMiddleware(MiddlewareMixin):
@@ -38,7 +39,20 @@ class RequestLogMiddleware(MiddlewareMixin):
             except:
                 pass
 
-        logger.info(f"📥 Request: {json.dumps(log_data, ensure_ascii=False)}")
+        # ========== رفع مشکل Unicode ==========
+        # لاگ بدون ایموجی و با encoding صحیح
+        log_message = json.dumps(log_data, ensure_ascii=False)
+        # جایگزینی ایموجی‌ها با متن ساده
+        log_message = log_message.replace('📥', '[REQUEST]')
+        log_message = log_message.replace('📤', '[RESPONSE]')
+
+        # لاگ با encode به utf-8 برای جلوگیری از خطا
+        try:
+            logger.info(f"Request: {log_message}")
+        except UnicodeEncodeError:
+            # اگر باز هم خطا داد، با ascii لاگ کن
+            logger.info(f"Request: {json.dumps(log_data, ensure_ascii=True)}")
+
         return None
 
     def process_response(self, request, response):
@@ -54,11 +68,19 @@ class RequestLogMiddleware(MiddlewareMixin):
                 'user': str(request.user) if request.user.is_authenticated else 'anonymous',
             }
 
+            log_message = json.dumps(log_data, ensure_ascii=False)
+
             # لاگ خطاهای خاص
             if response.status_code >= 400:
-                logger.warning(f" Response Error: {json.dumps(log_data, ensure_ascii=False)}")
+                try:
+                    logger.warning(f"Response Error: {log_message}")
+                except UnicodeEncodeError:
+                    logger.warning(f"Response Error: {json.dumps(log_data, ensure_ascii=True)}")
             else:
-                logger.info(f" Response: {json.dumps(log_data, ensure_ascii=False)}")
+                try:
+                    logger.info(f"Response: {log_message}")
+                except UnicodeEncodeError:
+                    logger.info(f"Response: {json.dumps(log_data, ensure_ascii=True)}")
 
         return response
 
@@ -71,7 +93,13 @@ class RequestLogMiddleware(MiddlewareMixin):
             'exception': str(exception),
             'traceback': traceback.format_exc(),
         }
-        logger.error(f" Exception: {json.dumps(log_data, ensure_ascii=False)}")
+
+        log_message = json.dumps(log_data, ensure_ascii=False)
+        try:
+            logger.error(f"Exception: {log_message}")
+        except UnicodeEncodeError:
+            logger.error(f"Exception: {json.dumps(log_data, ensure_ascii=True)}")
+
         return None
 
     def get_client_ip(self, request):

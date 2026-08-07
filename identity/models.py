@@ -48,7 +48,12 @@ class User(AbstractUser):
     )
     email = models.EmailField(unique=True)
     phone = models.CharField(
-        validators=[RegexValidator(regex=r'^\+?1?\d{9,15}$',)],
+        validators=[
+            RegexValidator(
+                regex=r'^09\d{9}$',
+                message='شماره موبایل معتبر نیست. باید با 09 شروع شده و 11 رقم باشد.'
+            )
+        ],
         unique=True,
         max_length=15
     )

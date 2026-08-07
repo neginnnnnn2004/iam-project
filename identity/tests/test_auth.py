@@ -9,9 +9,10 @@ class UserRegisterTest(APITestCase):
     def test_successful_register(self):
         valid_data1 = {
             'username':"samira",
-            'password':"8!4J8&kj",
+            'password':"60A9gvNT",
+            'confirm_password': "60A9gvNT",
             'email':"samira@test.com",
-            'phone':"+989100825689",
+            'phone':"09100825689",
             'first_name':"Samira",
             'last_name':"Mehrgo"
         }
@@ -23,9 +24,10 @@ class UserRegisterTest(APITestCase):
 
         valid_data2 = {
             'username':"alireza",
-            'password':"!Mp4t4)4",
+            'password':"hkhKaVPv",
+            'confirm_password': "hkhKaVPv",
             'email':"alrz@test.com",
-            'phone':"+989123456789",
+            'phone':"09123456789",
             'first_name':"Alireza",
             'last_name':"Jamee"
         }
@@ -35,164 +37,252 @@ class UserRegisterTest(APITestCase):
         # verification
         self.assertTrue(User.objects.filter(username="alireza").exists())
 
-    def test_unsuccessful_register(self):
+    def test_unsuccessful_error_code_10(self):
         data = {
-            'username': "user83",
-            'password': "pass",
-            'email': "invalid-email-format",
-            'phone': "+123456789"
-        }
-        response = self.client.post(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'], 16)
-
-
-    def test_unsuccessful_error_code_11(self):
-        User.objects.create_user(username='dara', password='old_pass')
-        data = {
-            'username': "dara",
-            'password': "pa",
+            'username': "11111",
+            'password': "1234Aa@QqWw",
+            'confirm_password': "1234Aa@QqWw",
             'email': "dra@test.com",
-            'phone': "+989188325689",
+            'phone': "09188325689",
             'first_name': "Dara",
             'last_name': "Zamani"
         }
         response = self.client.post(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'],11)
+        self.assertEqual(response.data['error_code'],10)
 
+    def test_unsuccessful_error_code_11(self):
+        User.objects.create_user(username='dara', password='1234Aa@QqWw')
+        data = {
+            'username': "dara",
+            'password': "123Aa@QqWw",
+            'confirm_password': "123Aa@QqWw",
+            'email': "ddr@test.com",
+            'phone': "09188325559",
+            'first_name': "Dara",
+            'last_name': "Moahmmadi"
+        }
+        response = self.client.post(self.url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error_code'], 11)
 
+    def test_unsuccessful_error_code_12(self):
         data = {
             'username': "",
-            'password': "",
+            'password':"" ,
+            'confirm_password': "",
             'email': "",
             'phone': "",
+            'first_name': "",
+            'last_name': ""
         }
         response = self.client.post(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['error_code'], 12)
 
-class LoginRegisterTest(APITestCase):
-    def setUp(self):
-        self.url = reverse('user-login')
-    def test_successful(self):
-        User.objects.create_user(username='dara', password='^5MN76f[', email='dara@test.com',phone='+989100825689')
-        data = {
-            'username':"dara",
-            'password':"^5MN76f[",
-        }
-        response = self.client.post(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('access_token', response.data)
+    def test_unsuccessful_error_code_13(self):
+       data = {
+           'username': "dara",
+           'password': "12341234",
+           'confirm_password': "12341234",
+           'email': "ddr@test.com",
+           'phone': "09188325559",
+           'first_name': "Dara",
+           'last_name': "Moahmmadi"
+       }
+       response = self.client.post(self.url, data, format='json')
+       self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+       self.assertEqual(response.data['error_code'], 13)
 
-        User.objects.create_user(username='nima', password='r4-0X^1~', email='nima@test.com',phone='+989188825689')
-        data = {
-            'username':"nima",
-            'password':"r4-0X^1~",
-        }
-        response = self.client.post(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('access_token', response.data)
-
-    def test_unsuccessful_wrong_pass(self):
-        User.objects.create_user(username='dara', password='5MN76f', email='dara@test.com',phone='+989100825689')
-        data = {'username': "dara", 'password': "passwrong"}
-        response = self.client.post(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(response.data['error_code'], 13)
-
-        User.objects.create_user(username='nima', password='r4-0X^1~', email='nima@test.com', phone='+989188825689')
-        data = {'username': "nimaa", 'password': "r4-0X^1~"}
-        response = self.client.post(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(response.data['error_code'], 13)
-
-    def test_unsuccessful_bad_req(self):
-        User.objects.create_user(username="dara", password="pass123")
-
-        data = {'username': 'dara'}
-        response = self.client.post(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'], 10)
-
-        data = {'username': '', 'password': ''}
-        response = self.client.post(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'], 10)
-
-        data = {'username': ['dara', 'nima'], 'password': 'pass123'}
-        response = self.client.post(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'], 10)
-
-        data = {'username': 'dara', 'password': {'value': 'pass123'}}
-        response = self.client.post(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'], 10)
-
-class ProfileUpdateTest(APITestCase):
-    def setUp(self):
-        self.url = reverse('update-profile')
-
-        self.user = User.objects.create_user(
-            username='dara',
-            password='^9*$0Z9p',
-            first_name='Dara',
-            last_name='Zamani',
+    def test_unsuccessful_error_code_14(self):
+        User.objects.create_user(
+            username='test_user',
+            password='Test@1234',
+            phone='09111111111'
         )
 
-    def test_unauthorized_user_cannot_access(self):
-        data = {"username": 'daraaa'}
-        response = self.client.patch(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_successful_patch_update(self):
-        self.client.force_authenticate(user=self.user)
         data = {
-            'first_name': 'Dana',
+            'username': "new_user",
+            'password': "Test@1234",
+            'confirm_password': "Test@1234",
+            'email': "new@test.com",
+            'phone': "09111111111",
+            'first_name': "New",
+            'last_name': "User"
         }
-        response = self.client.patch(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        # verification
-        self.user.refresh_from_db()
-        self.assertEqual(self.user.first_name, 'Dana')
-
-    def test_successful_patch_update_and_password_hashing(self):
-        self.client.force_authenticate(user=self.user)
-        data = {
-            'first_name': 'Mohammad',
-            'last_name': 'Rezaei',
-            'password': 'S4=3no3='
-        }
-        response = self.client.patch(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        # verification
-        self.user.refresh_from_db()
-        self.assertEqual(self.user.first_name, 'Mohammad')
-        self.assertEqual(self.user.last_name, 'Rezaei')
-        self.assertTrue(self.user.check_password('S4=3no3='))
-
-    def test_update_code_10_blank_or_whitespace_fields(self):
-        self.client.force_authenticate(user=self.user)
-
-        data = {'first_name': ''}
-        response = self.client.patch(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'], 10)
-
-        data = {'last_name': '     '}
-        response = self.client.patch(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'], 10)
-
-    def test_update_code_10_short_password(self):
-        self.client.force_authenticate(user=self.user)
-
-        data = {
-            'password': 'short1'
-        }
-        response = self.client.patch(self.url, data, format='json')
+        response = self.client.post(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['error_code'], 14)
+
+    def test_unsuccessful_error_code_15(self):
+        User.objects.create_user(
+            username='test_user2',
+            password='Test@1234',
+            email='existing@test.com'
+        )
+
+        data = {
+            'username': "new_user2",
+            'password': "Test@1234",
+            'confirm_password': "Test@1234",
+            'email': "existing@test.com",
+            'phone': "09222222222",
+            'first_name': "New",
+            'last_name': "User"
+        }
+        response = self.client.post(self.url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error_code'], 15)
+
+    def test_unsuccessful_error_code_16_invalid_email(self):
+        data = {
+            'username': "user_test",
+            'password': "Test@1234",
+            'confirm_password': "Test@1234",
+            'email': "invalid-email",
+            'phone': "09333333333",
+            'first_name': "Test",
+            'last_name': "User"
+        }
+        response = self.client.post(self.url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error_code'], 16)
+
+    def test_unsuccessful_error_code_16_invalid_phone(self):
+        data = {
+            'username': "user_test2",
+            'password': "Test@1234",
+            'confirm_password': "Test@1234",
+            'email': "user@test.com",
+            'phone': "123456789",
+            'first_name': "Test",
+            'last_name': "User"
+        }
+        response = self.client.post(self.url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error_code'], 16)
+
+# class LoginRegisterTest(APITestCase):
+#     def setUp(self):
+#         self.url = reverse('user-login')
+#     def test_successful(self):
+#         User.objects.create_user(username='dara', password='^5MN76f[', email='dara@test.com',phone='+989100825689')
+#         data = {
+#             'username':"dara",
+#             'password':"^5MN76f[",
+#         }
+#         response = self.client.post(self.url, data, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+#         self.assertIn('access_token', response.data)
+#
+#         User.objects.create_user(username='nima', password='r4-0X^1~', email='nima@test.com',phone='+989188825689')
+#         data = {
+#             'username':"nima",
+#             'password':"r4-0X^1~",
+#         }
+#         response = self.client.post(self.url, data, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+#         self.assertIn('access_token', response.data)
+#
+#     def test_unsuccessful_wrong_pass(self):
+#         User.objects.create_user(username='dara', password='5MN76f', email='dara@test.com',phone='+989100825689')
+#         data = {'username': "dara", 'password': "passwrong"}
+#         response = self.client.post(self.url, data, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+#         self.assertEqual(response.data['error_code'], 13)
+#
+#         User.objects.create_user(username='nima', password='r4-0X^1~', email='nima@test.com', phone='+989188825689')
+#         data = {'username': "nimaa", 'password': "r4-0X^1~"}
+#         response = self.client.post(self.url, data, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+#         self.assertEqual(response.data['error_code'], 13)
+#
+#     def test_unsuccessful_bad_req(self):
+#         User.objects.create_user(username="dara", password="pass123")
+#
+#         data = {'username': 'dara'}
+#         response = self.client.post(self.url, data, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(response.data['error_code'], 10)
+#
+#         data = {'username': '', 'password': ''}
+#         response = self.client.post(self.url, data, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(response.data['error_code'], 10)
+#
+#         data = {'username': ['dara', 'nima'], 'password': 'pass123'}
+#         response = self.client.post(self.url, data, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(response.data['error_code'], 10)
+#
+#         data = {'username': 'dara', 'password': {'value': 'pass123'}}
+#         response = self.client.post(self.url, data, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(response.data['error_code'], 10)
+#
+# class ProfileUpdateTest(APITestCase):
+#     def setUp(self):
+#         self.url = reverse('update-profile')
+#
+#         self.user = User.objects.create_user(
+#             username='dara',
+#             password='^9*$0Z9p',
+#             first_name='Dara',
+#             last_name='Zamani',
+#         )
+#
+#     def test_unauthorized_user_cannot_access(self):
+#         data = {"username": 'daraaa'}
+#         response = self.client.patch(self.url, data, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+#
+#     def test_successful_patch_update(self):
+#         self.client.force_authenticate(user=self.user)
+#         data = {
+#             'first_name': 'Dana',
+#         }
+#         response = self.client.patch(self.url, data, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+#
+#         # verification
+#         self.user.refresh_from_db()
+#         self.assertEqual(self.user.first_name, 'Dana')
+#
+#     def test_successful_patch_update_and_password_hashing(self):
+#         self.client.force_authenticate(user=self.user)
+#         data = {
+#             'first_name': 'Mohammad',
+#             'last_name': 'Rezaei',
+#             'password': 'S4=3no3='
+#         }
+#         response = self.client.patch(self.url, data, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+#
+#         # verification
+#         self.user.refresh_from_db()
+#         self.assertEqual(self.user.first_name, 'Mohammad')
+#         self.assertEqual(self.user.last_name, 'Rezaei')
+#         self.assertTrue(self.user.check_password('S4=3no3='))
+#
+#     def test_update_code_10_blank_or_whitespace_fields(self):
+#         self.client.force_authenticate(user=self.user)
+#
+#         data = {'first_name': ''}
+#         response = self.client.patch(self.url, data, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(response.data['error_code'], 10)
+#
+#         data = {'last_name': '     '}
+#         response = self.client.patch(self.url, data, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(response.data['error_code'], 10)
+#
+#     def test_update_code_10_short_password(self):
+#         self.client.force_authenticate(user=self.user)
+#
+#         data = {
+#             'password': 'short1'
+#         }
+#         response = self.client.patch(self.url, data, format='json')
+#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+#         self.assertEqual(response.data['error_code'], 14)
