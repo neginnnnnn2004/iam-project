@@ -4,8 +4,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models import Q
 from django.conf import settings
 import hashlib
-
-
 class Role(models.Model):
     id = models.AutoField(primary_key=True)
     CODE_CHOICES = (
@@ -48,9 +46,14 @@ class User(AbstractUser):
     )
     email = models.EmailField(unique=True)
     phone = models.CharField(
-        validators=[RegexValidator(regex=r'^\+?1?\d{9,15}$',)],
+        validators=[
+            RegexValidator(
+                regex=r'^09\d{9}$',
+                message='شماره موبایل معتبر نیست. باید با 09 شروع شده و 11 رقم باشد.'
+            )
+        ],
         unique=True,
-        max_length=15
+        max_length=11
     )
     STATUS_CHOICES = (
         ('unverified','Unverified'),

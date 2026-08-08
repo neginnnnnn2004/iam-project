@@ -24,7 +24,7 @@ class ListOfGroupsView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_description="دریافت لیست گروه ها",
+        operation_description="دریافت لیست گروه ها برای هر کاربر احراز هویت شده(برای کاربران عادی و میهمان لیست گروه هایی که در آنها عضو است. و برای ادمین ها لیست تمامی گروه ها)",
         responses={
             200: UserListOfGroupsSerializer(many=True),
             401: "Unauthorized",
@@ -56,7 +56,7 @@ class GroupRegisterView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-        ایجاد گروه جدید
+         ایجاد گروه جدید با دسترسی ادمین
 
         کدهای خطای اختصاصی :
         - code 10: اطلاعات ارسالی ناقص یا اشتباه است
@@ -91,7 +91,7 @@ class GroupDetailOREditView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-         دریافت جزییات یک گروه
+         دریافت جزییات یک گروه با دسترسی ادمین
 
         کد های اختصاصی:
         - code 50: گروه مورد نظر یافت نشد.
@@ -117,7 +117,7 @@ class GroupDetailOREditView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-        ویرایش  گروه
+        ویرایش  گروه با دسترسی ادمین
 
         کدهای خطای اختصاصی :
         - code 10: اطلاعات ارسالی نامعتبر است.
@@ -157,7 +157,7 @@ class GroupDetailOREditView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-        حذف نرم گروه
+        حذف نرم گروه با دسترسی ادمین
 
         کدهای خطای اختصاصی :
         - code 50: گروه مورد نظر یافت نشد.
@@ -234,12 +234,16 @@ class GroupDomainView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-        نمایش دامنه‌های مربوط به گروه انتخاب شده
+         دریافت لیست دامنه‌های مرتبط با یک گروه خاص
 
-        کدهای خطای اختصاصی :
-        - code 65: گروه مورد نظر حذف شده یا وجود ندارد
-        - code 66: عدم دسترسی کاربر غیر ادمین به گروه
-        """,
+         **دسترسی‌ها:**
+         - **ادمین و سوپرادمین**: دسترسی به دامنه‌های تمام گروه‌ها
+         - **کاربر عادی و مهمان**: فقط دامنه‌های گروه‌هایی که عضو هستند را مشاهده می‌کنند
+
+         **کدهای خطا:**
+         - `65`: گروه مورد نظر وجود ندارد یا حذف شده است
+         - `66`: کاربر دسترسی به این گروه را ندارد
+         """,
         manual_parameters=[
             openapi.Parameter(
                 'group_id',
