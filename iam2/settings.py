@@ -52,8 +52,15 @@ MIDDLEWARE = [
     'middleware.logging_middleware.RequestLogMiddleware',
 
 ]
+CSRF_TRUSTED_ORIGINS = [
+    'https://label.lioradco.ir',
+    'http://label.lioradco.ir',
+]
 
-ROOT_URLCONF = 'iam2.urls'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 TEMPLATES = [
     {
