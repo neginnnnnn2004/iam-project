@@ -4,8 +4,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models import Q
 from django.conf import settings
 import hashlib
-
-
 class Role(models.Model):
     id = models.AutoField(primary_key=True)
     CODE_CHOICES = (
@@ -55,7 +53,7 @@ class User(AbstractUser):
             )
         ],
         unique=True,
-        max_length=15
+        max_length=11
     )
     STATUS_CHOICES = (
         ('unverified','Unverified'),

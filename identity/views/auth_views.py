@@ -342,48 +342,59 @@ class ProfileUpdateView(APIView):
             }, status=status.HTTP_200_OK)
 
         errors = serializer.errors
-        error_code = 10
-        error_message = "ویرایش اطلاعات پروفایل انجام نشد."
-
         if 'password' in errors:
             error_code = 30
             error_message = "رمز عبور وارد شده معتبر نیست"
+            # لاگ امنیتی ثبت کن
 
+        elif 'confirm_password' in errors:
+            error_code = 30
+            error_message = "تکرار رمز عبور معتبر نیست"
+
+        elif 'non_field_errors' in errors:
+            # بررسی محتوای non_field_errors برای خطاهای رمز عبور
+            non_field_str = str(errors['non_field_errors'])
+            if any(keyword in non_field_str for keyword in ['رمز عبور', 'password', 'تطابق']):
+                error_code = 30
+                error_message = "رمز عبور وارد شده معتبر نیست"
+            else:
+                error_code = 10
+                error_message = "اطلاعات ارسالی نامعتبر است"
+
+            # اولویت 2: خطاهای یکتایی (Duplicate)
+        elif 'email' in errors and 'already' in str(errors['email']).lower():
+            error_code = 31
+            error_message = "ایمیل وارد شده تکراری است"
+
+        elif 'phone' in errors and 'قبلاً ثبت' in str(errors['phone']):
+            error_code = 32
+            error_message = "شماره تلفن وارد شده تکراری است"
+
+            # اولویت 3: خطاهای فرمت
+        elif 'phone' in errors:
+            error_code = 32
+            error_message = "فرمت شماره تلفن نامعتبر است"
+
+        elif 'email' in errors:
+            error_code = 31
+            error_message = "فرمت ایمیل نامعتبر است"
+
+            # اولویت 4: سایر خطاها
+        else:
+            error_code = 10
+            error_message = "ویرایش اطلاعات پروفایل انجام نشد."
+
+            # ========== ثبت لاگ‌ها ==========
+        if error_code in [30, 31, 32]:
             log_critical_event(
                 action='profile_update',
                 status='failed',
                 user_id=user.id,
-                error_code=30,
+                error_code=error_code,
                 extra={
                     'username': user.username,
                     'errors': str(errors),
                     'ip': get_client_ip(request)
-                }
-            )
-
-        elif 'email' in errors:
-            log_critical_event(
-                action='profile_update',
-                status='failed',
-                user_id=user.id,
-                error_code=31,
-                extra={
-                    'username': user.username,
-                    'email': request.data.get('email'),
-                    'errors': str(errors)
-                }
-            )
-
-        elif 'phone' in errors:
-            log_critical_event(
-                action='profile_update',
-                status='failed',
-                user_id=user.id,
-                error_code=32,
-                extra={
-                    'username': user.username,
-                    'phone': request.data.get('phone'),
-                    'errors': str(errors)
                 }
             )
 
@@ -392,7 +403,6 @@ class ProfileUpdateView(APIView):
             "message": error_message,
             "detail": errors
         }, status=status.HTTP_400_BAD_REQUEST)
-
     @swagger_auto_schema(
         operation_description="""
         بروزرسانی جزئی اطلاعات پروفایل کاربر
