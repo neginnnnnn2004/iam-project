@@ -1,84 +1,88 @@
 import logging
 import json
 import time
-from django.utils.deprecation import MiddlewareMixin
 import traceback
 
-logger = logging.getLogger('myapp.requests')  # یا هر اسم دیگه‌ای
+logger = logging.getLogger('myapp.requests')
+
+SENSITIVE_KEYS = {'password', 'token', 'key', 'secret', 'credit_card', 'authorization'}
 
 
-class RequestLogMiddleware(MiddlewareMixin):
-    """لاگ تمام درخواست‌ها و پاسخ‌ها"""
+class RequestLogMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
 
-    def process_request(self, request):
-        """قبل از پردازش درخواست"""
-        request.start_time = time.time()
+    def __call__(self, request):
+        start_time = time.time()
 
-        # اطلاعات درخواست
         log_data = {
             'method': request.method,
             'path': request.path,
             'full_path': request.get_full_path(),
-            'user': str(request.user) if request.user.is_authenticated else 'anonymous',
-            'ip': self.get_client_ip(request),
+            'user': str(request.user) if hasattr(request, 'user') and request.user.is_authenticated else 'anonymous',
+            'ip': self._get_client_ip(request),
             'user_agent': request.META.get('HTTP_USER_AGENT', ''),
             'referer': request.META.get('HTTP_REFERER', ''),
         }
 
-        # برای متدهای POST/PUT، بدنه درخواست رو لاگ کن (به جز اطلاعات حساس)
-        if request.method in ['POST', 'PUT', 'PATCH'] and request.body:
-            try:
-                body = json.loads(request.body)
-                # پاک کردن اطلاعات حساس
-                sensitive_fields = ['password', 'token', 'key', 'secret', 'credit_card']
-                for field in sensitive_fields:
-                    if field in body:
-                        body[field] = '******'
-                log_data['body'] = body
-            except:
-                pass
+        if request.method in ['POST', 'PUT', 'PATCH']:
+            content_type = request.META.get('CONTENT_TYPE', '')
+            if 'multipart/form-data' not in content_type and request.body:
+                try:
+                    body = json.loads(request.body.decode('utf-8'))
+                    log_data['body'] = self._sanitize_data(body)
+                except (json.JSONDecodeError, UnicodeDecodeError):
+                    log_data['body'] = '[Non-JSON or Binary Data]'
 
-        logger.info(f"📥 Request: {json.dumps(log_data, ensure_ascii=False)}")
-        return None
+        logger.info(f"Request: {request.method} {request.path}", extra={'extra': log_data})
 
-    def process_response(self, request, response):
-        """بعد از پردازش درخواست"""
-        if hasattr(request, 'start_time'):
-            duration = time.time() - request.start_time
+        try:
+            response = self.get_response(request)
+        except Exception as exc:
+            self._log_exception(request, exc)
+            raise exc
 
-            log_data = {
-                'method': request.method,
-                'path': request.path,
-                'status_code': response.status_code,
-                'duration': f"{duration:.3f}s",
-                'user': str(request.user) if request.user.is_authenticated else 'anonymous',
-            }
+        duration = time.time() - start_time
+        response_log = {
+            'method': request.method,
+            'path': request.path,
+            'status_code': response.status_code,
+            'duration': f"{duration:.3f}s",
+            'user': str(request.user) if hasattr(request, 'user') and request.user.is_authenticated else 'anonymous',
+        }
 
-            # لاگ خطاهای خاص
-            if response.status_code >= 400:
-                logger.warning(f" Response Error: {json.dumps(log_data, ensure_ascii=False)}")
-            else:
-                logger.info(f" Response: {json.dumps(log_data, ensure_ascii=False)}")
+        if response.status_code >= 400:
+            logger.warning(f"Response Error: {response.status_code} {request.path}", extra={'extra': response_log})
+        else:
+            logger.info(f"Response: {response.status_code} {request.path}", extra={'extra': response_log})
 
         return response
 
-    def process_exception(self, request, exception):
-        """وقتی خطا رخ میده"""
-        log_data = {
+    def _sanitize_data(self, data):
+        if isinstance(data, dict):
+            clean_dict = {}
+            for k, v in data.items():
+                if k.lower() in SENSITIVE_KEYS:
+                    clean_dict[k] = '******'
+                else:
+                    clean_dict[k] = self._sanitize_data(v)
+            return clean_dict
+        elif isinstance(data, list):
+            return [self._sanitize_data(item) for item in data]
+        return data
+
+    def _log_exception(self, request, exception):
+        exc_log = {
             'method': request.method,
             'path': request.path,
-            'user': str(request.user) if request.user.is_authenticated else 'anonymous',
+            'user': str(request.user) if hasattr(request, 'user') and request.user.is_authenticated else 'anonymous',
             'exception': str(exception),
             'traceback': traceback.format_exc(),
         }
-        logger.error(f" Exception: {json.dumps(log_data, ensure_ascii=False)}")
-        return None
+        logger.error(f"Unhandled Exception: {request.path}", extra={'extra': exc_log})
 
-    def get_client_ip(self, request):
-        """دریافت IP واقعی کاربر"""
+    def _get_client_ip(self, request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-        return ip
+            return x_forwarded_for.split(',')[0].strip()
+        return request.META.get('REMOTE_ADDR', '')

@@ -36,7 +36,7 @@ class ImportOrEditDomainView(APIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
     @swagger_auto_schema(
-        operation_description="اضافه کردن دسته‌جمعی یا تکی دامنه‌ها (بررسی خودکار و حذف تکراری‌ها / استخراج اصل دامنه)",
+        operation_description="اضافه کردن دسته‌جمعی یا تکی دامنه‌ها،با دسترسی ادمین (بررسی خودکار و حذف تکراری‌ها / استخراج اصل دامنه)",
         request_body=DomainRegisterSerializer(many=True),
         responses={
             201: DomainRegisterSerializer(many=True),
@@ -120,7 +120,7 @@ class ImportOrEditDomainView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-        ویرایش تکی یا دسته‌جمعی مشخصات دامنه‌ها (PATCH)
+        ویرایش تکی یا دسته‌جمعی مشخصات دامنه‌ها،با دسترسی ادمین
 
         - برای ویرایش تکی: یک Object ارسال کنید: {"domain_name": "a.com", "description": "new"}
         - برای ویرایش دسته‌جمعی: یک Array ارسال کنید: [{"domain_name": "a.com", ...}, ...]
@@ -275,7 +275,7 @@ class TagListCreateView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-            ایجاد تگ جدید
+            ایجاد تگ جدید،با دسترسی ادمین
 
             کدهای خطای اختصاصی :
             - code 10: اطلاعات ارسالی ناقص یا اشتباه است.
@@ -312,7 +312,7 @@ class TagDetailView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-ویرایش تگ بر اساس شناسه               
+ویرایش تگ بر اساس شناسه،با دسترسی ادمین               
                کدهای خطای اختصاصی :
                - code 10: اطلاعات ارسالی ناقص یا اشتباه است.
                - code 55: تگ مورد نظر یافت نشد.
@@ -348,7 +348,7 @@ class TagDetailView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-            حذف نرم تگ توسط ادمین / سوپرادمین بر اساس شناسه
+            حذف نرم تگ ،با دسترسی ادمین( بر اساس شناسه)
             
             کدهای خطای اختصاصی :
             - code 55: تگ مورد نظر یافت نشد.

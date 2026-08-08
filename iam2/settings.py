@@ -21,20 +21,8 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-# allowed_hosts = os.getenv('ALLOWED_HOSTS','')
-# ALLOWED_HOSTS = allowed_hosts.split(',') if allowed_hosts else []
 
 ALLOWED_HOSTS = ['*']
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-
-# SECURITY WARNING: don't run with debug turned on in production!
-
 
 # Application definition
 
@@ -165,18 +153,11 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
 }
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'negin.mahdavian1383@gmail.com'
-# EMAIL_HOST_PASSWORD = 'vhrrvnwmfmarpajn'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 CORS_ALLOW_ALL_ORIGINS = True
-
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(LOGS_DIR):
     os.makedirs(LOGS_DIR)
@@ -186,6 +167,9 @@ LOGGING = {
     'disable_existing_loggers': False,
 
     'formatters': {
+        'json_safe': {
+            '()': 'identity.formatters.SafeJSONFormatter',
+        },
         'verbose': {
             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
             'style': '{',
@@ -194,7 +178,6 @@ LOGGING = {
             'format': '{levelname} {asctime} {message}',
             'style': '{',
         },
-        # نسخه درست colorlog
         'colored': {
             '()': 'colorlog.ColoredFormatter',
             'format': '%(log_color)s%(levelname)-8s %(asctime)s %(bold_cyan)s%(name)s%(reset)s %(message)s',
@@ -206,15 +189,6 @@ LOGGING = {
                 'ERROR': 'red',
                 'CRITICAL': 'red,bg_white',
             },
-            'secondary_log_colors': {
-                'name': {
-                    'DEBUG': 'cyan',
-                    'INFO': 'green',
-                    'WARNING': 'yellow',
-                    'ERROR': 'red',
-                    'CRITICAL': 'red',
-                }
-            }
         },
     },
 
@@ -226,24 +200,27 @@ LOGGING = {
         'error_file': {
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(LOGS_DIR, 'errors.log'),
-            'maxBytes': 1024 * 1024 * 5,
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
             'backupCount': 5,
-            'formatter': 'verbose',
+            'formatter': 'json_safe',
+            'encoding': 'utf-8',
             'level': 'ERROR',
         },
         'app_file': {
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(LOGS_DIR, 'app.log'),
-            'maxBytes': 1024 * 1024 * 10,
+            'maxBytes': 1024 * 1024 * 10,  # 10 MB
             'backupCount': 10,
-            'formatter': 'verbose',
+            'formatter': 'json_safe',
+            'encoding': 'utf-8',
         },
         'requests_file': {
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(LOGS_DIR, 'requests.log'),
-            'maxBytes': 1024 * 1024 * 10,
+            'maxBytes': 1024 * 1024 * 10,  # 10 MB
             'backupCount': 5,
-            'formatter': 'simple',
+            'formatter': 'json_safe',
+            'encoding': 'utf-8',
         },
     },
 
@@ -263,6 +240,11 @@ LOGGING = {
             'level': 'DEBUG' if DEBUG else 'INFO',
             'propagate': False,
         },
+        'myapp.requests': {
+            'handlers': ['console', 'requests_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
         'django.server': {
             'handlers': ['console', 'error_file'],
             'level': 'ERROR',
@@ -271,9 +253,7 @@ LOGGING = {
     },
 }
 
-# برای محیط production
 if not DEBUG:
     LOGGING['loggers']['django']['level'] = 'WARNING'
     LOGGING['loggers']['myapp']['level'] = 'INFO'
-    # در production از فرمت ساده استفاده کن
     LOGGING['handlers']['console']['formatter'] = 'simple'
