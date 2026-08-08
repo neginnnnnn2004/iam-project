@@ -1914,3 +1914,4 @@ WARNING 2026-08-08 09:25:13,755 logging_middleware 12516 32568 Response Error: {
 {"timestamp": "2026-08-08T06:34:53.518685+00:00", "level": "INFO", "logger": "django.utils.autoreload", "message": "Watching for file changes with StatReloader"}
 {"timestamp": "2026-08-08T06:35:50.987325+00:00", "level": "INFO", "logger": "django.utils.autoreload", "message": "C:\\Users\\Top\\iam2\\identity\\urls.py changed, reloading."}
 {"timestamp": "2026-08-08T06:35:52.342170+00:00", "level": "INFO", "logger": "django.utils.autoreload", "message": "Watching for file changes with StatReloader"}
+{"timestamp": "2026-08-08T06:43:34.224298+00:00", "level": "INFO", "logger": "django.utils.autoreload", "message": "Watching for file changes with StatReloader"}
