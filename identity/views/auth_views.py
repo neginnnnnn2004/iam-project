@@ -1,58 +1,78 @@
-from django.contrib.auth import authenticate
 import json
+import logging
+from typing import Optional
+
+from django.contrib.auth import authenticate
+from django.utils import timezone
+from rest_framework import status
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from identity.models import User
 from identity.serializers.auth_serializers import (
     UserRegisterSerializer,
     UserLoginSerializer,
     ProfileUpdateSerializer,
     ProfileUpdateResponseSerializer
 )
+from identity.utils import create_user_backup_codes
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from identity.utils import create_user_backup_codes
-from typing import Optional
-from identity.models import User
-import logging
-import time
 
 logger = logging.getLogger('myapp.critical')
 
 
 # ================== Helper Functions =====================
-def get_client_ip(request):
+def get_client_meta(request):
+    """
+    Extracting network metadata for security logs
+    """
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
-        return x_forwarded_for.split(',')[0]
-    return request.META.get('REMOTE_ADDR')
+        ip = x_forwarded_for.split(',')[0].strip()
+    else:
+        ip = request.META.get('REMOTE_ADDR', 'UNKNOWN')
+
+    user_agent = request.META.get('HTTP_USER_AGENT', 'UNKNOWN')
+    return {
+        'ip': ip,
+        'user_agent': user_agent
+    }
 
 
-def log_critical_event(action, status, user_id=None, error_code=None, extra=None):
+def log_critical_event(action: str, status_type: str, request, user_id=None, error_code=None, extra=None):
     """
-    لاگ نقاط حیاتی
+    Structured logging at critical and security-sensitive points in the system
     """
+    client_info = get_client_meta(request)
+
     log_data = {
+        'event_type': 'SECURITY_AUDIT',
         'action': action,
-        'status': status,
-        'timestamp': time.time(),
+        'status': status_type,
+        'timestamp': timezone.now().isoformat(),
+        'client_ip': client_info['ip'],
+        'user_agent': client_info['user_agent'],
     }
 
     if user_id:
         log_data['user_id'] = user_id
     if error_code:
         log_data['error_code'] = error_code
+
     if extra:
-        safe_extra = {k: v for k, v in extra.items() if k not in ['password', 'token']}
+        sensitive_keys = ['password', 'confirm_password', 'token', 'access_token', 'refresh', 'backup_codes']
+        safe_extra = {k: v for k, v in extra.items() if k not in sensitive_keys}
         log_data['extra'] = safe_extra
 
     log_message = json.dumps(log_data, ensure_ascii=False)
 
-    if status in ['failed', 'error']:
+    if status_type in ['failed', 'error']:
         logger.error(log_message)
-    elif status == 'success' and action in ['register', 'login']:
+    elif status_type == 'success':
         logger.info(log_message)
     else:
         logger.debug(log_message)
@@ -60,18 +80,24 @@ def log_critical_event(action, status, user_id=None, error_code=None, extra=None
 
 # ================== 1. Registration =====================
 class UserRegisterView(APIView):
+    """
+    Handles new user registration, generates backup recovery codes,
+    and returns localized responses with granular custom error codes.
+    """
+
     @swagger_auto_schema(
         operation_description="""
         Register a new user and retrieve one-time backup codes.
 
         Custom error codes for this endpoint:
-        - code 10: Invalid input data (username or password format).
+        - code 10: Invalid input data (e.g., username format).
         - code 11: Username already exists.
         - code 12: One or more required fields are missing or empty.
-        - code 13: Provided password is invalid.
+        - code 13: Provided password is invalid (weak or bad format).
         - code 14: Phone number is already registered.
         - code 15: Email address is already registered.
         - code 16: Invalid email or phone number format.
+        - code 17: Password and confirm_password do not match.
         """,
         request_body=UserRegisterSerializer,
         responses={
@@ -95,7 +121,7 @@ class UserRegisterView(APIView):
                     }
                 )
             ),
-            400: "Bad Request (Code 10,11,12,13,14,15,16)",
+            400: "Bad Request (Code 10,11,12,13,14,15,16,17)",
         }
     )
     def post(self, request):
@@ -105,14 +131,16 @@ class UserRegisterView(APIView):
             user = serializer.save()
             raw_codes = create_user_backup_codes(user, count=8)
 
+            # Successful registration log
             log_critical_event(
                 action="register",
-                status='success',
+                status_type='success',
+                request=request,
                 user_id=user.id,
                 extra={
                     'username': user.username,
                     'email': user.email,
-                    'phone': user.phone,
+                    'phone': str(user.phone) if user.phone else None,
                 }
             )
 
@@ -144,11 +172,20 @@ class UserRegisterView(APIView):
                 "en": "One or more required fields are missing"
             }
 
-        elif 'password' in errors or 'non_field_errors' in errors or 'confirm_password' in errors:
+        elif 'confirm_password' in errors or (
+            'non_field_errors' in errors and any('match' in str(e).lower() or 'مطابقت' in str(e) for e in errors['non_field_errors'])
+        ):
+            error_code = 17
+            error_message = {
+                "fa": "رمز عبور با تکرار آن مطابقت ندارد",
+                "en": "Password and confirm password do not match"
+            }
+
+        elif 'password' in errors:
             error_code = 13
             error_message = {
-                "fa": "رمز عبور وارد شده معتبر نیست یا با تکرار آن مطابقت ندارد",
-                "en": "Invalid password or password confirmation does not match"
+                "fa": "رمز عبور وارد شده معتبر نیست",
+                "en": "Provided password is invalid"
             }
 
         elif 'phone' in errors:
@@ -182,8 +219,9 @@ class UserRegisterView(APIView):
                 }
 
         elif 'username' in errors:
-            err_str = str(errors['username']).lower()
-            if 'unique' in err_str or 'exist' in err_str:
+            username = str(request.data.get('username', '')).strip().lower()
+
+            if User.objects.filter(username=username).exists():
                 error_code = 11
                 error_message = {
                     "fa": "نام کاربری تکراری است",
@@ -195,19 +233,19 @@ class UserRegisterView(APIView):
                     "fa": "فرمت نام کاربری اشتباه است",
                     "en": "Invalid username format"
                 }
-
-        if error_code in [11, 13, 14, 15]:
-            log_critical_event(
-                action="register",
-                status='failed',
-                error_code=error_code,
-                extra={
-                    'username': request.data.get('username'),
-                    'email': request.data.get('email'),
-                    'phone': request.data.get('phone'),
-                    'error': serializer.errors,
-                }
-            )
+        # Registration failure log (including all validation errors)
+        log_critical_event(
+            action="register",
+            status_type='failed',
+            request=request,
+            error_code=error_code,
+            extra={
+                'attempted_username': request.data.get('username'),
+                'attempted_email': request.data.get('email'),
+                'attempted_phone': request.data.get('phone'),
+                'validation_errors': errors,
+            }
+        )
 
         return Response({
             "error_code": error_code,
@@ -250,11 +288,12 @@ class UserLoginView(APIView):
         if not serializer.is_valid():
             log_critical_event(
                 action='login',
-                status='failed',
+                status_type='failed',
+                request=request,
                 error_code=10,
                 extra={
-                    'username': username,
-                    'error': serializer.errors,
+                    'attempted_username': username,
+                    'validation_errors': serializer.errors,
                 }
             )
             return Response({
@@ -272,13 +311,15 @@ class UserLoginView(APIView):
         )
 
         if user is None or user.status == 'deleted':
+            # Login failure due to invalid username/password or deleted user (to prevent brute-force attacks)
             log_critical_event(
                 action='login',
-                status='failed',
+                status_type='failed',
+                request=request,
                 error_code=20,
                 extra={
-                    'username': username,
-                    'ip': get_client_ip(request)
+                    'attempted_username': username,
+                    'reason': 'Invalid credentials or deleted account'
                 }
             )
 
@@ -307,14 +348,16 @@ class UserLoginView(APIView):
                 }
             }
 
+            # Login failure due to invalid username/password or deleted user (to prevent brute-force attacks)
             log_critical_event(
                 action='login',
-                status='failed',
+                status_type='failed',
+                request=request,
                 user_id=user.id,
                 error_code=21,
                 extra={
                     'username': user.username,
-                    'status': user.status
+                    'account_status': user.status
                 }
             )
 
@@ -330,9 +373,11 @@ class UserLoginView(APIView):
         if user.status == 'active':
             refresh = RefreshToken.for_user(user)
 
+            # Successful login log
             log_critical_event(
                 action='login',
-                status='success',
+                status_type='success',
+                request=request,
                 user_id=user.id,
                 extra={'username': user.username}
             )
@@ -368,18 +413,20 @@ class ProfileUpdateView(APIView):
         if serializer.is_valid():
             serializer.save()
 
-            important_fields = ['email', 'phone', 'password']
-            changed_important = [f for f in request.data.keys() if f in important_fields]
+            # Check which sensitive fields were actually modified and verified
+            important_fields = ['phone', 'password']
+            changed_important = [f for f in serializer.validated_data.keys() if f in important_fields]
 
             if changed_important:
+                # Log successful changes to sensitive profile information
                 log_critical_event(
                     action='profile_update',
-                    status='success',
+                    status_type='success',
+                    request=request,
                     user_id=user.id,
                     extra={
                         'username': user.username,
-                        'changed_fields': changed_important,
-                        'ip': get_client_ip(request)
+                        'changed_sensitive_fields': changed_important,
                     }
                 )
 
@@ -421,32 +468,18 @@ class ProfileUpdateView(APIView):
                     "en": "Provided data is invalid"
                 }
 
-        elif 'email' in errors and 'already' in str(errors['email']).lower():
-            error_code = 31
-            error_message = {
-                "fa": "ایمیل وارد شده تکراری است",
-                "en": "Provided email is already in use"
-            }
-
         elif 'phone' in errors and 'قبلاً ثبت' in str(errors['phone']):
-            error_code = 32
+            error_code = 31
             error_message = {
                 "fa": "شماره تلفن وارد شده تکراری است",
                 "en": "Provided phone number is already in use"
             }
 
         elif 'phone' in errors:
-            error_code = 32
+            error_code = 31
             error_message = {
                 "fa": "فرمت شماره تلفن نامعتبر است",
                 "en": "Invalid phone number format"
-            }
-
-        elif 'email' in errors:
-            error_code = 31
-            error_message = {
-                "fa": "فرمت ایمیل نامعتبر است",
-                "en": "Invalid email address format"
             }
 
         else:
@@ -456,18 +489,18 @@ class ProfileUpdateView(APIView):
                 "en": "Profile update failed."
             }
 
-        if error_code in [30, 31, 32]:
-            log_critical_event(
-                action='profile_update',
-                status='failed',
-                user_id=user.id,
-                error_code=error_code,
-                extra={
-                    'username': user.username,
-                    'errors': str(errors),
-                    'ip': get_client_ip(request)
-                }
-            )
+        # Log errors related to changing sensitive information such as passwords and phone numbers
+        log_critical_event(
+            action='profile_update',
+            status_type='failed',
+            request=request,
+            user_id=user.id,
+            error_code=error_code,
+            extra={
+                'username': user.username,
+                'validation_errors': errors
+            }
+        )
 
         return Response({
             "error_code": error_code,
@@ -482,8 +515,7 @@ class ProfileUpdateView(APIView):
         Custom error codes for this endpoint:
         - code 10: Invalid input data.
         - code 30: Provided password is invalid.
-        - code 31: Provided email is invalid or already in use.
-        - code 32: Provided phone number is invalid or already in use.
+        - code 31: Provided phone number is invalid or already in use.
         """,
         request_body=ProfileUpdateSerializer,
         responses={
@@ -491,7 +523,7 @@ class ProfileUpdateView(APIView):
                 description="Profile updated successfully",
                 schema=ProfileUpdateResponseSerializer
             ),
-            400: "Bad Request (Code 10,30,31,32)",
+            400: "Bad Request (Code 10,30,31)",
             401: "Unauthorized",
         }
     )
