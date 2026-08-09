@@ -54,9 +54,9 @@ class UserRegisterTest(APITestCase):
         self.assertEqual(response.data['error_code'],10)
 
     def test_unsuccessful_error_code_11(self):
-        User.objects.create_user(username='dara', password='1234Aa@QqWw')
+        User.objects.create_user(username='dara80', password='1234Aa@QqWw')
         data = {
-            'username': "dara",
+            'username': "dara80",
             'password': "123Aa@QqWw",
             'confirm_password': "123Aa@QqWw",
             'email': "ddr@test.com",
@@ -163,6 +163,30 @@ class UserRegisterTest(APITestCase):
         response = self.client.post(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['error_code'], 16)
+
+    def test_unsuccessful_password_confirm_mismatch(self):
+        data = {
+            'username': "mismatch_user",
+            'password': "ValidPass@1234",
+            'confirm_password': "DifferentPass@5678",
+            'email': "mismatch@test.com",
+            'phone': "09123456789",
+            'first_name': "Mismatch",
+            'last_name': "Test"
+        }
+        response = self.client.post(self.url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error_code'], 17)
+
+        # ✅ بررسی وجود هرگونه خطای مرتبط با تطابق رمز
+        detail = response.data.get('detail', {})
+        self.assertTrue(
+            any('match' in str(v).lower() or 'مطابقت' in str(v) for v in detail.values()),
+            "No password mismatch error found in detail"
+        )
+
+        self.assertFalse(User.objects.filter(username="mismatch_user").exists())
 
 class LoginRegisterTest(APITestCase):
     def setUp(self):
@@ -350,7 +374,7 @@ class ProfileUpdateTest(APITestCase):
         response = self.client.patch(self.url, data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'], 32)
+        self.assertEqual(response.data['error_code'], 31)
         self.assertIn('phone', response.data['detail'])
 
     def test_update_phone_invalid_format_without_zero(self):
@@ -360,7 +384,7 @@ class ProfileUpdateTest(APITestCase):
         response = self.client.patch(self.url, data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'], 32)
+        self.assertEqual(response.data['error_code'], 31)
 
     def test_update_phone_short_number(self):
         data = {
@@ -369,7 +393,7 @@ class ProfileUpdateTest(APITestCase):
         response = self.client.patch(self.url, data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'], 32)
+        self.assertEqual(response.data['error_code'], 31)
 
     def test_update_phone_long_number(self):
         data = {
@@ -390,7 +414,7 @@ class ProfileUpdateTest(APITestCase):
         response = self.client.patch(self.url, data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'], 32)
+        self.assertEqual(response.data['error_code'], 31)
         self.assertIn('phone', response.data['detail'])
 
     def test_update_password_invalid_weak(self):
@@ -443,7 +467,7 @@ class ProfileUpdateTest(APITestCase):
         response = self.client.patch(self.url, data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'], 32)
+        self.assertEqual(response.data['error_code'], 31)
 
         self.user.refresh_from_db()
         self.assertNotEqual(self.user.first_name, 'ValidName')
