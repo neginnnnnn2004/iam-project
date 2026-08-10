@@ -156,11 +156,12 @@ class UserRegisterTest(APITestCase):
             'password': "Test@1234",
             'confirm_password': "Test@1234",
             'email': "user@test.com",
-            'phone': "123456789",
+            'phone': "12345678911",
             'first_name': "Test",
             'last_name': "User"
         }
         response = self.client.post(self.url, data, format='json')
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['error_code'], 16)
 
