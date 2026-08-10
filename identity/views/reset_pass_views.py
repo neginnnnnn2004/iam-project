@@ -7,117 +7,203 @@ from identity.serializers.reset_pass_serializer import PasswordResetWithBackupCo
 from identity.utils import  verify_and_use_backup_code
 
 from drf_yasg.utils import swagger_auto_schema
+from django.db import transaction
 
 import json
 import logging
+import  django.utils.timezone as timezone
 
 logger = logging.getLogger('myapp')
 User = get_user_model()
 
-
-# ================== help full def =====================
-def get_client_ip(request):
-    """دریافت IP واقعی کاربر"""
+# ================== Helper Functions =====================
+def get_client_meta(request):
+    """
+    Extracting network metadata for security logs
+    """
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
-        return x_forwarded_for.split(',')[0]
-    return request.META.get('REMOTE_ADDR')
+        ip = x_forwarded_for.split(',')[0].strip()
+    else:
+        ip = request.META.get('REMOTE_ADDR', 'UNKNOWN')
 
-def safe_json_dumps(data):
-    """تبدیل به JSON با مدیریت خطا"""
-    try:
-        return json.dumps(data, ensure_ascii=False)
-    except:
-        return str(data)
+    user_agent = request.META.get('HTTP_USER_AGENT', 'UNKNOWN')
+    return {
+        'ip': ip,
+        'user_agent': user_agent
+    }
+
+
+def log_critical_event(action: str, status_type: str, request, user_id=None, error_code=None, extra=None):
+    """
+    Structured logging at critical and security-sensitive points in the system
+    """
+    client_info = get_client_meta(request)
+
+    log_data = {
+        'event_type': 'SECURITY_AUDIT',
+        'action': action,
+        'status': status_type,
+        'timestamp': timezone.now().isoformat(),
+        'client_ip': client_info['ip'],
+        'user_agent': client_info['user_agent'],
+    }
+
+    if user_id is not None:
+        log_data['user_id'] = user_id
+    if error_code:
+        log_data['error_code'] = error_code
+
+    if extra:
+        sensitive_keys = {
+            'password',
+            'confirm_password',
+            'old_password',
+            'new_password',
+            'token',
+            'access_token',
+            'refresh_token',
+            'authorization',
+            'backup_codes',
+        }
+        safe_extra = {k: v for k, v in extra.items() if k not in sensitive_keys}
+        log_data['extra'] = safe_extra
+
+    log_message = json.dumps(log_data, ensure_ascii=False)
+
+    if status_type in ['failed', 'error']:
+        logger.error(log_message)
+    elif status_type == 'success':
+        logger.info(log_message)
+    else:
+        logger.debug(log_message)
 
 #Password Reset With Backup Code
 class PasswordResetWithBackupCodeView(APIView):
     @swagger_auto_schema(
-        operation_description="بازیابی و بازنشانی رمز عبور با استفاده از کدهای پشتیبان یک‌بار مصرف",
+        operation_description="""
+    Reset the user's password using a one-time backup code.
+
+    Security notes:
+    - The backup code is single-use and is invalidated after successful verification.
+    - Invalid account information and invalid backup codes return the same generic error
+      response to prevent user enumeration.
+    - Password values and backup codes are never included in security logs.
+
+    Custom error codes:
+    - code 10: Invalid input data or password format.
+    - code 75: Invalid account information or backup code.
+    """,
         request_body=PasswordResetWithBackupCodeSerializer,
         responses={
-            200: "Password changed successfully",
-            400: "Invalid input or code",
+            200: "Password reset successfully.",
+            400: "Invalid input data or backup code.",
         }
     )
     def post(self, request):
-        logger.info("=" * 60)
-        logger.info(f'شروع فرآیند بازیابی رمز عبور')
-        logger.info(f' IP: {get_client_ip(request)}')
-        logger.info(f" User-Agent: {request.META.get('HTTP_USER_AGENT', 'unknown')}")
-        logger.info(f"داده های درخواست: {safe_json_dumps(request.data)}")
-
         serializer = PasswordResetWithBackupCodeSerializer(data=request.data)
         if not serializer.is_valid():
-            logger.info(f" اطلاعات ثبت نام نامعتبر است")
-            logger.warning(f"خطاهای اعتبارسنجی: {safe_json_dumps(serializer.errors)}")
-            logger.info("=" * 60)
+            log_critical_event(
+                    action='reset_password',
+                    status_type='failed',
+                    request=request,
+                    error_code=10,
 
+                )
             return Response({
                 "error_code": 10,
-                "message": "اطلاعات ارسالی یا فرمت رمز عبور معتبر نیست.",
+                "message": {
+                    "fa": "اطلاعات ارسالی یا فرمت رمز عبور معتبر نیست.",
+                    "en": "The provided data or password format is invalid."
+                },
                 "detail": serializer.errors,
             },status=status.HTTP_400_BAD_REQUEST)
         username = serializer.validated_data['username'].lower()
         backup_code = serializer.validated_data['backup_code']
         new_password = serializer.validated_data['new_password']
 
-        logger.info(f"نام کاربری برای بازیابی: {username}")
-        logger.info(f"طول کد پشتیبان دریافت شده: {len(backup_code)} کاراکتر ")
-
         try:
             user = User.objects.get(username=username)
-            logger.info(f" کاربر یافت شد: {user.username} (ID: {user.id})")
-            logger.info(f" وضعیت فعلی کاربر: {user.status}")
-            logger.info(f" ایمیل: {user.email}")
-            logger.info(f" تلفن: {user.phone}")
-            logger.info(f" نقش: {user.role.name if user.role else 'بدون نقش'}")
 
             if user.status != 'active':
-                logger.warning(f" کاربر غیرفعال است! وضعیت فعلی: '{user.status}'")
-                logger.warning(f"کاربر با نام {username} وجود دارد اما وضعیت '{user.status}' است")
-                logger.info("=" * 60)
+                log_critical_event(
+                    action='reset_password',
+                    status_type='failed',
+                    request=request,
+                    user_id=user.id,
+                    error_code=75,
+                    extra={
+                        'username': user.username,
+                        'account_status': user.status
+                    }
+                )
                 return Response({
                     "error_code": 75,
-                    "message": "اطلاعات وارد شده یا کد پشتیبان معتبر نیست."
+                    "message": {
+                        "fa": "اطلاعات وارد شده یا کد پشتیبان معتبر نیست.",
+                        "en": "The provided information or backup code is invalid."
+                    },
                 }, status=status.HTTP_400_BAD_REQUEST)
 
-            logger.info(f"* کاربر فعال است و می‌تواند ریست پسورد کند")
-
         except User.DoesNotExist:
-            logger.warning(f" کاربر با نام {username} یافت نشد")
-            logger.info("=" * 60)
+
+            log_critical_event(
+                action='reset_password',
+                status_type='failed',
+                request=request,
+                error_code=75,
+            )
             return Response({
                 "error_code": 75,
-                "message": "اطلاعات وارد شده یا کد پشتیبان معتبر نیست."
+                "message": {
+                    "fa": "اطلاعات وارد شده یا کد پشتیبان معتبر نیست.",
+                    "en": "The provided information or backup code is invalid."
+                },
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        logger.info(f"  شروع بررسی کد پشتیبان برای کاربر {user.username}")
-        result = verify_and_use_backup_code(user, backup_code)
+        with transaction.atomic():
+            result = verify_and_use_backup_code(user, backup_code)
 
-        if not result:
-            logger.warning(f"کد پشتیبان نامعتبر برای کاربر {user.username}")
-            logger.warning(f"تلاش ناموفق برای بازیابی رمز از IP {get_client_ip(request)}" )
-            logger.info("=" * 60)
-            return Response({
-               "error_code": 75,
-                "message":"اطلاعات وارد شده یا کد پشتیبان معتبر نیست."
-            }, status=status.HTTP_400_BAD_REQUEST)
-        logger.info(f" کد پشتیبان برای کاربر {user.username} معتبر است")
+            if not result:
+                log_critical_event(
+                    action='reset_password',
+                    status_type='failed',
+                    request=request,
+                    user_id=user.id,
+                    error_code=75,
+                    extra={
+                        'username': user.username,
+                    }
+                )
 
-        logger.info(f" در حال تغییر رمز عبور برای کاربر {user.username}")
-        user.set_password(new_password)
-        user.save()
+                return Response({
+                    "error_code": 75,
+                    "message": {
+                        "fa": "اطلاعات وارد شده یا کد پشتیبان معتبر نیست.",
+                        "en": "The provided information or backup code is invalid."
+                    },
+                }, status=status.HTTP_400_BAD_REQUEST)
 
-        logger.info(f" رمز عبور کاربر {user.username} با موفقیت تغییر کرد")
+            user.set_password(new_password)
+            user.save(update_fields=['password'])
+            
+        log_critical_event(
+            action="reset_password",
+            status_type='success',
+            request=request,
+            user_id=user.id,
+            extra={
+                'username': user.username,
+            }
+        )
+
         response_data = {
-            "message": "رمز عبور شما با موفقیت تغییر یافت. می‌توانید وارد شوید.",
+            "message": {
+                "fa": "رمز عبور شما با موفقیت تغییر یافت. می‌توانید وارد شوید.",
+                "en": "Your password has been changed successfully. You can now log in."
+            },
             "show_popup": True,
-            "new_backup_code": result ,
+            "new_backup_code": result,
         }
-
-        logger.info(f" فرآیند بازیابی رمز با موفقیت کامل شد")
-        logger.info(f" کد پشتیبان جدید برای کاربر {user.username} صادر شد")
-        logger.info("=" * 60)
 
         return Response(response_data, status=status.HTTP_200_OK)
