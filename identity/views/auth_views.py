@@ -58,13 +58,23 @@ def log_critical_event(action: str, status_type: str, request, user_id=None, err
         'user_agent': client_info['user_agent'],
     }
 
-    if user_id:
+    if user_id is not None:
         log_data['user_id'] = user_id
     if error_code:
         log_data['error_code'] = error_code
 
     if extra:
-        sensitive_keys = ['password', 'confirm_password', 'token', 'access_token', 'refresh', 'backup_codes']
+        sensitive_keys = {
+            'password',
+            'confirm_password',
+            'old_password',
+            'new_password',
+            'token',
+            'access_token',
+            'refresh_token',
+            'authorization',
+            'backup_codes',
+        }
         safe_extra = {k: v for k, v in extra.items() if k not in sensitive_keys}
         log_data['extra'] = safe_extra
 
