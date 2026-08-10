@@ -164,15 +164,12 @@ class UserRegisterView(APIView):
             }, status=status.HTTP_201_CREATED)
 
         errors = serializer.errors
-        error_code = 10
-        error_message = {
-            "fa": "ثبت نام با خطا مواجه شد. لطفاً ورودی‌ها را بررسی کنید.",
-            "en": "Registration failed. Please check your inputs."
-        }
 
+        # 12 - Missing required fields
         is_missing_required = any(
-            'required' in str(err) or 'blank' in str(err) or 'null' in str(err)
-            for err in errors.values()
+            getattr(error, 'code', None) in ['required','blank','null']
+            for field_errors in errors.values()
+            for error in field_errors
         )
 
         if is_missing_required:
@@ -182,8 +179,14 @@ class UserRegisterView(APIView):
                 "en": "One or more required fields are missing"
             }
 
+        # 17 - Password confirmation mismatch
         elif 'confirm_password' in errors or (
-            'non_field_errors' in errors and any('match' in str(e).lower() or 'مطابقت' in str(e) for e in errors['non_field_errors'])
+                'non_field_errors' in errors
+                and any(
+            'match' in str(error).lower()
+            or 'مطابقت' in str(error)
+            for error in errors['non_field_errors']
+        )
         ):
             error_code = 17
             error_message = {
@@ -191,6 +194,7 @@ class UserRegisterView(APIView):
                 "en": "Password and confirm password do not match"
             }
 
+        # 13 - Invalid password
         elif 'password' in errors:
             error_code = 13
             error_message = {
@@ -198,9 +202,15 @@ class UserRegisterView(APIView):
                 "en": "Provided password is invalid"
             }
 
+        # 14 / 16 - Phone
         elif 'phone' in errors:
             err_str = str(errors['phone']).lower()
-            if 'unique' in err_str or 'exist' in err_str:
+
+            if (
+                    'registered' in err_str
+                    or 'unique' in err_str
+                    or 'exist' in err_str
+            ):
                 error_code = 14
                 error_message = {
                     "fa": "شماره تلفن تکراری است",
@@ -213,9 +223,15 @@ class UserRegisterView(APIView):
                     "en": "Invalid phone number format"
                 }
 
+        # 15 / 16 - Email
         elif 'email' in errors:
             err_str = str(errors['email']).lower()
-            if 'unique' in err_str:
+
+            if (
+                    'registered' in err_str
+                    or 'unique' in err_str
+                    or 'exist' in err_str
+            ):
                 error_code = 15
                 error_message = {
                     "fa": "ایمیل تکراری است",
@@ -228,8 +244,11 @@ class UserRegisterView(APIView):
                     "en": "Invalid email address format"
                 }
 
+        # 11 / 10 - Username
         elif 'username' in errors:
-            username = str(request.data.get('username', '')).strip().lower()
+            username = str(
+                request.data.get('username', '')
+            ).strip().lower()
 
             if User.objects.filter(username=username).exists():
                 error_code = 11
@@ -243,6 +262,13 @@ class UserRegisterView(APIView):
                     "fa": "فرمت نام کاربری اشتباه است",
                     "en": "Invalid username format"
                 }
+
+        else:
+            error_code = 10
+            error_message = {
+                "fa": "ثبت نام با خطا مواجه شد. لطفاً ورودی‌ها را بررسی کنید.",
+                "en": "Registration failed. Please check your inputs."
+            }
         # Registration failure log (including all validation errors)
         log_critical_event(
             action="register",

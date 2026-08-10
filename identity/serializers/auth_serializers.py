@@ -4,33 +4,74 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 from identity.models import User
 
+class SwaggerEmailField(serializers.EmailField):
+    class Meta:
+        swagger_schema_fields = {
+            "min_length": None,
+        }
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     """
-    Validates inputs including username, email, phone format, and password matching.
+    Serializer for user registration.
     """
-    # override these fields
+
     username = serializers.CharField(
         required=True,
+        min_length=5,
+        max_length=20,
+        help_text="5-20 characters; letters, numbers, underscores, and hyphens only."
     )
 
     password = serializers.CharField(
         write_only=True,
         required=True,
-        style={'input_type': 'password'}
+        min_length=8,
+        help_text="At least 8 characters."
     )
+
     confirm_password = serializers.CharField(
         write_only=True,
         required=True,
-        style={'input_type': 'password'}
+        min_length=8,
+        help_text="Must match the password."
     )
-    first_name = serializers.CharField(required=False, allow_blank=True)
-    last_name = serializers.CharField(required=False, allow_blank=True)
+
+    email = SwaggerEmailField(
+        required=True,
+        help_text="Valid and unique email address."
+    )
+    
+    phone = serializers.RegexField(
+        regex=r'^09\d{9}$',
+        required=True,
+        min_length=11,
+        max_length=11,
+        help_text="Iranian mobile number (09xxxxxxxxx)."
+    )
+
+    first_name = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        help_text="Optional first name."
+    )
+
+    last_name = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        help_text="Optional last name."
+    )
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'confirm_password', 'email', 'phone', 'first_name', 'last_name')
-
+        fields = (
+            'username',
+            'password',
+            'confirm_password',
+            'email',
+            'phone',
+            'first_name',
+            'last_name'
+        )
     def validate_username(self, value: str) -> str:
         """
         Check if the username is unique and normalize it to lowercase.
@@ -142,10 +183,32 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
     """
     first_name = serializers.CharField(required=False, allow_blank=True, trim_whitespace=True)
     last_name = serializers.CharField(required=False, allow_blank=True, trim_whitespace=True)
-    password = serializers.CharField(write_only=True, required=False, allow_blank=True, style={'input_type': 'password'})
-    confirm_password = serializers.CharField(write_only=True, required=False, allow_blank=True, style={'input_type': 'password'})
-    phone = serializers.CharField(required=False, trim_whitespace=True, allow_blank=True)
+    password = serializers.CharField(
+        write_only=True,
+        required=False,
+        allow_blank=True,
+        min_length=8,
+        help_text="New password must be at least 8 characters long.",
+        style={'input_type': 'password'}
+    )
 
+    confirm_password = serializers.CharField(
+        write_only=True,
+        required=False,
+        allow_blank=True,
+        min_length=8,
+        help_text="Must match the new password.",
+        style={'input_type': 'password'}
+    )
+
+    phone = serializers.RegexField(
+        regex=r'^09\d{9}$',
+        required=False,
+        allow_blank=True,
+        min_length=11,
+        max_length=11,
+        help_text="Iranian mobile number. Must start with 09 and contain exactly 11 digits."
+    )
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'password', 'confirm_password', 'phone')
