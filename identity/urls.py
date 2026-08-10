@@ -5,7 +5,7 @@ urlpatterns = [
     path('auth/register/', auth_views.UserRegisterView.as_view(), name='user-register'),
     path('auth/login/', auth_views.UserLoginView.as_view(), name='user-login'),
     path('auth/profile/update/', auth_views.ProfileUpdateView.as_view(), name='update-profile'),
-    path('auth/password-reset/', reset_pass_views.PasswordResetWithBackupCodeView.as_view(),name='password_reset_confirm'),
+    path('auth/reset_password/', reset_pass_views.PasswordResetWithBackupCodeView.as_view(),name="reset_password"),
     path('auth/myRole/', user_views.ReturnTheRoleOfUser.as_view(), name='my_role'),
 
     path('admin/list-of-users/', user_views.ListOfUsersView.as_view(), name='list-of-users'),
