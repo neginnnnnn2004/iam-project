@@ -1,9 +1,11 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
+from django.utils import timezone
 from identity.models import User, Role
 
-class AdminUserManagmentTest(APITestCase):
+class AdminUserManagementTest(APITestCase):
+
     def setUp(self):
         # create roles
         self.admin_role = Role.objects.create(
@@ -38,7 +40,7 @@ class AdminUserManagmentTest(APITestCase):
             username="admin_dara",
             password="admin_password123",
             email="admin@test.com",
-            phone="+989111111111",
+            phone="09111111111",
             status="active",
             role=self.admin_role
         )
@@ -46,7 +48,7 @@ class AdminUserManagmentTest(APITestCase):
             username="super_admin_nima",
             password="super_admin_password123",
             email="superadmin@test.com",
-            phone="+989222222222",
+            phone="09222222222",
             status="active",
             role=self.super_admin_role
         )
@@ -54,119 +56,568 @@ class AdminUserManagmentTest(APITestCase):
             username="normal_user",
             password="password123",
             email="normal@test.com",
-            phone="+989333333333",
-            status="active",
+            phone="09333333333",
+            status="unverified",
             role=self.regular_role
         )
         self.target_user = User.objects.create_user(
             username="pending_user",
             password="password123",
             email="target@test.com",
-            phone="+989444444444",
+            phone="09444444444",
             status="pending"
         )
+        self.limited_user = User.objects.create_user(
+            username="limited_user",
+            password="password123",
+            email="limited@test.com",
+            phone="09555555555",
+            status="active",
+            role=self.limited_role
+        )
+
         # define urls
         self.list_users_url = reverse('list-of-users')
         self.pending_users_url = reverse('pending-users')
         self.list_roles_url = reverse('list-of-roles')
+        self.my_role_url=reverse('my_role')
 
-        self.assign_role_url = lambda pk: reverse('assign-users-role', kwargs={'pk': pk})
-        self.manage_status_url = lambda pk: reverse('manage-user-status', kwargs={'pk': pk})
-        self.activation_url = lambda pk: reverse('is-active', kwargs={'pk': pk})
+        self.assign_role_url = lambda pk: reverse(
+            'assign-users-role',
+            kwargs={'pk': pk}
+        )
 
-    def test_regular_user_cannot_access_admin_endpoints(self):
-        self.client.force_authenticate(user=self.regular_user)
+        self.manage_status_url = lambda pk: reverse(
+            'manage-user-status',
+            kwargs={'pk': pk}
+        )
 
-        response = self.client.get(self.pending_users_url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.activation_url = lambda pk: reverse(
+            'is-active',
+            kwargs={'pk': pk}
+        )
 
-        data = {'status': 'active'}
-        response = self.client.patch(self.manage_status_url(self.target_user.pk), data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_admin_get_lists(self):
+    def test_admin_can_list_users(self):
         self.client.force_authenticate(user=self.admin_user)
 
         response = self.client.get(self.list_users_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(len(response.data) >= 4)
 
-        response = self.client.get(self.pending_users_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK
+        )
 
-        response = self.client.get(self.list_roles_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(len(response.data) >= 4)
+        self.assertEqual(len(response.data), 5)
 
-    def test_assign_user_role_success(self):
+    def test_admin_can_list_pending_users(self):
         self.client.force_authenticate(user=self.admin_user)
 
+        response = self.client.get(self.pending_users_url)
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK
+        )
+
+        self.assertEqual(len(response.data), 1)
+
+    def test_admin_can_list_roles(self):
+        self.client.force_authenticate(user=self.admin_user)
+
+        response = self.client.get(self.list_roles_url)
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK
+        )
+
+        self.assertEqual(len(response.data), 4)
+
+    #######################
+    def test_regular_user_can_not_list_users(self):
+        self.client.force_authenticate(user=self.regular_user)
+
+        response = self.client.get(self.list_users_url)
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN
+        )
+
+    def test_limited_user_can_not_list_users(self):
+        self.client.force_authenticate(user=self.limited_user)
+
+        response = self.client.get(self.list_users_url)
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN
+        )
+
+    def test_regular_user_can_not_list_roles(self):
+        self.client.force_authenticate(user=self.regular_user)
+
+        response = self.client.get(self.list_roles_url)
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN
+        )
+
+    def test_limited_user_can_not_list_roles(self):
+        self.client.force_authenticate(user=self.limited_user)
+
+        response = self.client.get(self.list_roles_url)
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN
+        )
+
+    def test_regular_user_can_not_list_pending_users(self):
+        self.client.force_authenticate(user=self.regular_user)
+
+        response = self.client.get(self.pending_users_url)
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN
+        )
+
+    def test_limited_user_can_not_list_pending_users(self):
+        self.client.force_authenticate(user=self.limited_user)
+
+        response = self.client.get(self.pending_users_url)
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN
+        )
+#############
+    def test_Unauthenticated_user_can_not_list_pending_users(self):
+        response = self.client.get(self.list_users_url)
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_401_UNAUTHORIZED
+        )
+    def test_Unauthenticated_user_can_not_list_users(self):
+        response = self.client.get(self.list_users_url)
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_401_UNAUTHORIZED
+        )
+    def test_Unauthenticated_user_can_not_list_roles(self):
+        response = self.client.get(self.list_users_url)
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_401_UNAUTHORIZED
+        )
+ #########################
+
+    def test_get_my_role(self):
+        self.client.force_authenticate(user=self.regular_user)
+
+        response = self.client.get(self.my_role_url)
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK
+        )
+
+    def test_assign_role_to_user_success(self):
+        self.client.force_authenticate(user=self.super_admin_user)
         data = {
-            'role': self.super_admin_role.id
+            'role': self.regular_role.id
         }
         response = self.client.patch(self.assign_role_url(self.target_user.pk), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        self.target_user.refresh_from_db()
-        self.assertEqual(self.target_user.role, self.super_admin_role)
-
-    def test_assign_user_role_unsuccess(self):
-        self.client.force_authenticate(user=self.admin_user)
-
-        first_data = {
-            'role': self.super_admin_role.id
-        }
-        response = self.client.patch(self.assign_role_url(999), first_data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(response.data['error_code'],40)
-
-        invalid_data = {'role': 999}
-        response = self.client.patch(self.assign_role_url(self.target_user.pk), invalid_data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['error_code'],10)
-
-    def test_manage_user_status_success(self):
+    def test_assign_role_to_user_unsuccess(self):
         self.client.force_authenticate(user=self.admin_user)
         data = {
-            'status': 'suspended'
+            'role': self.regular_role.id
         }
-        response = self.client.patch(self.manage_status_url(self.target_user.pk), data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.patch(self.assign_role_url(self.target_user.pk), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    def test_assign_role_to_user_unsuccess2(self):
+        data = {
+            'role': self.regular_role.id
+        }
+        response = self.client.patch(self.assign_role_url(self.target_user.pk), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    #########################
+    # Manage User Status
+    #########################
+
+    def test_super_admin_can_change_user_status(self):
+        self.client.force_authenticate(user=self.super_admin_user)
+
+        data = {
+            'status': 'active'
+        }
+
+        response = self.client.patch(
+            self.manage_status_url(self.target_user.pk),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK
+        )
 
         self.target_user.refresh_from_db()
-        self.assertEqual(self.target_user.status, 'suspended')
 
-    def test_manage_user_status_unsuccess_code_10(self):
+        self.assertEqual(
+            self.target_user.status,
+            'active'
+        )
+
+    def test_admin_can_not_change_user_status(self):
         self.client.force_authenticate(user=self.admin_user)
+
         data = {
-            'status': 'close'
+            'status': 'active'
         }
-        response = self.client.patch(self.manage_status_url(self.target_user.pk), data, format='json')
-        self.assertEqual(response.data['error_code'],10)
 
-    def test_manage_user_status_unsuccess_code_40(self):
-        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.patch(
+            self.manage_status_url(self.target_user.pk),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN
+        )
+
+    def test_regular_user_can_not_change_user_status(self):
+        self.client.force_authenticate(user=self.regular_user)
+
         data = {
-            'status': 'suspended'
+            'status': 'active'
         }
-        response = self.client.patch(self.manage_status_url(999), data, format='json')
-        self.assertEqual(response.data['error_code'],40)
 
-    def test_soft_delete_user_success(self):
-        self.client.force_authenticate(user=self.admin_user)
-        response = self.client.delete(self.manage_status_url(self.target_user.pk))
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.client.patch(
+            self.manage_status_url(self.target_user.pk),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN
+        )
+
+    def test_unauthenticated_user_can_not_change_user_status(self):
+        data = {
+            'status': 'active'
+        }
+
+        response = self.client.patch(
+            self.manage_status_url(self.target_user.pk),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_401_UNAUTHORIZED
+        )
+
+    def test_super_admin_can_not_change_status_with_invalid_value(self):
+        self.client.force_authenticate(user=self.super_admin_user)
+
+        data = {
+            'status': 'invalid_status'
+        }
+
+        response = self.client.patch(
+            self.manage_status_url(self.target_user.pk),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST
+        )
+
+    def test_change_status_for_non_existing_user(self):
+        self.client.force_authenticate(user=self.super_admin_user)
+
+        data = {
+            'status': 'active'
+        }
+
+        response = self.client.patch(
+            self.manage_status_url(99999),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_404_NOT_FOUND
+        )
+
+    #########################
+    # Soft Delete User
+    #########################
+
+    def test_super_admin_can_soft_delete_user(self):
+        self.client.force_authenticate(user=self.super_admin_user)
+
+        response = self.client.delete(
+            self.manage_status_url(self.target_user.pk)
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_204_NO_CONTENT
+        )
+
         self.target_user.refresh_from_db()
-        self.assertEqual(self.target_user.status, 'deleted')
-        self.assertIsNotNone(self.target_user.deleted_at)
 
-    def test_user_activation_patch_success(self):
+        self.assertIsNotNone(
+            self.target_user.deleted_at
+        )
+
+        self.assertEqual(
+            self.target_user.status,
+            'deleted'
+        )
+
+    def test_admin_can_not_soft_delete_user(self):
         self.client.force_authenticate(user=self.admin_user)
+
+        response = self.client.delete(
+            self.manage_status_url(self.target_user.pk)
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN
+        )
+
+    def test_regular_user_can_not_soft_delete_user(self):
+        self.client.force_authenticate(user=self.regular_user)
+
+        response = self.client.delete(
+            self.manage_status_url(self.target_user.pk)
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN
+        )
+
+    def test_unauthenticated_user_can_not_soft_delete_user(self):
+        response = self.client.delete(
+            self.manage_status_url(self.target_user.pk)
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_401_UNAUTHORIZED
+        )
+
+    def test_soft_delete_non_existing_user(self):
+        self.client.force_authenticate(user=self.super_admin_user)
+
+        response = self.client.delete(
+            self.manage_status_url(99999)
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_404_NOT_FOUND
+        )
+
+    #########################
+    # User Activation
+    #########################
+
+    def test_admin_can_activate_user(self):
+        self.client.force_authenticate(user=self.admin_user)
+
+        self.target_user.is_active = False
+        self.target_user.save()
+
+        data = {
+            'is_active': True
+        }
+
+        response = self.client.patch(
+            self.activation_url(self.target_user.pk),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK
+        )
+
+        self.target_user.refresh_from_db()
+
+        self.assertTrue(
+            self.target_user.is_active
+        )
+
+    def test_admin_can_deactivate_user(self):
+        self.client.force_authenticate(user=self.admin_user)
+
         data = {
             'is_active': False
         }
-        response = self.client.patch(self.activation_url(self.target_user.pk), data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = self.client.patch(
+            self.activation_url(self.target_user.pk),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK
+        )
 
         self.target_user.refresh_from_db()
-        self.assertFalse(self.target_user.is_active)
+
+        self.assertFalse(
+            self.target_user.is_active
+        )
+
+    def test_super_admin_can_activate_user(self):
+        self.client.force_authenticate(user=self.super_admin_user)
+
+        self.target_user.is_active = False
+        self.target_user.save()
+
+        data = {
+            'is_active': True
+        }
+
+        response = self.client.patch(
+            self.activation_url(self.target_user.pk),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK
+        )
+
+    def test_regular_user_can_not_activate_user(self):
+        self.client.force_authenticate(user=self.regular_user)
+
+        data = {
+            'is_active': True
+        }
+
+        response = self.client.patch(
+            self.activation_url(self.target_user.pk),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN
+        )
+
+    def test_limited_user_can_not_activate_user(self):
+        self.client.force_authenticate(user=self.limited_user)
+
+        data = {
+            'is_active': True
+        }
+
+        response = self.client.patch(
+            self.activation_url(self.target_user.pk),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN
+        )
+
+    def test_unauthenticated_user_can_not_activate_user(self):
+        data = {
+            'is_active': True
+        }
+
+        response = self.client.patch(
+            self.activation_url(self.target_user.pk),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_401_UNAUTHORIZED
+        )
+
+    def test_activate_non_existing_user(self):
+        self.client.force_authenticate(user=self.admin_user)
+
+        data = {
+            'is_active': True
+        }
+
+        response = self.client.patch(
+            self.activation_url(99999),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_404_NOT_FOUND
+        )
+
+    def test_activate_user_with_invalid_payload(self):
+        self.client.force_authenticate(user=self.admin_user)
+
+        data = {
+            'is_active': 'invalid'
+        }
+
+        response = self.client.patch(
+            self.activation_url(self.target_user.pk),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST
+        )
+
+    def test_activate_soft_deleted_user(self):
+        self.client.force_authenticate(user=self.admin_user)
+
+        self.target_user.deleted_at = timezone.now()
+        self.target_user.save()
+
+        data = {
+            'is_active': True
+        }
+
+        response = self.client.patch(
+            self.activation_url(self.target_user.pk),
+            data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_404_NOT_FOUND
+        )
