@@ -5,15 +5,16 @@ urlpatterns = [
     path('auth/register/', auth_views.UserRegisterView.as_view(), name='user-register'),
     path('auth/login/', auth_views.UserLoginView.as_view(), name='user-login'),
     path('auth/profile/update/', auth_views.ProfileUpdateView.as_view(), name='update-profile'),
-    path('auth/password-reset/', reset_pass_views.PasswordResetWithBackupCodeView.as_view(),name='password_reset_confirm'),
-    path('auth/myRole/', user_views.ReturnTheRoleOfUser.as_view(), name='user-profile-me'),
+    path('auth/reset_password/', reset_pass_views.PasswordResetWithBackupCodeView.as_view(),name="reset_password"),
+    path('auth/myRole/', user_views.ReturnTheRoleOfUser.as_view(), name='my_role'),
 
     path('admin/list-of-users/', user_views.ListOfUsersView.as_view(), name='list-of-users'),
     path('admin/list-of-pending-users/', user_views.PendingUsersView.as_view(), name='pending-users'),
     path('admin/list-of-roles/', user_views.ListOfRolesView.as_view(), name='list-of-roles'),
-    path('admin/users/<int:pk>/assign/role/', user_views.AssignUserRoleView.as_view(), name='assign-users-role'),
-    path('admin/users/<int:pk>/change/status/', user_views.ManageUsersStatusView.as_view(), name='manage-user-status'),
     path('admin/users/<int:pk>/make/active-or-inactive/', user_views.UserActivationView.as_view(), name='is-active'),
+
+    path('super-admin/users/<int:pk>/assign/role/', user_views.AssignUserRoleView.as_view(), name='assign-users-role'),
+    path('super-admin/users/<int:pk>/change/status/', user_views.ManageUsersStatusView.as_view(),name='manage-user-status'),
 
     path('group/list/', group_views.ListOfGroupsView.as_view(), name='list-of-groups'),
     path('group/create/', group_views.GroupRegisterView.as_view(), name='group-register'),
