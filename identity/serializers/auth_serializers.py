@@ -7,10 +7,13 @@ from identity.models import User
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     """
-    Serializer for handling user registration.
-
     Validates inputs including username, email, phone format, and password matching.
     """
+    # override these fields
+    username = serializers.CharField(
+        required=True,
+    )
+
     password = serializers.CharField(
         write_only=True,
         required=True,
@@ -32,12 +35,26 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         """
         Check if the username is unique and normalize it to lowercase.
         """
-        username = value.lower()
+        username = value.strip().lower()
+
+        if len(username) < 5:
+            raise serializers.ValidationError({
+                "fa": "نام کاربری باید حداقل ۵ کاراکتر باشد.",
+                "en": "Username must be at least 5 characters long."
+            })
+
+        if username.isdigit():
+            raise serializers.ValidationError({
+                "fa": "نام کاربری نمی‌تواند فقط شامل اعداد باشد.",
+                "en": "Username cannot consist only of numbers."
+            })
+
         if User.objects.filter(username=username).exists():
             raise serializers.ValidationError({
                 "fa": "این نام کاربری قبلاً ثبت شده است.",
                 "en": "This username is already registered."
             })
+
         return username
 
     def validate_password(self, value: str) -> str:
@@ -48,7 +65,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         try:
             validate_password(value)
         except DjangoValidationError as e:
-            # دریافت پیام‌های خطای واقعی جنگو و تبدیل آن به دو زبانه
             raw_errors_en = " ".join(e.messages)
             raise serializers.ValidationError({
                 "fa": "رمز عبور وارد شده معتبر نیست (باید حداقل ۸ کاراکتر باشد و شامل حروف و اعداد باشد).",
