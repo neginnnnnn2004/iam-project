@@ -388,7 +388,7 @@ class ListOfTagView(APIView):
         }
     )
 
-    def get(self):
+    def get(self,request):
         tags= Tag.objects.filter(is_active=True,deleted_at__isnull=True).order_by('title')
         serializer = TagListSerializer(tags , many=True)
         return Response(serializer.data , status=status.HTTP_200_OK)
