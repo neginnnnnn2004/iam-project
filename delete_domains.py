@@ -1,7 +1,7 @@
 import os
 import django
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "iam2.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 django.setup()
 
 from identity.models import Domain, User_Domain_Tag
@@ -9,10 +9,10 @@ from identity.models import Domain, User_Domain_Tag
 
 print("Deleting all domains...")
 
-# ابتدا ارتباط‌های مربوط به Domain را حذف می‌کنیم
+# First, remove the connections related to the domain.
 User_Domain_Tag.objects.all().delete()
 
-# سپس خود Domainها را حذف می‌کنیم
+# Then, delete the domains.
 deleted_count, _ = Domain.objects.all().delete()
 
 print(f"Deleted {deleted_count} records.")
