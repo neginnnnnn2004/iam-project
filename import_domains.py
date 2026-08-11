@@ -3,7 +3,7 @@ import django
 import pandas as pd
 from urllib.parse import urlparse
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "iam2.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 django.setup()
 
 from identity.models import User, Domain, Tag, User_Domain_Tag, Group
