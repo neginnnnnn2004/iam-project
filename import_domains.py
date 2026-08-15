@@ -59,7 +59,10 @@ def import_with_tags(file_path1, username):
         tag_name = str(tag_name).strip()
 
         domain_obj, created = Domain.objects.get_or_create(
-            domain_name=domain_name
+            domain_name=domain_name,
+            defaults={
+                "groups": general_group
+            }
         )
 
         if created:
@@ -67,7 +70,6 @@ def import_with_tags(file_path1, username):
         else:
             print(f"Domain already exists: {domain_name}")
 
-        domain_obj.groups.add(general_group)
 
         #find tag obj
         try:
@@ -89,12 +91,6 @@ def import_with_tags(file_path1, username):
 
     print("Import finished successfully!")
 
-
-if __name__ == "__main__":
-    import_with_tags(
-        file_path1,
-        "admin"
-    )
 
 #####################################################
 def import_domain_without_tags(file_path2, username):
@@ -126,20 +122,16 @@ def import_domain_without_tags(file_path2, username):
 
         # create domain
         domain_obj, created = Domain.objects.get_or_create(
-            domain_name=domain_name
+            domain_name=domain_name,
+            defaults={
+                "groups": general_group
+            }
         )
 
         if created:
             print(f"Created domain: {domain_name}")
         else:
             print(f"Domain already exists: {domain_name}")
-
-        # add to general group
-        domain_obj.groups.add(general_group)
-
-        print(
-            f"Imported: {domain_name} -> general"
-        )
 
     print("Import without tags finished successfully!")
 
