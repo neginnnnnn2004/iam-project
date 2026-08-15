@@ -12,10 +12,9 @@ from identity.permissions import IsAdminRole, IsSuperAdmin
 from identity.serializers.user_serializers import (
     ListOfUsersSerializer,
     UserRoleUpdateSerializer,
-    ListOfRoleSerializer,
     UserStatusUpdateSerializer,
-    UserActivationSerializer,
-    ListOfRoleUsersSerializer,
+    ListOfRoleUsersSerializer
+
 )
 
 from drf_yasg.utils import swagger_auto_schema
@@ -179,7 +178,7 @@ class ListOfRolesView(APIView):
     @swagger_auto_schema(
         operation_description="Get list of all roles for admin",
         responses={
-            200: ListOfRoleSerializer(many=True),
+            200: ListOfRoleUsersSerializer(many=True),
             401: "Unauthorized",
             403: "Forbidden",
         }
@@ -187,7 +186,7 @@ class ListOfRolesView(APIView):
     def get(self, request):
         try:
             roles = Role.objects.all()
-            serializer = ListOfRoleSerializer(roles, many=True)
+            serializer =     ListOfRoleUsersSerializer(roles, many=True)
             log_critical_event(
                 action='list_roles',
                 status_type='success',
@@ -212,30 +211,7 @@ class ListOfRolesView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-# ================== 3.1. ReturnMyRole =====================
-class ReturnTheRoleOfUser(APIView):
-    permission_classes = [IsAuthenticated]
-
-    @swagger_auto_schema(
-        operation_description="Get authenticated user profile and role details",
-        responses={
-            200: ListOfRoleUsersSerializer(),
-            401: "Unauthorized",
-        }
-    )
-    def get(self, request):
-        try:
-            user = request.user
-            serializer = ListOfRoleUsersSerializer(user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        except Exception:
-            return Response(
-                {"detail": "An error occurred while fetching user role / خطایی در دریافت نقش کاربر رخ داده است."},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
-
-# ================== 4. AssignARoleToUsersByAdmin =====================
+# ================== 4. AssignARoleToUsersBySuperAdmin =====================
 class AssignUserRoleView(APIView):
     permission_classes = [IsAuthenticated, IsSuperAdmin]
 
@@ -381,7 +357,7 @@ class AssignUserRoleView(APIView):
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-# ================== 5.  ChangeTheUserStatus&SoftDeleteTheUsers =====================
+# ================== 5.  ChangeTheUserStatus&SoftDeleteTheUsersBySuperAdmin =====================
 class ManageUsersStatusView(APIView):
     permission_classes = [IsAuthenticated, IsSuperAdmin]
 
@@ -561,132 +537,5 @@ class ManageUsersStatusView(APIView):
             )
             return Response(
                 {"detail": "An unexpected error occurred / خطای غیرمنتظره‌ای رخ داده است."},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
-
-# ================== 6. MakeUserActiveOrInactive =====================
-
-class UserActivationView(APIView):
-    permission_classes = [IsAuthenticated, IsAdminRole]
-
-    @swagger_auto_schema(
-        operation_description="""
-        Activate or deactivate a user account by admin.
-
-        Custom Error Codes:
-        - Code 10: Invalid payload or boolean value provided for 'is_active'.
-        - Code 40: Target user not found or has been soft-deleted.
-        """,
-        request_body=UserActivationSerializer,
-        responses={
-            200: openapi.Response(
-                description="Activation status changed successfully",
-                schema=openapi.Schema(
-                    type=openapi.TYPE_OBJECT,
-                    properties={
-                        "message": openapi.Schema(type=openapi.TYPE_STRING),
-                        "is_active": openapi.Schema(type=openapi.TYPE_BOOLEAN),
-                    }
-                )
-            ),
-            400: "Bad Request (Code 10)",
-            401: "Unauthorized",
-            403: "Forbidden",
-            404: "Not Found (Code 40)",
-        }
-    )
-    def patch(self, request, pk):
-        try:
-            user = User.objects.filter(
-                pk=pk,
-                deleted_at__isnull=True
-            ).first()
-
-            if not user:
-                log_critical_event(
-                    action="change_user_activation",
-                    status_type="error",
-                    request=request,
-                    user_id=request.user.id,
-                    error_code="USER_NOT_FOUND",
-                    extra={
-                        'target_user_id': pk,
-                    }
-                )
-
-                return Response(
-                    {
-                        "error_code": 40,
-                        "message": "User not found / کاربر مورد نظر یافت نشد.",
-                        "detail": None
-                    },
-                    status=status.HTTP_404_NOT_FOUND
-                )
-
-            serializer = UserActivationSerializer(data=request.data)
-
-            if not serializer.is_valid():
-                log_critical_event(
-                    action="change_user_activation",
-                    status_type="error",
-                    request=request,
-                    user_id=request.user.id,
-                    error_code="INVALID_ACTIVATION_PAYLOAD",
-                    extra={
-                        'target_user_id': user.id,
-                    }
-                )
-
-                return Response(
-                    {
-                        "error_code": 10,
-                        "message": "Invalid activation payload / اطلاعات فرستاده شده برای فعال‌سازی معتبر نیست.",
-                        "detail": serializer.errors
-                    },
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-            old_is_active = user.is_active
-            new_is_active = serializer.validated_data['is_active']
-
-            user.is_active = new_is_active
-            user.save(update_fields=['is_active'])
-
-            log_critical_event(
-                action="change_user_activation",
-                status_type="success",
-                request=request,
-                user_id=request.user.id,
-                extra={
-                    'target_user_id': user.id,
-                    'old_is_active': old_is_active,
-                    'new_is_active': new_is_active,
-                }
-            )
-
-            return Response(
-                {
-                    "message": "User activation status updated successfully / وضعیت فعال بودن کاربر تغییر کرد.",
-                    "is_active": user.is_active
-                },
-                status=status.HTTP_200_OK
-            )
-
-        except Exception:
-            log_critical_event(
-                action="change_user_activation",
-                status_type="error",
-                request=request,
-                user_id=request.user.id,
-                error_code="ACTIVATION_CHANGE_FAILED",
-                extra={
-                    'target_user_id': pk,
-                }
-            )
-
-            return Response(
-                {
-                    "detail": "An unexpected error occurred / خطای غیرمنتظره‌ای رخ داده است."
-                },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
