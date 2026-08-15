@@ -27,17 +27,6 @@ class UserRoleUpdateSerializer(serializers.ModelSerializer):
         model = User
         fields = ['role', 'role_name']
 
-
-class ListOfRoleSerializer(serializers.ModelSerializer):
-    """
-    Exposes all attributes of the Role model for administrative management.
-    """
-
-    class Meta:
-        model = Role
-        fields = '__all__'
-
-
 class UserStatusUpdateSerializer(serializers.ModelSerializer):
     """
     Used by administrators to modify account state (e.g., active, pending, suspended).
@@ -46,18 +35,6 @@ class UserStatusUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['status']
-
-
-class UserActivationSerializer(serializers.Serializer):
-    """
-    Accepts a boolean flag to quickly activate or deactivate a user account.
-
-    Fields:
-        is_active (serializers.BooleanField): Indicates whether the account is enabled.
-    """
-
-    is_active = serializers.BooleanField()
-
 
 class ListOfRoleUsersSerializer(serializers.ModelSerializer):
     """
