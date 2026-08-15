@@ -19,8 +19,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
-DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
-
+# DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -34,6 +34,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'identity',
+    'accounts',
+    'user_management',
+    'group_management',
+    'domain_tag_management',
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
