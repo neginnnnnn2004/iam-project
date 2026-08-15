@@ -36,7 +36,7 @@ class ImportOrEditDomainView(APIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
     @swagger_auto_schema(
-        operation_description="اضافه کردن دسته‌جمعی یا تکی دامنه‌ها،با دسترسی ادمین (بررسی خودکار و حذف تکراری‌ها / استخراج اصل دامنه)",
+        operation_description="Bulk or single addition of domains with admin access (automatic validation, duplicate removal, and root domain extraction)",
         request_body=DomainRegisterSerializer(many=True),
         responses={
             201: DomainRegisterSerializer(many=True),
@@ -75,7 +75,10 @@ class ImportOrEditDomainView(APIView):
 
         if not cleaned_items:
             return Response({
-                "message": "تمامی دامنه‌های ارسالی تکراری بوده و از فرآیند ثبت حذف شدند.",
+                "message": {
+                    "fa": "تمامی دامنه‌های ارسالی تکراری بوده و از فرآیند ثبت حذف شدند.",
+                    "en": "All submitted domains were duplicates and removed from the registration process.",
+                },
                 "skipped_domains": skipped_domains,
                 "created_domains": []
             }, status=status.HTTP_200_OK)
@@ -85,7 +88,10 @@ class ImportOrEditDomainView(APIView):
         if not serializer.is_valid():
             return Response({
                 "error_code": 10,
-                "message": "اطلاعات ارسالی برای ایمپورت دامنه معتبر نیست.",
+                "message": {
+                    "fa": "اطلاعات ارسالی برای ایمپورت دامنه معتبر نیست.",
+                    "en": "The submitted data for domain import is not valid.",
+                },
                 "detail": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -106,7 +112,10 @@ class ImportOrEditDomainView(APIView):
         created_data = DomainRegisterSerializer(created_instances, many=True).data
 
         response_payload = {
-            "message": "فرآیند ایمپورت با موفقیت انجام شد.",
+            "message": {
+                "fa": "فرآیند ایمپورت با موفقیت انجام شد.",
+                "en": "The import process completed successfully.",
+            },
             "created_count": len(created_instances),
             "skipped_count": len(skipped_domains),
             "skipped_domains": skipped_domains,
@@ -120,10 +129,10 @@ class ImportOrEditDomainView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-        ویرایش تکی یا دسته‌جمعی مشخصات دامنه‌ها،با دسترسی ادمین
+        Edit domain information individually or in bulk, with admin access.
 
-        - برای ویرایش تکی: یک Object ارسال کنید: {"domain_name": "a.com", "description": "new"}
-        - برای ویرایش دسته‌جمعی: یک Array ارسال کنید: [{"domain_name": "a.com", ...}, ...]
+        - For single update: Send an Object: {"domain_name": "a.com", "description": "new"}
+        - For bulk update: Send an Array: [{"domain_name": "a.com", ...}, ...]
         """,
         request_body=DomainRegisterSerializer(many=True),
         responses={
@@ -142,13 +151,19 @@ class ImportOrEditDomainView(APIView):
                 for index, item in enumerate(data):
                     domain_name = item.get('domain_name')
                     if not domain_name:
-                        errors[f"item_{index}"] = "ارسال فیلد domain_name برای ویرایش الزامی است."
+                        errors[f"item_{index}"] = {
+                            "fa": "ارسال فیلد domain_name برای ویرایش الزامی است.",
+                            "en": "The domain_name field is required for editing."
+                        }
                         continue
 
                     try:
                         domain_instance = Domain.objects.get(domain_name=domain_name)
                     except Domain.DoesNotExist:
-                        errors[f"item_{index}"] = f"دامنه با نام «{domain_name}» یافت نشد."
+                        errors[f"item_{index}"] = {
+                            "fa": f"دامنه با نام «{domain_name}» یافت نشد.",
+                            "en": f"Domain with name «{domain_name}» was not found."
+                        }
                         continue
 
                     serializer = DomainRegisterSerializer(domain_instance, data=item, partial=True)
@@ -163,12 +178,18 @@ class ImportOrEditDomainView(APIView):
                     transaction.set_rollback(True)
                     return Response({
                         "error_code": 10,
-                        "message": "برخی از اطلاعات ارسالی برای ویرایش نامعتبر هستند.",
+                        "message": {
+                            "fa": "برخی از اطلاعات ارسالی برای ویرایش نامعتبر هستند.",
+                            "en": "Some of the submitted data for editing is invalid."
+                        },
                         "detail": errors
                     }, status=status.HTTP_400_BAD_REQUEST)
 
             return Response({
-                "message": f"مشخصات تعداد {len(updated_domains)} دامنه با موفقیت بروزرسانی شد.",
+                "message": {
+                    "fa": f"مشخصات تعداد {len(updated_domains)} دامنه با موفقیت بروزرسانی شد.",
+                    "en": f"Details of {len(updated_domains)} domain(s) were updated successfully."
+                },
                 "data": DomainRegisterSerializer(updated_domains, many=True).data
             }, status=status.HTTP_200_OK)
 
@@ -177,21 +198,30 @@ class ImportOrEditDomainView(APIView):
             if not domain_name:
                 return Response({
                     "error_code": 10,
-                    "message": "ارسال فیلد domain_name در بدنه درخواست الزامی است."
+                    "message": {
+                        "fa": "ارسال فیلد domain_name در بدنه درخواست الزامی است.",
+                        "en": "The domain_name field is required in the request body."
+                    },
                 }, status=status.HTTP_400_BAD_REQUEST)
 
             try:
                 domain = Domain.objects.get(domain_name=domain_name)
             except Domain.DoesNotExist:
                 return Response({
-                    "error": f"دامنه‌ای با نام «{domain_name}» یافت نشد."
+                    "error": {
+                        "fa": f"دامنه‌ای با نام «{domain_name}» یافت نشد.",
+                        "en": f"Domain with name «{domain_name}» was not found."
+                    },
                 }, status=status.HTTP_404_NOT_FOUND)
 
             serializer = DomainRegisterSerializer(domain, data=data, partial=True)
             if not serializer.is_valid():
                 return Response({
                     "error_code": 10,
-                    "message": "اطلاعات ارسالی معتبر نیست.",
+                    "message": {
+                        "fa": "اطلاعات ارسالی معتبر نیست.",
+                        "en": "The submitted data is not valid."
+                    },
                     "detail": serializer.errors
                 }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -203,7 +233,7 @@ class DomainDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_description="دریافت لیست دامنه‌ها به همراه تگ‌های مجاز و وضعیت قابلیت افزودن تگ",
+        operation_description="Retrieve the list of domains along with allowed tags and the tag-addition availability status",
         responses={
             200: DomainRegisterSerializer(many=True),
             401: "Unauthorized",
@@ -274,12 +304,13 @@ class TagListCreateView(APIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
     @swagger_auto_schema(
-        operation_description="""
-            ایجاد تگ جدید،با دسترسی ادمین
 
-            کدهای خطای اختصاصی :
-            - code 10: اطلاعات ارسالی ناقص یا اشتباه است.
-            """,
+        operation_description="""
+        Create a new tag, with admin access.
+
+        Custom error codes:
+        - code 10: The submitted information is incomplete or invalid.
+        """,
         request_body=TagRegisterSerializer,
         responses={
             201: TagRegisterSerializer(),
@@ -293,7 +324,10 @@ class TagListCreateView(APIView):
         if not serializer.is_valid():
             return Response({
                 "error_code": 10,
-                "message": "اطلاعات ارسالی برای ایجاد تگ معتبر نیست.",
+                "message": {
+                    "fa": "اطلاعات ارسالی برای ایجاد تگ معتبر نیست.",
+                    "en": "The submitted data for creating a tag is not valid."
+                },
                 "detail": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -312,12 +346,12 @@ class TagDetailView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-ویرایش تگ بر اساس شناسه،با دسترسی ادمین               
-               کدهای خطای اختصاصی :
-               - code 10: اطلاعات ارسالی ناقص یا اشتباه است.
-               - code 55: تگ مورد نظر یافت نشد.
+        Edit a tag by ID, with admin access.
 
-               """,
+        Custom error codes:
+        - code 10: The submitted information is incomplete or invalid.
+        - code 55: The requested tag was not found.
+        """,
         request_body=TagRegisterSerializer,
         responses={
             200: TagRegisterSerializer(),
@@ -332,14 +366,20 @@ class TagDetailView(APIView):
         if not tag:
             return Response({
             "error_code": 55,
-                "message": f"تگی با شناسه {pk} یافت نشد.",
-                }, status = status.HTTP_404_NOT_FOUND)
+                "message": {
+                    "fa": f"تگی با شناسه {pk} یافت نشد.",
+                    "en": f"Tag with ID {pk} was not found."
+                },
+            }, status = status.HTTP_404_NOT_FOUND)
 
         serializer = TagRegisterSerializer(tag, data=request.data,partial=True)
         if not serializer.is_valid():
             return Response({
                 "error_code": 10,
-                "message": "اطلاعات ارسالی معتبر نیست.",
+                "message": {
+                    "fa": "اطلاعات ارسالی معتبر نیست.",
+                    "en": "The submitted data is not valid."
+                },
                 "detail": serializer.errors
             },status=status.HTTP_400_BAD_REQUEST)
 
@@ -348,11 +388,11 @@ class TagDetailView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-            حذف نرم تگ ،با دسترسی ادمین( بر اساس شناسه)
-            
-            کدهای خطای اختصاصی :
-            - code 55: تگ مورد نظر یافت نشد.
-            """,
+        Soft-delete a tag by ID, with admin access.
+
+        Custom error codes:
+        - code 55: The requested tag was not found.
+        """,
         responses={
             204: "No Content",
             401: "Unauthorized",
@@ -365,7 +405,10 @@ class TagDetailView(APIView):
         if not tag:
             return Response({
                 "error_code": 55,
-                "message": f"تگی با شناسه {pk} یافت نشد.",
+                "message": {
+                    "fa": f"تگی با شناسه {pk} یافت نشد.",
+                    "en": f"Tag with ID {pk} was not found."
+                },
             },status=status.HTTP_404_NOT_FOUND)
 
         tag.deleted_at = timezone.now()
@@ -381,7 +424,7 @@ class ListOfTagView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_description="لیست تمامی تگ های فعال جهت انتخاب توسط کاربر",
+        operation_description="Retrieve a list of all active tags available for user selection",
         responses={
             200: TagListSerializer(many=True),
             401: "Unauthorized",
@@ -404,35 +447,54 @@ class AssignTagToDomainView(APIView):
         if role_code in ['limited']:
             return False, Response({
                 "error_code": 403,
-                "message": "کاربران محدودشده امکان افزودن، ویرایش یا حذف تگ را ندارند."
+                "message": {
+                    "fa": "کاربران محدودشده امکان افزودن، ویرایش یا حذف تگ را ندارند.",
+                    "en": "Restricted users are not allowed to add, edit, or delete tags."
+                },
             }, status=status.HTTP_403_FORBIDDEN)
         return True, None
 
     def _get_domain_by_name(self, domain_name, index):
         """یافتن دامنه صرفاً بر اساس domain_name"""
         if not domain_name:
-            return None, f"آیتم {index}: نام دامنه (domain_name) ارسال نشده است."
+            return None, {
+                "fa": f"آیتم {index}: دامنه‌ای با نام «{domain_name}» یافت نشد.",
+                "en": f"Item {index}: Domain with name «{domain_name}» was not found."
+            }
         try:
             return Domain.objects.get(domain_name=domain_name, deleted_at__isnull=True), None
         except Domain.DoesNotExist:
-            return None, f"آیتم {index}: دامنه‌ای با نام «{domain_name}» یافت نشد."
+            return None, {
+                "fa": f"آیتم {index}: دامنه‌ای با نام «{domain_name}» یافت نشد.",
+                "en": f"Item {index}: Domain with name «{domain_name}» was not found."
+            }
 
     def _get_tag_by_title(self, title, index):
         """یافتن تگ صرفاً بر اساس title"""
         if not title:
-            return None, f"آیتم {index}: عنوان تگ (title) ارسال نشده است."
+            return None, {
+                "fa": f"آیتم {index}: عنوان تگ (title) ارسال نشده است.",
+                "en": f"Item {index}: The tag title (title) was not provided."
+            }
         try:
             return Tag.objects.get(title=title, is_active=True, deleted_at__isnull=True), None
         except Tag.DoesNotExist:
-            return None, f"آیتم {index}: تگی با عنوان «{title}» یافت نشد یا غیرفعال است."
+            return None, {
+                "fa": f"آیتم {index}: تگی با عنوان «{title}» یافت نشد یا غیرفعال است.",
+                "en": f"Item {index}: Tag with title «{title}» was not found or is inactive."
+            }
 
     # =========================================================================
     # 1. POST: add & assign new tag (Bulk Create)
     # =========================================================================
     @swagger_auto_schema(
-        operation_description="افزودن دسته‌جمعی تگ‌های جدید به دامنه‌ها با domain_name و title",
+        operation_description="Bulk addition of new tags to domains using domain_name and title",
         request_body=UserDomainTagSerializer(many=True),
-        responses={200: "تگ‌/ تگ های با موفقیت اضافه شدند.", 400: "Bad Request (Code 60)", 403: "Forbidden"}
+        responses={
+            200: "tag/ tags added successfully",
+            400: "Bad Request (Code 60)",
+            403: "Forbidden"
+        }
     )
     def post(self, request):
         has_access, response = self._check_user_access(request.user)
@@ -458,12 +520,15 @@ class AssignTagToDomainView(APIView):
 
             has_main_tag = User_Domain_Tag.objects.filter(
                 domain=domain,
-                tag__created_by__role__code__in=['admin', 'super_admin'],
+                user__role__code__in=['admin', 'super_admin'],
                 deleted_at__isnull=True
             ).exists()
 
             if has_main_tag and not is_admin:
-                errors.append(f"دامنه «{domain.domain_name}» دارای برچسب اصلی است و امکان افزودن برچسب جدید ندارد.")
+                errors.append({
+                    "fa": f"دامنه «{domain.domain_name}» دارای برچسب اصلی است و امکان افزودن برچسب جدید ندارد.",
+                    "en": f"Domain «{domain.domain_name}» has a primary tag and cannot have new tags added."
+                })
                 continue
 
             tag, err = self._get_tag_by_title(title, index)
@@ -474,7 +539,10 @@ class AssignTagToDomainView(APIView):
             user_existing_udts = list(User_Domain_Tag.objects.filter(user=user, domain=domain,deleted_at__isnull=True))
 
             if any(udt.tag_id == tag.id for udt in user_existing_udts):
-                errors.append(f"تگ «{tag.title}» قبلاً توسط شما برای دامنه «{domain.domain_name}» ثبت شده است.")
+                errors.append({
+                    "fa": f"تگ «{tag.title}» قبلاً توسط شما برای دامنه «{domain.domain_name}» ثبت شده است.",
+                    "en": f"Tag «{tag.title}» has already been registered by you for domain «{domain.domain_name}»."
+                })
                 continue
 
             max_allowed_tags = 2 if is_admin else 1
@@ -482,28 +550,43 @@ class AssignTagToDomainView(APIView):
             effective_tag_count = len(user_existing_udts) + pending_creations
 
             if effective_tag_count >= max_allowed_tags:
-                errors.append(f"دامنه «{domain.domain_name}»: به سقف مجاز انتخاب تگ ({max_allowed_tags}) رسیده است.")
+                errors.append({
+                    "fa": f"دامنه «{domain.domain_name}»: به سقف مجاز انتخاب تگ ({max_allowed_tags}) رسیده است.",
+                    "en": f"Domain «{domain.domain_name}»: reached the maximum allowed tag limit ({max_allowed_tags})."
+                })
                 continue
 
             items_to_create.append(User_Domain_Tag(user=user, domain=domain, tag=tag))
             pending_creations_per_domain[domain.id] = pending_creations + 1
 
         if errors:
-            return Response({"error_code": 60, "message": "خطا در افزودن تگ‌ها.", "detail": errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "error_code": 60,
+                "message": {
+                    "fa": "خطا در افزودن تگ‌ها.",
+                    "en": "Error in adding tags."
+                },
+                "detail": errors
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         with transaction.atomic():
             if items_to_create:
                 User_Domain_Tag.objects.bulk_create(items_to_create)
 
-        return Response({"message": "تگ‌های جدید با موفقیت اضافه شدند."}, status=status.HTTP_200_OK)
+        return Response({
+            "message": {
+                "fa": "تگ‌های جدید با موفقیت اضافه شدند.",
+                "en": "New tags were added successfully."
+            }
+        }, status=status.HTTP_200_OK)
 
     # =========================================================================
     # 2. PATCH: edit & replace the current tag (Bulk Update)
     # =========================================================================
     @swagger_auto_schema(
-        operation_description="ویرایش دسته‌جمعی تگ‌های دامنه‌ها بر اساس domain_name و title (نیاز به confirm برای کاربر عادی)",
+        operation_description="Bulk update of domain tags using domain_name and title (confirmation required for regular users)",
         request_body=UserDomainTagPatchSerializer(many=True),
-        responses={200: "ویرایش با موفقیت انجام شد.", 409: "Conflict (Code 21)", 400: "Bad Request"}
+        responses={200: "edit is done successfully", 409: "Conflict (Code 21)", 400: "Bad Request"}
     )
     def patch(self, request):
         has_access,  response = self._check_user_access(request.user)
@@ -534,7 +617,10 @@ class AssignTagToDomainView(APIView):
             ))
 
             if not user_existing_udts:
-                errors.append(f"دامنه «{domain.domain_name}»: تگی متعلق به شما برای ویرایش وجود ندارد.")
+                errors.append({
+                    "fa": f"دامنه «{domain.domain_name}»: تگی متعلق به شما برای ویرایش وجود ندارد.",
+                    "en": f"Domain «{domain.domain_name}»: there is no tag belonging to you to edit."
+                })
                 continue
 
             is_admin = user.is_superuser or (
@@ -547,7 +633,10 @@ class AssignTagToDomainView(APIView):
             ).exclude(user=user).exists()
 
             if has_main_tag and not is_admin:
-                errors.append(f"دامنه «{domain.domain_name}» دارای برچسب اصلی است و امکان تغییر تگ ندارد.")
+                errors.append({
+                    "fa": f"دامنه «{domain.domain_name}» دارای برچسب اصلی است و امکان تغییر تگ ندارد.",
+                    "en": f"Domain «{domain.domain_name}» has a primary tag and cannot have its tag changed."
+                })
                 continue
 
             tag, err = self._get_tag_by_title(title, index)
@@ -558,8 +647,10 @@ class AssignTagToDomainView(APIView):
             existing_udt = user_existing_udts[0]
 
             if existing_udt.tag_id == tag.id:
-                errors.append(
-                    f"دامنه «{domain.domain_name}»: تگ انتخاب شده («{tag.title}») هم‌اکنون برای شما فعال است و تغییری ایجاد نشد.")
+                errors.append({
+                    "fa": f"دامنه «{domain.domain_name}»: تگ انتخاب شده («{tag.title}») هم‌اکنون برای شما فعال است و تغییری ایجاد نشد.",
+                    "en": f"Domain «{domain.domain_name}»: the selected tag («{tag.title}») is already active for you and no change was made."
+                })
                 continue
 
             if not confirm:
@@ -574,13 +665,22 @@ class AssignTagToDomainView(APIView):
                 items_to_update.append(existing_udt)
 
         if errors:
-            return Response({"error_code": 60, "message": "خطا در ویرایش تگ‌ها.", "detail": errors},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "error_code": 60,
+                "message": {
+                    "fa": "خطا در ویرایش تگ‌ها.",
+                    "en": "Error in editing tags."
+                },
+                "detail": errors
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         if requires_confirm_list:
             return Response({
                 "error_code": 21,
-                "message": "ویرایش برخی تگ‌ها نیاز به تایید نهایی دارد.",
+                "message": {
+                    "fa": "ویرایش برخی تگ‌ها نیاز به تایید نهایی دارد.",
+                    "en": "Editing some tags requires final approval."
+                },
                 "detail": {
                     "requires_confirmation": True,
                     "conflicts": requires_confirm_list
@@ -591,15 +691,19 @@ class AssignTagToDomainView(APIView):
             if items_to_update:
                 User_Domain_Tag.objects.bulk_update(items_to_update, fields=['tag', 'updated_at'])
 
-        return Response({"message": "ویرایش تگ‌ها با موفقیت انجام شد."}, status=status.HTTP_200_OK)
+        return Response({
+            "message": {
+                "fa": "ویرایش تگ‌ها با موفقیت انجام شد.",
+                "en": "Tags were edited successfully."
+            }
+        }, status=status.HTTP_200_OK)
 
     # =========================================================================
     # 3. DELETE: delete the tags (Bulk Delete)
     # =========================================================================
     @swagger_auto_schema(
-        operation_description="حذف نرم (Soft Delete) دسته‌جمعی تگ‌های کاربر روی دامنه‌ها بر اساس domain_name و title",
-        request_body=UserDomainTagSerializer(many=True),
-        responses={200: "تگ‌ها با موفقیت حذف شدند.", 400: "Bad Request"}
+        operation_description="Bulk soft deletion of user tags from domains using domain_name and title",        request_body=UserDomainTagSerializer(many=True),
+        responses={200: "tag deleted successfully ", 400: "Bad Request"}
     )
     def delete(self, request):
         has_access, response = self._check_user_access(request.user)
@@ -628,7 +732,10 @@ class AssignTagToDomainView(APIView):
             )
 
             if not existing_udts.exists():
-                errors.append(f"دامنه «{domain.domain_name}»: تگ فعالی متعلق به شما برای حذف یافت نشد.")
+                errors.append({
+                    "fa": f"دامنه «{domain.domain_name}»: تگ فعالی متعلق به شما برای حذف یافت نشد.",
+                    "en": f"Domain «{domain.domain_name}»: no active tag belonging to you was found to delete."
+                })
                 continue
 
             if title:
@@ -639,7 +746,10 @@ class AssignTagToDomainView(APIView):
 
                 udts = existing_udts.filter(tag=tag)
                 if not udts.exists():
-                    errors.append(f"دامنه «{domain.domain_name}»: تگ «{title}» توسط شما روی این دامنه ثبت نشده است.")
+                    errors.append({
+                        "fa": f"دامنه «{domain.domain_name}»: تگ «{title}» توسط شما روی این دامنه ثبت نشده است.",
+                        "en": f"Domain «{domain.domain_name}»: tag «{title}» has not been registered by you on this domain."
+                    })
                     continue
 
                 ids_to_delete.extend(udts.values_list('id', flat=True))
@@ -647,11 +757,22 @@ class AssignTagToDomainView(APIView):
                 ids_to_delete.extend(existing_udts.values_list('id', flat=True))
 
         if errors:
-            return Response({"error_code": 60, "message": "خطا در حذف تگ‌ها.", "detail": errors},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                "error_code": 60,
+                "message": {
+                    "fa": "خطا در حذف تگ‌ها.",
+                    "en": "Error in deleting tags."
+                },
+                "detail": errors
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         with transaction.atomic():
             if ids_to_delete:
                 User_Domain_Tag.objects.filter(id__in=ids_to_delete).update(deleted_at=timezone.now())
 
-        return Response({"message": "تگ‌های انتخابی با موفقیت حذف شدند."}, status=status.HTTP_200_OK)
+        return Response({
+            "message": {
+                "fa": "تگ‌های انتخابی با موفقیت حذف شدند.",
+                "en": "Selected tags were deleted successfully."
+            }
+        }, status=status.HTTP_200_OK)
