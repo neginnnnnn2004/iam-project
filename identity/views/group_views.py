@@ -24,7 +24,7 @@ class ListOfGroupsView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_description="دریافت لیست گروه ها برای هر کاربر احراز هویت شده(برای کاربران عادی و میهمان لیست گروه هایی که در آنها عضو است. و برای ادمین ها لیست تمامی گروه ها)",
+        operation_description="Retrieve the list of groups for any authenticated user. Regular users and guests see only the groups they belong to, while admins see all groups.",
         responses={
             200: UserListOfGroupsSerializer(many=True),
             401: "Unauthorized",
@@ -56,10 +56,12 @@ class GroupRegisterView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-         ایجاد گروه جدید با دسترسی ادمین
+        Create a new group with admin access.
+        
+        Custom error codes:
+        
+        code 10: The submitted information is incomplete or incorrect.
 
-        کدهای خطای اختصاصی :
-        - code 10: اطلاعات ارسالی ناقص یا اشتباه است
         """,
         request_body=GroupCreateSerializer,
         responses={
@@ -74,7 +76,10 @@ class GroupRegisterView(APIView):
         if not serializer.is_valid():
             return Response({
                 "error_code": 10,
-                "message": "اطلاعات ارسالی برای ایجاد گروه معتبر نیست.",
+                "message": {
+                    "fa": "اطلاعات ارسالی برای ایجاد گروه معتبر نیست.",
+                    "en": "The submitted information is not valid for creating a group."
+                },
                 "detail": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -91,10 +96,11 @@ class GroupDetailOREditView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-         دریافت جزییات یک گروه با دسترسی ادمین
+        Retrieve the details of a group with admin access.
 
-        کد های اختصاصی:
-        - code 50: گروه مورد نظر یافت نشد.
+        Custom error codes:
+
+        code 50: The requested group was not found.
         """,
         responses={
             200: GroupSerializer(),
@@ -108,7 +114,10 @@ class GroupDetailOREditView(APIView):
         if not group:
             return Response({
                 "error_code": 50,
-                "message": "گروه مورد نظر یافت نشد یا حذف شده است.",
+                "message": {
+                    "fa": "گروه مورد نظر یافت نشد.",
+                    "en": "The requested group was not found."
+                },
                 "detail": None
             }, status=status.HTTP_404_NOT_FOUND)
 
@@ -117,11 +126,12 @@ class GroupDetailOREditView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-        ویرایش  گروه با دسترسی ادمین
+        Edit Group with Admin Access
 
-        کدهای خطای اختصاصی :
-        - code 10: اطلاعات ارسالی نامعتبر است.
-        - code 50: گروه مورد نظر یافت نشد.
+        Specific Error Codes:
+        Code 10: The submitted information is invalid.
+        Code 50: The requested group was not found.
+
         """,
         request_body=GroupSerializer,
         responses={
@@ -140,7 +150,10 @@ class GroupDetailOREditView(APIView):
         if not group:
             return Response({
                 "error_code": 50,
-                "message": "گروه مورد نظر جهت ویرایش یافت نشد.",
+                "message": {
+                    "fa": "گروه مورد نظر جهت ویرایش یافت نشد.",
+                    "en": "The group to be edited was not found."
+                    },
                 "detail": None
             }, status=status.HTTP_404_NOT_FOUND)
 
@@ -148,7 +161,10 @@ class GroupDetailOREditView(APIView):
         if not serializer.is_valid():
             return Response({
                 "error_code": 10,
-                "message": "اطلاعات ارسالی برای ویرایش گروه معتبر نیست.",
+                "message": {
+                    "fa": "اطلاعات ارسالی برای ویرایش  گروه معتبر نیست.",
+                    "en": "The submitted information is not valid for editing a group."
+                },
                 "detail": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -157,10 +173,11 @@ class GroupDetailOREditView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-        حذف نرم گروه با دسترسی ادمین
+        Soft Delete Group with Admin Access
 
-        کدهای خطای اختصاصی :
-        - code 50: گروه مورد نظر یافت نشد.
+        Specific Error Codes:
+
+        Code 50: The requested group was not found.
         """,
         responses={
             204: "No Content",
@@ -174,7 +191,10 @@ class GroupDetailOREditView(APIView):
         if not group:
             return Response({
                 "error_code": 50,
-                "message": "گروه مورد نظر قبلاً حذف شده یا وجود ندارد.",
+                "message": {
+                    "fa": "گروه مورد نظر قبلاً حذف شده یا وجود ندارد.",
+                    "en": "The requested group has already been deleted or does not exist."
+                },
                 "detail": None
             }, status=status.HTTP_404_NOT_FOUND)
 
@@ -189,10 +209,11 @@ class AssignUsersGroups(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-        انتساب کاربران به یکی از گروه های موجود توسط ادمین
+        Assign Users to an Existing Group by Admin
 
-        کدهای خطای اختصاصی :
-        - code 10: اطلاعات ارسالی (آیدی کاربر یا گروه) ناقص یا نامعتبر است.
+        Specific Error Codes:
+
+        Code 10: The submitted information (user ID or group ID) is incomplete or invalid.
         """,
         request_body=UserGroupSerializer,
         responses={
@@ -216,15 +237,21 @@ class AssignUsersGroups(APIView):
         if not serializer.is_valid():
             return Response({
                 "error_code": 10,
-                "message": "اطلاعات ارسالی برای انتساب کاربر به گروه معتبر نیست.",
+                "message": {
+                    "fa": "اطلاعات ارسالی برای انتساب کاربر به گروه معتبر نیست.",
+                    "en": "The submitted information for assigning the user to the group is invalid."
+                },
                 "detail": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
         user_group = serializer.save(assigned_by=request.user)
 
         return Response({
-            "message": "کاربر با موفقیت به گروه انتساب داده شد.",
-            "data": UserGroupSerializer(user_group).data
+            "message": {
+                "fa": "کاربر با موفقیت به گروه انتساب داده شد.",
+                "en": "The user was successfully assigned to the group."
+            },
+             "data": UserGroupSerializer(user_group).data
         }, status=status.HTTP_201_CREATED)
 
 
@@ -234,21 +261,24 @@ class GroupDomainView(APIView):
 
     @swagger_auto_schema(
         operation_description="""
-         دریافت لیست دامنه‌های مرتبط با یک گروه خاص
+        Get List of Domains Associated with a Specific Group
 
-         **دسترسی‌ها:**
-         - **ادمین و سوپرادمین**: دسترسی به دامنه‌های تمام گروه‌ها
-         - **کاربر عادی و مهمان**: فقط دامنه‌های گروه‌هایی که عضو هستند را مشاهده می‌کنند
+        Access Levels:
 
-         **کدهای خطا:**
-         - `65`: گروه مورد نظر وجود ندارد یا حذف شده است
-         - `66`: کاربر دسترسی به این گروه را ندارد
+        Admin and Superadmin: Access to domains of all groups
+
+        Regular User and Guest: Can only view domains of groups they are a member of
+
+        Error Codes:
+        65: The requested group does not exist or has been deleted
+         66: The user does not have access to this group
+         
          """,
         manual_parameters=[
             openapi.Parameter(
                 'group_id',
                 openapi.IN_PATH,
-                description="شناسه (ID) گروه",
+                description=" (ID) Group",
                 type=openapi.TYPE_INTEGER,
                 required=True,
             )
@@ -265,7 +295,10 @@ class GroupDomainView(APIView):
         if not group:
             return Response({
                 "error_code": 65,
-                "message": "گروه مورد نظر یافت نشد."
+                "message": {
+                    "fa": "گروه مورد نظر یافت نشد.",
+                    "en": "The requested group was not found."
+                },
             }, status=status.HTTP_404_NOT_FOUND)
 
         user = request.user
@@ -277,7 +310,10 @@ class GroupDomainView(APIView):
             if not is_assigned:
                 return Response({
                     "error_code": 66,
-                    "message": "شما به این گروه دسترسی ندارید."
+                    "message": {
+                        "fa": "شما به این گروه دسترسی ندارید.",
+                        "en": "You do not have access to this group."
+                    },
                 }, status=status.HTTP_403_FORBIDDEN)
 
         domains = Domain.objects.filter(groups=group, deleted_at__isnull=True).distinct()
