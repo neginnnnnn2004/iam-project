@@ -6,7 +6,7 @@ from django.db.models import Q
 from rest_framework.views import APIView
 
 from identity.models import  Domain, UserGroup, User_Domain_Tag
-from domain_tag_management.serializers.domain_list import (DomainRegisterSerializer, TagListSerializer)
+from domain_tag_management.serializers.domain_list import (DomainListSerializer, TagListSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
 
@@ -17,7 +17,7 @@ class DomainDetailView(APIView):
     @swagger_auto_schema(
         operation_description="Retrieve the list of domains along with allowed tags and the tag-addition availability status",
         responses={
-            200: DomainRegisterSerializer(many=True),
+            200: DomainListSerializer(many=True),
             401: "Unauthorized",
             403: "Forbidden"
         }
@@ -72,7 +72,7 @@ class DomainDetailView(APIView):
 
                 can_add_tag = not has_user_tag
 
-            domain_data = DomainRegisterSerializer(domain).data
+            domain_data = DomainListSerializer(domain).data
             domain_data['tags'] = TagListSerializer(visible_tags, many=True).data
             domain_data['can_add_tag'] = can_add_tag
             domain_data['has_main_tag'] = has_main_tag
