@@ -196,7 +196,8 @@ class Domain(models.Model):
         'Group',
         on_delete = models.CASCADE,
         related_name='domains',
-        blank=True
+        blank=True,
+        null=True,
     )
     def __str__(self):
         return self.domain_name
