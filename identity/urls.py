@@ -27,7 +27,7 @@ from domain_tag_management.views.assign_tag_to_domain import BulkSyncDomainTagsV
 
 
 urlpatterns = [
-    path('account/egister/', UserRegisterView.as_view(), name='register'),
+    path('account/register/', UserRegisterView.as_view(), name='register'),
     path('account/login/', UserLoginView.as_view(), name='login'),
     path('account/profile/update/', ProfileUpdateView.as_view(), name='profile_update'),
     path('account/reset_password/', PasswordResetWithBackupCodeView.as_view(), name="reset_password"),
