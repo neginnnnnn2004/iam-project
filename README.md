@@ -8,96 +8,308 @@ Designed with a highly clean, decoupled architecture, this service manages custo
 
 ## 🌟 Key Features
 
-* **Custom User Architecture:** Built using a customized Django User Model (`CustomUser`), allowing seamless scalability for enterprise-level user fields.
-* **Granular Access Control:** Comprehensive management of user authentication, groups, and system permissions.
-* **Stateless Password Reset:** Generates secure, cryptographic, time-sensitive tokens via Django's `TimestampSigner`. Tokens expire automatically after 10 minutes without requiring database storage.
-* **User Enumeration Protection:** The password reset request endpoint returns a generic, ambiguous success message regardless of whether the username exists, preventing malicious actors from mapping active users.
-* **Domain & Tag Management:** Allows registration of organizational domains coupled with dynamic tagging, facilitating smart classification, filtering, and multi-tenant domain mapping.
-* **Automated Testing:** Robust, module-based test coverage ensuring each core service component functions reliably.
+* **Custom User Architecture:** Built using a customized Django User Model (`User`), allowing the system to support additional user attributes such as roles, account status, phone number, verification status, and login tracking.
 
+* **JWT Authentication:** Implements stateless authentication using JSON Web Tokens with short-lived access tokens and longer-lived refresh tokens.
+
+* **Granular Access Control:** Provides role-based access control and dedicated permission classes for managing users, roles, groups, domains, and tags.
+
+* **Secure Password Reset with Backup Codes:** Allows users to reset their password using a one-time backup code. Backup codes are securely hashed before being stored in the database and are marked as used after successful verification.
+
+* **Automatic Backup Code Rotation:** After a backup code is successfully used for password recovery, it is invalidated and a new backup code is generated.
+
+* **User Enumeration Protection:** Password reset failures use a generic error response for invalid account information and invalid backup codes, reducing the risk of revealing whether a username exists.
+
+* **Domain & Tag Management:** Provides APIs for managing domains and dynamically assigning tags to domains, supporting classification, filtering, and organizational domain management.
+
+* **Group Management:** Supports group creation, user-group assignment, primary group management, and domain association.
+
+* **User Management:** Provides administrative functionality for managing users, roles, account status, and pending users.
+
+* **Security Audit Logging:** Records security-sensitive events such as password reset attempts using structured logs while excluding sensitive information such as passwords, tokens, and backup codes.
+
+* **Automated Testing:** Includes module-based unit and integration tests covering authentication, password reset, user management, group management, and domain/tag management.
 ---
 
 ## 📁 Project Architecture & Structure
 
-The project strictly follows the **Separation of Concerns (SoC)** principle, breaking down views, serializers, and test suites into domain-specific modules for maximum maintainability:
+The project follows the **Separation of Concerns (SoC)** principle by organizing authentication, user management, group management, and domain/tag management into separate Django applications.
+
+Each application is responsible for its own domain-specific views, serializers, permissions, utilities, and test suites, while the `identity` application provides the core data models and shared identity-related functionality.
+
+This modular architecture improves **maintainability, scalability, testability, and separation of responsibilities**.
 
 ```text
-📁 iam2/                      # Project root configuration directory
-├── 📁 .idea/                 # IDE configurations
-├── 📁 .venv/                 # Python Virtual Environment
-├── 📁 accounts/              # Main IAM and user management application
-│   ├── 📁 migrations/        # Database migration files (Initial to domain/group updates)
-│   ├── 📁 serializers/       # Decoupled DRF serializers matching each module
+📁 iam2/                                      # Project root
+│
+├── 📁 identity/                              # Core identity and data models
+│   ├── 📁 migrations/                        # Database migration files
+│   ├── 📁 serializers/                       # Legacy/core DRF serializers
+│   ├── 📁 tests/                             # Legacy/core test suites
+│   ├── 📁 views/                             # Legacy/core API views
+│   ├── __init__.py
+│   ├── admin.py                              # Django admin configuration
+│   ├── apps.py                               # Django application configuration
+│   ├── formatters.py                         # Response/log formatting utilities
+│   ├── models.py                             # Core data models
+│   ├── permissions.py                        # Custom permission classes
+│   ├── services.py                           # Service-layer and security audit helpers
+│   ├── urls.py                               # Identity application routing
+│   └── utils.py                              # Backup code generation and verification
+│
+├── 📁 accounts/                              # Authentication and account management
+│   ├── 📁 serializers/
 │   │   ├── __init__.py
-│   │   ├── auth_serializers.py
-│   │   ├── domain_serializers.py
-│   │   ├── group_serializers.py
-│   │   └── user_serializers.py
-│   ├── 📁 tests/             # Dedicated unit and integration test suites
+│   │   ├── get_my_role.py
+│   │   ├── login.py
+│   │   ├── profile_update.py
+│   │   ├── register.py
+│   │   └── reset_pass.py
+│   │
+│   ├── 📁 tests/
 │   │   ├── __init__.py
-│   │   ├── test_auth.py
-│   │   ├── test_domain.py
-│   │   ├── test_group.py
-│   │   └── test_user.py
-│   ├── 📁 views/             # Decoupled views handling distinct operations
+│   │   ├── test_get_my_role.py
+│   │   ├── test_login.py
+│   │   ├── test_profile_update.py
+│   │   ├── test_register.py
+│   │   └── test_reset_pass.py
+│   │
+│   ├── 📁 views/
 │   │   ├── __init__.py
-│   │   ├── auth_views.py
-│   │   ├── domain_views.py
-│   │   ├── group_views.py
-│   │   ├── reset_pass_views.py
-│   │   └── user_views.py
-│   ├── admin.py              # Admin panel registrations
-│   ├── apps.py               # Application configuration
-│   ├── models.py             # Custom User and Domain model configurations
-│   ├── permissions.py        # Custom API permission classes
-│   ├── urls.py               # Local application routing
-│   └── utils.py              # Cryptographic token utilities and helpers
-├── 📁 iam2/                  # Core Django project configuration folder
+│   │   ├── get_my_role.py
+│   │   ├── login.py
+│   │   ├── profile_update.py
+│   │   ├── register.py
+│   │   └── reset_pass.py
+│   │
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── permissions.py
+│   ├── urls.py
+│   └── utils.py
+│
+├── 📁 user_management/                      # User and role management
+│   ├── 📁 serializers/
+│   │   ├── __init__.py
+│   │   ├── assign_role.py
+│   │   ├── list_roles.py
+│   │   ├── list_users.py
+│   │   ├── manage_status.py
+│   │   └── pending_users.py
+│   │
+│   ├── 📁 tests/
+│   │   ├── __init__.py
+│   │   ├── test_assign_role.py
+│   │   ├── test_list_roles.py
+│   │   ├── test_list_users.py
+│   │   ├── test_manage_status.py
+│   │   └── test_pending_users.py
+│   │
+│   ├── 📁 views/
+│   │   ├── __init__.py
+│   │   ├── assign_role.py
+│   │   ├── list_roles.py
+│   │   ├── list_users.py
+│   │   ├── manage_status.py
+│   │   └── pending_users.py
+│   │
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── permissions.py
+│   ├── urls.py
+│   └── utils.py
+│
+├── 📁 group_management/                     # Group management
+│   ├── 📁 serializers/
+│   │   ├── __init__.py
+│   │   ├── group_assign_users.py
+│   │   ├── group_detail.py
+│   │   ├── group_domains.py
+│   │   ├── group_list.py
+│   │   └── group_register.py
+│   │
+│   ├── 📁 tests/
+│   │   ├── __init__.py
+│   │   ├── test_group_assign_users.py
+│   │   ├── test_group_detail.py
+│   │   ├── test_group_domains.py
+│   │   ├── test_group_list.py
+│   │   └── test_group_register.py
+│   │
+│   ├── 📁 views/
+│   │   ├── __init__.py
+│   │   ├── group_assign_users.py
+│   │   ├── group_detail.py
+│   │   ├── group_domains.py
+│   │   ├── group_list.py
+│   │   └── group_register.py
+│   │
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── permissions.py
+│   ├── urls.py
+│   └── utils.py
+│
+├── 📁 domain_tag_management/                # Domain and tag management
+│   ├── 📁 serializers/
+│   │   ├── __init__.py
+│   │   ├── assign_tag_to_domain.py
+│   │   ├── domain_list.py
+│   │   ├── import_or_edit_domain.py
+│   │   ├── tag_create.py
+│   │   ├── tag_edit_or_delete.py
+│   │   └── tag_list.py
+│   │
+│   ├── 📁 tests/
+│   │   ├── __init__.py
+│   │   ├── test_assign_tag_to_domain.py
+│   │   ├── test_domain_list.py
+│   │   ├── test_import_or_edit_domain.py
+│   │   ├── test_tag_create.py
+│   │   ├── test_tag_edit_or_delete.py
+│   │   └── test_tag_list.py
+│   │
+│   ├── 📁 views/
+│   │   ├── __init__.py
+│   │   ├── assign_tag_to_domain.py
+│   │   ├── domain_list.py
+│   │   ├── import_or_edit_domain.py
+│   │   ├── tag_create.py
+│   │   ├── tag_edit_or_delete.py
+│   │   └── tag_list.py
+│   │
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── permissions.py
+│   ├── urls.py
+│   └── utils.py
+│
+├── 📁 middleware/                           # Custom Django middleware
+│   ├── __init__.py
+│   └── logging_middleware.py                # Request/response logging middleware
+│
+├── 📁 config/                               # Core Django project configuration
 │   ├── __init__.py
 │   ├── asgi.py
-│   ├── settings.py           # Centralized settings and credentials configuration
-│   ├── urls.py               # Global root routing configuration
+│   ├── settings.py                           # Project settings
+│   ├── urls.py                               # Global URL routing
 │   └── wsgi.py
-├── .env                      # Local environment variables
-├── .env.example              # Sample template for environment configurations
-├── .gitignore                # Git ignore configurations
-├── LICENSE                   # Project license file
-├── manage.py                 # Django command-line utility
-└── README.md                 # Project documentation
-```
+│
+├── .env.example                              # Environment variable template
+├── .gitignore                                # Git ignore rules
+├── .gitlab-ci.yml                            # GitLab CI/CD configuration
+├── Dockerfile                                # Docker image configuration
+├── LICENSE                                   # Project license
+├── README.md                                 # Project documentation
+├── requirements.txt                          # Python dependencies
+├── manage.py                                 # Django management utility
+├── logger.py                                 # Project-level logging configuration
+├── import_domains.py                         # Domain data import script
+├── delete_domains.py                         # Domain deletion/cleanup script
+│
+#not sure about xlsx file in tree... i should check it
+├── 📄 Fa_domain (1).xlsx                     # Domain data source
+└── 📄 لیست سایت های فارسی.xlsx                # Persian website/domain list```
+
+### 🔐 Ignored Files
+
+The following files and directories are intentionally excluded from version control
+for security and environment-specific reasons:
+
+- `.env` — Contains local environment variables and sensitive configuration.
+- `logs/` — Contains runtime application and security logs.
+- `.venv/` — Local Python virtual environment.
 
 ## 🚀 Installation & Setup
 
-Follow these steps to set up and run the service locally:
+Follow these steps to set up and run the project locally.
 
 ### 1. Clone the Repository
+
 ```bash
-git clone [https://github.com/neginnnnnn2004/iam-project.git](https://github.com/neginnnnnn2004/iam-project.git)
-cd iam-project
+git clone https://gitlab.lioradco.ir/domain-labeling/backend.git
+cd backend
 ```
 
-## 2. Configure Environment Variables
+### 2. Configure Environment Variables
+
+Create your local environment file from the provided template:
+
+```bash
 cp .env.example .env
+```
 
-## 3. Configure Virtual Environment
-# Activate the virtual environment
-# On Windows:
+> **Note:** Update the values in `.env` according to your local database and environment configuration. The `.env` file is not included in version control because it may contain sensitive information.
+
+### 3. Configure the Virtual Environment
+
+Create a Python virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+Activate the virtual environment:
+
+**Windows:**
+
+```bash
 .venv\Scripts\activate
-# On macOS/Linux:
+```
+
+**macOS/Linux:**
+
+```bash
 source .venv/bin/activate
+```
 
-## 4. Install Dependencies
+### 4. Install Dependencies
+
+Install the required Python packages:
+
+```bash
 pip install -r requirements.txt
+```
 
-## 5. Database Migrations
+### 5. Apply Database Migrations
+
+Run the Django database migrations:
+
+```bash
 python manage.py migrate
+```
 
-## 6. Run the Test Suite
+### 6. Run the Test Suite
+
+Run all project tests to verify the application:
+
+```bash
 python manage.py test
+```
 
-## 7. Run the Server
+### 7. Run the Development Server
+
+Start the Django development server:
+
+```bash
 python manage.py runserver
+```
 
+The application will then be available at:
+
+```text
+http://127.0.0.1:8000/
+```
+
+#it should be edit
 🗺️ API Endpoints Reference
 1. Authentication & Profile Management (auth_views.py)
 POST /api/accounts/register/ - Registers a new user account profile (Validation codes: 10, 11, 12).
