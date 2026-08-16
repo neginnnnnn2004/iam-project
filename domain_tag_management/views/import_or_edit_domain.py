@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 from identity.models import  Domain
 from identity.permissions import IsAdminRole
-from domain_tag_management.serializers.import_or_edit_domain import (DomainRegisterSerializer)
+from domain_tag_management.serializers.import_or_edit_domain import (DomainImportOrEditSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
 
@@ -35,9 +35,9 @@ class ImportOrEditDomainView(APIView):
 
     @swagger_auto_schema(
         operation_description="Bulk or single addition of domains with admin access (automatic validation, duplicate removal, and root domain extraction)",
-        request_body=DomainRegisterSerializer(many=True),
+        request_body=DomainImportOrEditSerializer(many=True),
         responses={
-            201: DomainRegisterSerializer(many=True),
+            201: DomainImportOrEditSerializer(many=True),
             400: "Bad Request (Code 10)"
         }
     )
@@ -81,7 +81,7 @@ class ImportOrEditDomainView(APIView):
                 "created_domains": []
             }, status=status.HTTP_200_OK)
 
-        serializer = DomainRegisterSerializer(data=cleaned_items, many=True)
+        serializer = DomainImportOrEditSerializer(data=cleaned_items, many=True)
 
         if not serializer.is_valid():
             return Response({
@@ -107,7 +107,7 @@ class ImportOrEditDomainView(APIView):
                 if groups:
                     instance.groups.set(groups)
 
-        created_data = DomainRegisterSerializer(created_instances, many=True).data
+        created_data = DomainImportOrEditSerializer(created_instances, many=True).data
 
         response_payload = {
             "message": {
@@ -132,7 +132,7 @@ class ImportOrEditDomainView(APIView):
         - For single update: Send an Object: {"domain_name": "a.com", "description": "new"}
         - For bulk update: Send an Array: [{"domain_name": "a.com", ...}, ...]
         """,
-        request_body=DomainRegisterSerializer(many=True),
+        request_body=DomainImportOrEditSerializer(many=True),
         responses={
             200: "Domains updated successfully",
             400: "Bad Request (Code 10)"
@@ -164,7 +164,7 @@ class ImportOrEditDomainView(APIView):
                         }
                         continue
 
-                    serializer = DomainRegisterSerializer(domain_instance, data=item, partial=True)
+                    serializer = DomainImportOrEditSerializer(domain_instance, data=item, partial=True)
                     if not serializer.is_valid():
                         errors[f"item_{index}"] = serializer.errors
                         continue
@@ -188,7 +188,7 @@ class ImportOrEditDomainView(APIView):
                     "fa": f"مشخصات تعداد {len(updated_domains)} دامنه با موفقیت بروزرسانی شد.",
                     "en": f"Details of {len(updated_domains)} domain(s) were updated successfully."
                 },
-                "data": DomainRegisterSerializer(updated_domains, many=True).data
+                "data": DomainImportOrEditSerializer(updated_domains, many=True).data
             }, status=status.HTTP_200_OK)
 
         else:
@@ -212,7 +212,7 @@ class ImportOrEditDomainView(APIView):
                     },
                 }, status=status.HTTP_404_NOT_FOUND)
 
-            serializer = DomainRegisterSerializer(domain, data=data, partial=True)
+            serializer = DomainImportOrEditSerializer(domain, data=data, partial=True)
             if not serializer.is_valid():
                 return Response({
                     "error_code": 10,
@@ -224,4 +224,4 @@ class ImportOrEditDomainView(APIView):
                 }, status=status.HTTP_400_BAD_REQUEST)
 
             updated_domain = serializer.save()
-            return Response(DomainRegisterSerializer(updated_domain).data, status=status.HTTP_200_OK)
+            return Response(DomainImportOrEditSerializer(updated_domain).data, status=status.HTTP_200_OK)
