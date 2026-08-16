@@ -2,7 +2,7 @@ from rest_framework import serializers
 from identity.models import Domain, Tag
 
 
-class DomainRegisterSerializer(serializers.ModelSerializer):
+class DomainListSerializer(serializers.ModelSerializer):
     """
     Serializer for registering a new domain.
 
