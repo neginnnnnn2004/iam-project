@@ -27,7 +27,7 @@ class DomainDetailView(APIView):
         role_code = user.role.code if user.role else None
 
         is_admin = user.is_superuser or (role_code in ['admin', 'super_admin'])
-        is_limited = (role_code in ['limited', 'restricted'])
+        is_limited = (role_code in ['limited'])
 
         if is_admin:
             domains = Domain.objects.filter(deleted_at__isnull=True)
