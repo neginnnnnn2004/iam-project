@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from identity.models import Domain
+from identity.models import Domain, Group
 
 
 class DomainImportOrEditSerializer(serializers.ModelSerializer):
@@ -51,6 +51,11 @@ class DomainImportOrEditSerializer(serializers.ModelSerializer):
     created_by = serializers.ReadOnlyField(
         source='created_by.username'
     )
+    groups = serializers.PrimaryKeyRelatedField(
+        queryset=Group.objects.all(),
+        required=False,
+        allow_null=True
+    )
 
     class Meta:
         model = Domain
@@ -62,28 +67,10 @@ class DomainImportOrEditSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['created_by']
 
-    def create(self, validated_data):
-        """
-        Create and return a new Domain instance.
 
-        The groups are extracted from the validated data before creating
-        the Domain instance. After the domain is created, the provided
-        groups are assigned to it.
-
-        Args:
-            validated_data (dict):
-                Validated data containing the domain information and
-                optionally a list of groups.
-
-        Returns:
-            Domain:
-                The newly created Domain instance.
-        """
-        groups = validated_data.pop('groups', [])
-
-        domain = Domain.objects.create(**validated_data)
-
-        if groups:
-            domain.groups.set(groups)
-
-        return domain
+class DomainDeleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Domain
+        fields = [
+            'domain_name',
+        ]

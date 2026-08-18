@@ -1,14 +1,18 @@
 from urllib.parse import urlparse
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
 
 from django.db import transaction
+from django.utils import timezone
+
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+from rest_framework import status
 from rest_framework.views import APIView
 
 from identity.models import  Domain
 from identity.permissions import IsAdminRole
-from domain_tag_management.serializers.import_or_edit_domain import (DomainImportOrEditSerializer)
+
+from domain_tag_management.serializers.import_or_edit_domain import (DomainImportOrEditSerializer, DomainDeleteSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
 
@@ -94,18 +98,18 @@ class ImportOrEditDomainView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         domains_to_create = []
-        for validated_data in serializer.validated_data:
-            groups = validated_data.pop('groups', [])
-            domain_instance = Domain(**validated_data, created_by=request.user)
-            domains_to_create.append((domain_instance, groups))
 
+        for  validated_data in serializer.validated_data:
+            domain_instance = Domain(
+                **validated_data,
+                created_by = request.user
+            )
+            domains_to_create.append(domain_instance)
         with transaction.atomic():
             created_instances = Domain.objects.bulk_create(
-                [item[0] for item in domains_to_create]
+                domains_to_create
             )
-            for instance, groups in zip(created_instances, [item[1] for item in domains_to_create]):
-                if groups:
-                    instance.groups.set(groups)
+
 
         created_data = DomainImportOrEditSerializer(created_instances, many=True).data
 
@@ -225,3 +229,143 @@ class ImportOrEditDomainView(APIView):
 
             updated_domain = serializer.save()
             return Response(DomainImportOrEditSerializer(updated_domain).data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        operation_description="""
+        Soft delete domain(s) with admin access.
+
+        - For single delete:
+          {
+              "domain_name": "example.com"
+          }
+
+        - For bulk delete:
+          [
+              {"domain_name": "example.com"},
+              {"domain_name": "test.com"}
+          ]
+
+        Deleted domains are soft-deleted by setting deleted_at.
+        """,
+        request_body=DomainDeleteSerializer(many=True),
+        responses={
+            200: "Domains deleted successfully",
+            400: "Bad Request",
+            404: "Domain not found"
+        }
+    )
+    def delete(self, request):
+        data = request.data
+
+        # Bulk Delete
+        if isinstance(data, list):
+            deleted_domains = []
+            errors = {}
+
+            with transaction.atomic():
+                for index, item in enumerate(data):
+                    domain_name = item.get('domain_name')
+                    if not domain_name:
+                        errors[f"item_{index}"] = {
+                            "fa": "ارسال فیلد domain_name برای حذف الزامی است.",
+                            "en": "The domain_name field is required for deleting."
+                        }
+                        continue
+
+                    try:
+                        domain_instance = Domain.objects.get(
+                            domain_name=domain_name,
+                            deleted_at__isnull=True
+                        )
+
+                    except Domain.DoesNotExist:
+                        errors[f"item_{index}"] = {
+                            "fa": f"دامنه با نام «{domain_name}» یافت نشد.",
+                            "en": f"Domain with name «{domain_name}» was not found."
+                        }
+                        continue
+
+                    domain_instance.deleted_at = timezone.now()
+                    domain_instance.save(
+                        update_fields=['deleted_at']
+                    )
+
+                    deleted_domains.append(domain_instance)
+
+                if errors:
+                    transaction.set_rollback(True)
+                    return Response(
+                        {
+                            "error_code": 10,
+                            "message": {
+                                "fa": "برخی از دامنه‌ها قابل حذف نیستند.",
+                                "en": "Some domains could not be deleted."
+                            },
+                            "detail": errors
+                        },
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+            return Response(
+                {
+                    "message": {
+                        "fa": f"{len(deleted_domains)} دامنه با موفقیت حذف شدند.",
+                        "en": f"{len(deleted_domains)} domain(s) were deleted successfully."
+                    },
+                    "deleted_count": len(deleted_domains),
+                    "deleted_domains": [
+                        domain.domain_name
+                        for domain in deleted_domains
+                    ]
+                },
+                status=status.HTTP_200_OK
+            )
+
+        # Single Delete
+        domain_name = data.get('domain_name')
+
+        if not domain_name:
+            return Response(
+                {
+                    "error_code": 10,
+                    "message": {
+                        "fa": "ارسال فیلد domain_name در بدنه درخواست الزامی است.",
+                        "en": "The domain_name field is required in the request body."
+                    }
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            domain = Domain.objects.get(
+                domain_name=domain_name,
+                deleted_at__isnull=True
+            )
+
+        except Domain.DoesNotExist:
+            return Response(
+                {
+                    "error_code": 10,
+                    "message": {
+                        "fa": f"دامنه‌ای با نام «{domain_name}» یافت نشد.",
+                        "en": f"Domain with name «{domain_name}» was not found."
+                    }
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        domain.deleted_at = timezone.now()
+        domain.save(
+            update_fields=['deleted_at']
+        )
+
+        return Response(
+            {
+                "message": {
+                    "fa": f"دامنه «{domain_name}» با موفقیت حذف شد.",
+                    "en": f"Domain «{domain_name}» was deleted successfully."
+                },
+                "deleted_domain": domain_name
+            },
+            status=status.HTTP_200_OK
+        )
