@@ -1,6 +1,17 @@
 from rest_framework import serializers
-from identity.models import User
+from identity.models import User, Role
 
+
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = (
+            'id',
+            'code',
+            'title',
+            'level',
+            'is_system',
+        )
 
 class ListOfUsersSerializer(serializers.ModelSerializer):
     """
@@ -25,6 +36,7 @@ class ListOfUsersSerializer(serializers.ModelSerializer):
               'phone': '0912...', 'first_name': 'Ali', 'last_name': 'Rezaei'}]
         """
 
+    role = RoleSerializer(read_only=True)
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'phone', 'first_name', 'last_name')
+        fields = ('id', 'username', 'email', 'phone', 'first_name', 'last_name','role')

@@ -30,10 +30,3 @@ class DomainRegisterSerializer(serializers.ModelSerializer):
         model = Domain
         fields = ['domain_name', 'description', 'created_by', 'groups']
         read_only_fields = ['created_by']
-
-    def create(self, validated_data):
-        groups = validated_data.pop('groups', [])
-        domain = Domain.objects.create(**validated_data)
-        if groups:
-            domain.groups.set(groups)
-        return domain

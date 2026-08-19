@@ -26,7 +26,7 @@ class AdminListOfGroupsSerializer(serializers.ModelSerializer):
         """
     class Meta:
         model = Group
-        fields = ['id', 'code', 'title', 'description', 'is_active']
+        fields = ['id', 'code', 'title', 'description', 'is_active','user_count','tag_count']
 
 class UserListOfGroupsSerializer(serializers.ModelSerializer):
     """

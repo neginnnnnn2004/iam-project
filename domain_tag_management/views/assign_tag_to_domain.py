@@ -10,9 +10,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 from identity.models import Domain, Tag, User_Domain_Tag
 from identity.permissions import IsAllowedUser
-from domain_tag_management.serializers.assign_tag_to_domain import (
-    BulkSyncDomainTagsSerializer,
-)
+from domain_tag_management.serializers.assign_tag_to_domain import (BulkSyncDomainTagsSerializer)
 
 
 class BulkSyncDomainTagsView(APIView):

@@ -6,31 +6,30 @@ class TagRegisterSerializer(serializers.ModelSerializer):
     """
     Serializer for registering a new tag.
 
-    Handles the creation of a Tag instance and provides the tag's
-    basic information, including its title, description, active status,
-    and the username of the user who created it.
+    Handles validation and creation of a Tag instance and provides
+    the tag's basic information, including its title, description,
+    active status, and creator.
 
     Fields:
-        code (str):
-            The unique code of the tag. This field is read-only and
-            is generated automatically.
+        id (int):
+            Unique identifier of the tag.
 
-        title (str):
-            The title or name of the tag.
-
-        description (str):
-            A description providing additional information about the tag.
-
-        is_active (bool):
-            Indicates whether the tag is currently active.
-
-        created_by (str):
-            The username of the user who created the tag.
+        code (int):
+            Unique code generated automatically for the tag.
             This field is read-only.
 
-    Notes:
-        The `code` and `created_by` fields are read-only and cannot be
-        modified through this serializer.
+        title (str):
+            Title or name of the tag.
+
+        description (str):
+            Additional information about the tag.
+
+        is_active (bool):
+            Indicates whether the tag is active.
+
+        created_by (str):
+            Username of the user who created the tag.
+            This field is read-only.
     """
 
     created_by = serializers.ReadOnlyField(
@@ -40,13 +39,53 @@ class TagRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = [
+            'id',
             'code',
             'title',
             'description',
             'is_active',
-            'created_by'
+            'created_by',
+            'created_at',
+            'updated_at',
+            'deleted_at',
         ]
         read_only_fields = [
+            'created_at',
+            'updated_at',
+            'deleted_at',
             'created_by',
             'code'
         ]
+
+    def validate_title(self, value):
+        """
+        Validate that the normalized tag title is unique.
+
+        Args:
+            value (str):
+                The tag title submitted by the client.
+
+        Returns:
+            str:
+                The original tag title.
+
+        Raises:
+            serializers.ValidationError:
+                If a tag with the same normalized title already exists.
+        """
+        normalized_title = value.strip().lower()
+
+        queryset = Tag.objects.filter(
+            title_normalized=normalized_title
+        )
+
+        if self.instance:
+            queryset = queryset.exclude(pk=self.instance.pk)
+
+        if queryset.exists():
+            raise serializers.ValidationError(
+                "A tag with this title already exists.",
+                code='tag_exists'
+            )
+
+        return value

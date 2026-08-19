@@ -21,11 +21,12 @@ class TagCreateView(APIView):
 
         Custom error codes:
         - code 10: The submitted information is incomplete or invalid.
+        -code 11: Tag already exists
         """,
         request_body=TagRegisterSerializer,
         responses={
             201: TagRegisterSerializer(),
-            400: "Bad Request (Code 10)",
+            400: "Bad Request ",
             401: "Unauthorized",
             403: "Forbidden",
         }
@@ -33,6 +34,18 @@ class TagCreateView(APIView):
     def post(self, request):
         serializer = TagRegisterSerializer(data=request.data)
         if not serializer.is_valid():
+            if 'title' in serializer.errors:
+                for error in serializer.errors['title']:
+                    if getattr(error, 'code', None) =='tag_exists':
+                        return Response({
+                            "error_code": 11,
+                            "message": {
+                                "fa": "این تگ قبلاً ثبت شده است.",
+                                "en": "This tag already exists."
+                            },
+                            "detail": serializer.errors
+                        }, status=status.HTTP_400_BAD_REQUEST)
+
             return Response({
                 "error_code": 10,
                 "message": {

@@ -1,59 +1,13 @@
 from rest_framework import serializers
-from identity.models import User_Domain_Tag, Domain, Tag
 
 
-class UserDomainTagSerializer(serializers.ModelSerializer):
+class UserDomainTagAddSerializer(serializers.Serializer):
     """
-    Serializer for creating a user-specific tag assignment to a domain.
-
-    Converts the domain name and tag title provided by the client into
-    their corresponding Domain and Tag model instances.
-
-    The user is automatically determined from the authenticated request
-    and cannot be specified or modified by the client.
+    Serializer for a single domain-tag "add" or "delete" operation
+    within a bulk sync request.
     """
-
-    domain_name = serializers.SlugRelatedField(
-        slug_field='domain_name',
-        queryset=Domain.objects.all(),
-        source='domain'
-    )
-
-    title = serializers.SlugRelatedField(
-        slug_field='title',
-        queryset=Tag.objects.all(),
-        source='tag'
-    )
-
-    user = serializers.ReadOnlyField(
-        source='user.username'
-    )
-
-    class Meta:
-        model = User_Domain_Tag
-        fields = [
-            'user',
-            'domain_name',
-            'title',
-            'created_at',
-            'updated_at'
-        ]
-
-    def create(self, validated_data):
-        """
-        Create a User_Domain_Tag for the authenticated user.
-
-        Args:
-            validated_data (dict):
-                Validated domain and tag data.
-
-        Returns:
-            User_Domain_Tag:
-                The newly created domain-tag relationship.
-        """
-        validated_data['user_id'] = self.context['request'].user.id
-
-        return User_Domain_Tag.objects.create(**validated_data)
+    domain_name = serializers.CharField()
+    title = serializers.CharField()
 
 
 class UserDomainTagPatchSerializer(serializers.Serializer):
@@ -107,7 +61,7 @@ class BulkSyncDomainTagsSerializer(serializers.Serializer):
             List of domain tags to be soft-deleted.
     """
 
-    add = UserDomainTagSerializer(
+    add = UserDomainTagAddSerializer(
         many=True,
         required=False,
         default=list
@@ -119,7 +73,7 @@ class BulkSyncDomainTagsSerializer(serializers.Serializer):
         default=list
     )
 
-    delete = UserDomainTagSerializer(
+    delete = UserDomainTagAddSerializer(
         many=True,
         required=False,
         default=list

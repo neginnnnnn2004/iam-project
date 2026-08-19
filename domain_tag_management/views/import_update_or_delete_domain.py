@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from identity.models import  Domain
 from identity.permissions import IsAdminRole
 
-from domain_tag_management.serializers.import_or_edit_domain import (DomainImportOrEditSerializer, DomainDeleteSerializer)
+from domain_tag_management.serializers.import_update_or_delete_domain import (DomainImportOrEditSerializer, DomainDeleteSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
 

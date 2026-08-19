@@ -28,4 +28,4 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = "__all__"
-        read_only_fields = ["assigned_by", "deleted_at", "created_at", "updated_at", "updated_by", "code"]
+        read_only_fields = ["assigned_by", "deleted_at", "created_at", "updated_at", "code"]

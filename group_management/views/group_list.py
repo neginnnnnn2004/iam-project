@@ -1,3 +1,4 @@
+from django.db.models import Count, Q
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -36,11 +37,26 @@ class ListOfGroupsView(APIView):
             active_groups = Group.objects.filter(deleted_at__isnull=True)
 
             if is_admin:
-                groups = active_groups
+                groups = active_groups.annotate(
+                    user_count=Count(
+                        'group_memberships',
+                        filter=Q(group_memberships__deleted_at__isnull=True),
+                        distinct=True
+                    ),
+                    tags_count=Count(
+                        'domains__user_domain_tag',
+                        filter=Q(domains__user_domain_tag__deleted_at__isnull=True),
+                        distinct=True
+                    )
+                )
                 serializer = AdminListOfGroupsSerializer(groups, many=True)
                 access_type = 'admin'
             else:
-                user_group_ids = UserGroup.objects.filter(user=user).values_list('group_id', flat=True)
+                user_group_ids = UserGroup.objects.filter(
+                    user=user,
+                    deleted_at__isnull=True
+                ).values_list('group_id', flat=True)
+
                 groups = active_groups.filter(id__in=user_group_ids).distinct()
                 serializer = UserListOfGroupsSerializer(groups, many=True)
                 access_type = 'member'
