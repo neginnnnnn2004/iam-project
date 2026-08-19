@@ -33,7 +33,7 @@ class UserGroupSerializer(serializers.ModelSerializer):
        """
     class Meta:
         model = UserGroup
-        fields = ['user', 'group', 'is_primary']
+        fields = ['user', 'group', 'is_primary','assigned_by']
         read_only_fields = ["assigned_by"]
 
     def validate(self, data):

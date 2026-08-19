@@ -65,8 +65,10 @@ class UserLoginView(APIView):
                 "detail": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
+        normalized_username = serializer.validated_data['username'].strip().lower()
+
         user: Optional[User] = authenticate(
-            username=serializer.validated_data['username'],
+            username=normalized_username,
             password=serializer.validated_data['password']
         )
 
