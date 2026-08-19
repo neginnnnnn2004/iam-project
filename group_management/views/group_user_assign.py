@@ -10,7 +10,7 @@ from identity.permissions import IsAdminRole
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from group_management.serializers.group_assign_users import (UserGroupSerializer)
+from group_management.serializers.group_user_assign import (UserGroupSerializer)
 
 
 # Assign users to group by admin
