@@ -24,6 +24,10 @@ class AdminListOfGroupsSerializer(serializers.ModelSerializer):
             [{'id': 1, 'code': 'admins', 'title': 'Admins',
               'description': '...', 'is_active': True}]
         """
+
+    user_count = serializers.IntegerField(read_only=True)
+    tag_count = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Group
         fields = ['id', 'code', 'title', 'description', 'is_active','user_count','tag_count']
