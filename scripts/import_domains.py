@@ -26,12 +26,12 @@ def extract_root_domain(url_or_domain: str) -> str:
 #####define path files#####
 file_path1 = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
-    "data/لیست سایت های فارسی.xlsx"
+    "../data/لیست سایت های فارسی.xlsx"
 )
 
 file_path2 = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
-    "data/Fa_domain (1).xlsx"
+    "../data/Fa_domain (1).xlsx"
 )
 
 def import_with_tags(file_path1, username):
