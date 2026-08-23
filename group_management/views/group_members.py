@@ -15,7 +15,7 @@ from identity.models import Group, UserGroup
 from group_management.serializers.group_members import GroupMemberSerializer
 
 
-class GroupMembersView(APIView):
+class GroupMembersListView(APIView):
     """
     List and remove members of a group (admin access).
     """
@@ -82,6 +82,17 @@ class GroupMembersView(APIView):
         )
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+class GroupMemberDeleteView(APIView):
+    """
+    Remove a member from a group.
+    """
+    permission_classes = [IsAuthenticated, IsAdminRole]
+
+    def get_group(self, group_id):
+        return Group.objects.filter(
+            pk=group_id,
+            deleted_at__isnull=True
+        ).first()
 
     @swagger_auto_schema(
         operation_description="""
@@ -94,13 +105,15 @@ class GroupMembersView(APIView):
         """,
         manual_parameters=[
             openapi.Parameter(
-                'group_id', openapi.IN_PATH,
+                'group_id',
+                openapi.IN_PATH,
                 description="(ID) Group",
                 type=openapi.TYPE_INTEGER,
                 required=True,
             ),
             openapi.Parameter(
-                'user_id', openapi.IN_PATH,
+                'user_id',
+                openapi.IN_PATH,
                 description="(ID) User to remove",
                 type=openapi.TYPE_INTEGER,
                 required=True,
@@ -115,22 +128,18 @@ class GroupMembersView(APIView):
     )
     def delete(self, request, group_id, user_id):
         group = self.get_group(group_id)
+
         if not group:
-            log_critical_event(
-                action="GROUP_MEMBER_REMOVE",
-                status_type='failed',
-                request=request,
-                user_id=request.user.id,
-                error_code=65,
-                extra={'group_id': group_id},
-            )
-            return Response({
-                "error_code": 65,
-                "message": {
-                    "fa": "گروه مورد نظر یافت نشد.",
-                    "en": "The requested group was not found."
+            return Response(
+                {
+                    "error_code": 65,
+                    "message": {
+                        "fa": "گروه مورد نظر یافت نشد.",
+                        "en": "The requested group was not found."
+                    },
                 },
-            }, status=status.HTTP_404_NOT_FOUND)
+                status=status.HTTP_404_NOT_FOUND
+            )
 
         membership = UserGroup.objects.filter(
             group=group,
@@ -139,31 +148,18 @@ class GroupMembersView(APIView):
         ).first()
 
         if not membership:
-            log_critical_event(
-                action="GROUP_MEMBER_REMOVE",
-                status_type='failed',
-                request=request,
-                user_id=request.user.id,
-                error_code=67,
-                extra={'group_id': group_id, 'target_user_id': user_id},
-            )
-            return Response({
-                "error_code": 67,
-                "message": {
-                    "fa": "این کاربر عضو این گروه نیست.",
-                    "en": "This user is not a member of this group."
+            return Response(
+                {
+                    "error_code": 67,
+                    "message": {
+                        "fa": "این کاربر عضو این گروه نیست.",
+                        "en": "This user is not a member of this group."
+                    },
                 },
-            }, status=status.HTTP_404_NOT_FOUND)
+                status=status.HTTP_404_NOT_FOUND
+            )
 
         membership.deleted_at = timezone.now()
         membership.save(update_fields=['deleted_at'])
-
-        log_critical_event(
-            action="GROUP_MEMBER_REMOVE",
-            status_type='success',
-            request=request,
-            user_id=request.user.id,
-            extra={'group_id': group.id, 'removed_user_id': user_id},
-        )
 
         return Response(status=status.HTTP_204_NO_CONTENT)
