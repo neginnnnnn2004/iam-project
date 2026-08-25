@@ -13,7 +13,7 @@ from identity.services import log_critical_event
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-# Password Reset With Backup Code
+# ================== Password Reset With Backup Code =====================
 class PasswordResetWithBackupCodeView(APIView):
     @swagger_auto_schema(
         operation_description="""
