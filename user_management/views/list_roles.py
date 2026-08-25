@@ -12,7 +12,7 @@ from user_management.serializers.list_roles import ListOfRolesSerializer
 import logging
 logger = logging.getLogger(__name__)
 
-
+# ================== ListOfRoles =====================
 class ListOfRolesView(APIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
