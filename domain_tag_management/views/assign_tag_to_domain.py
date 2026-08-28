@@ -10,6 +10,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 from identity.models import Domain, Tag, User_Domain_Tag
 from identity.permissions import IsAllowedUser
+from identity.services import log_critical_event
 from domain_tag_management.serializers.assign_tag_to_domain import (BulkSyncDomainTagsSerializer,)
 
 
@@ -27,7 +28,8 @@ class BulkSyncDomainTagsView(APIView):
 
     2. Regular users:
        - Can have at most one tag per domain.
-       - Cannot add or update tags when the domain has a main tag.
+       - Cannot add, update, or delete tags when the domain has a
+         main tag.
        - Can CRUD their own tag while no main tag exists.
 
     3. Limited users:
@@ -38,6 +40,9 @@ class BulkSyncDomainTagsView(APIView):
     4. Delete:
        - Soft delete is used.
        - Deleting a main tag frees one of the two main-tag slots.
+       - Regular users cannot delete their tag while a main tag
+         exists on the domain. Admins may still delete their own
+         main tag.
 
     5. Update:
        - Updating a main tag does not create another main tag.
@@ -253,6 +258,8 @@ class BulkSyncDomainTagsView(APIView):
 
         DELETE:
         - Users can delete only their own tags.
+        - Regular users cannot delete their tag when a main tag exists.
+        - Admins can delete their own main tags.
         - Deleting a main tag frees one main-tag slot.
 
         All database modifications are executed atomically.
@@ -279,6 +286,13 @@ class BulkSyncDomainTagsView(APIView):
         )
 
         if not has_access:
+            log_critical_event(
+                action="BULK_SYNC_DOMAIN_TAGS",
+                status_type="failed",
+                request=request,
+                user_id=request.user.id,
+                error_code=403,
+            )
             return response
 
         user = request.user
@@ -293,6 +307,14 @@ class BulkSyncDomainTagsView(APIView):
         )
 
         if not serializer.is_valid():
+            log_critical_event(
+                action="BULK_SYNC_DOMAIN_TAGS",
+                status_type="failed",
+                request=request,
+                user_id=user.id,
+                error_code=60,
+                extra={"detail": serializer.errors},
+            )
             return Response(
                 {
                     "error_code": 60,
@@ -412,6 +434,31 @@ class BulkSyncDomainTagsView(APIView):
                         f"Domain «{domain.domain_name}»: "
                         "no active tag belonging to you "
                         "was found to delete."
+                    ),
+                })
+                continue
+
+            # --------------------------------------------------------
+            # Main tag rule
+            #
+            # Regular users cannot delete their tag while a main
+            # tag exists on the domain. Admins may still delete
+            # their own main tag.
+            # --------------------------------------------------------
+
+            if self._has_main_tag(domain) and not is_admin:
+                errors.append({
+                    "operation": "delete",
+                    "domain_name": domain.domain_name,
+                    "fa": (
+                        f"دامنه «{domain.domain_name}» دارای "
+                        "تگ اصلی است و امکان حذف تگ "
+                        "برای کاربر عادی وجود ندارد."
+                    ),
+                    "en": (
+                        f"Domain «{domain.domain_name}» has a "
+                        "main tag and regular users cannot "
+                        "delete their tag."
                     ),
                 })
                 continue
@@ -892,6 +939,14 @@ class BulkSyncDomainTagsView(APIView):
         # ============================================================
 
         if errors:
+            log_critical_event(
+                action="BULK_SYNC_DOMAIN_TAGS",
+                status_type="failed",
+                request=request,
+                user_id=user.id,
+                error_code=60,
+                extra={"detail": errors},
+            )
             return Response(
                 {
                     "error_code": 60,
@@ -909,6 +964,14 @@ class BulkSyncDomainTagsView(APIView):
         # ============================================================
 
         if requires_confirmation:
+            log_critical_event(
+                action="BULK_SYNC_DOMAIN_TAGS",
+                status_type="pending",
+                request=request,
+                user_id=user.id,
+                error_code=21,
+                extra={"conflicts": requires_confirmation},
+            )
             return Response(
                 {
                     "error_code": 21,
@@ -996,6 +1059,17 @@ class BulkSyncDomainTagsView(APIView):
                         + len(new_main_tags_for_domain)
                         > self.MAX_MAIN_TAGS_PER_DOMAIN
                     ):
+                        log_critical_event(
+                            action="BULK_SYNC_DOMAIN_TAGS",
+                            status_type="failed",
+                            request=request,
+                            user_id=user.id,
+                            error_code=60,
+                            extra={
+                                "reason": "main_tag_limit_race_condition",
+                                "domain_name": domain.domain_name,
+                            },
+                        )
                         return Response(
                             {
                                 "error_code": 60,
@@ -1051,6 +1125,19 @@ class BulkSyncDomainTagsView(APIView):
         # ============================================================
         # 9. SUCCESS
         # ============================================================
+
+        log_critical_event(
+            action="BULK_SYNC_DOMAIN_TAGS",
+            status_type="success",
+            request=request,
+            user_id=user.id,
+            extra={
+                "is_admin": is_admin,
+                "added": len(items_to_create),
+                "updated": len(items_to_update),
+                "deleted": len(ids_to_delete),
+            },
+        )
 
         return Response(
             {
