@@ -23,9 +23,8 @@ class DomainImportOrEditSerializer(serializers.ModelSerializer):
             Username of the user who created the domain.
             This field is read-only.
 
-        groups (list):
-            List of groups associated with the domain. Each group is
-            identified by its primary key.
+        group (int):
+            Primary key of the group associated with the domain.
 
     Notes:
         The ``created_by`` field cannot be provided or modified by the
