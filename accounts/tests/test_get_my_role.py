@@ -240,3 +240,4 @@ class ReturnRoleTest(APITestCase):
             'An error occurred while fetching user role / '
             'خطایی در دریافت نقش کاربر رخ داده است.'
         )
+
