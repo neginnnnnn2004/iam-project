@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 from identity.models import Tag
+from identity.services import log_critical_event
 from domain_tag_management.serializers.tag_list import (TagListSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
@@ -25,4 +26,11 @@ class ListOfTagView(APIView):
     def get(self,request):
         tags= Tag.objects.filter(is_active=True,deleted_at__isnull=True).order_by('title')
         serializer = TagListSerializer(tags , many=True)
+
+        log_critical_event(
+            action="LIST_TAG",
+            status_type="success",
+            request=request,
+            user_id=request.user.id,
+        )
         return Response(serializer.data , status=status.HTTP_200_OK)
