@@ -5,8 +5,8 @@ from django.db.models import Q
 
 from rest_framework.views import APIView
 
-from group_management.serializers import group_domains
 from identity.models import  Domain, UserGroup, User_Domain_Tag
+from identity.services import log_critical_event
 from domain_tag_management.serializers.domain_list import (DomainListSerializer, TagListSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
@@ -36,6 +36,16 @@ class DomainDetailView(APIView):
             domain = Domain.objects.get(pk=pk, deleted_at__isnull=True)
 
         except Domain.DoesNotExist:
+            log_critical_event(
+                action="DOMAIN_DETAIL",
+                status_type='failed',
+                request=request,
+                user_id=request.user.id,
+                error_code=50,
+                extra={
+                    'domain_id': pk,
+                }
+            )
             return Response(
                 {
                     "error_code": 50,
@@ -65,6 +75,16 @@ class DomainDetailView(APIView):
             ).exists()
 
             if not has_access:
+                log_critical_event(
+                    action="DOMAIN_DETAIL",
+                    status_type='failed',
+                    request=request,
+                    user_id=request.user.id,
+                    error_code=50,
+                    extra={
+                        'domain_id': pk,
+                    }
+                )
                 return Response(
                     {
                         "error_code": 50,
@@ -150,7 +170,16 @@ class DomainDetailView(APIView):
 
         domain_data['can_add_tag'] = can_add_tag
         domain_data['has_main_tag'] = has_main_tag
-
+        
+        log_critical_event(
+            action="DOMAIN_DETAIL",
+            status_type='success',
+            request=request,
+            user_id=request.user.id,
+            extra={
+                'domain_id': domain.id,
+            }
+        )
         return Response(
             domain_data,
             status=status.HTTP_200_OK
