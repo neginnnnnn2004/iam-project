@@ -708,3 +708,4 @@ class UserRegisterTest(APITestCase):
         self.assertEqual(response.data['error_code'], 10)
 
         self.assertIn('username', response.data['detail'])
+
