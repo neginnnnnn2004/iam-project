@@ -177,3 +177,4 @@ class UserLoginTest(APITestCase):
         access_token = response.data['access_token']
         token = AccessToken(access_token)
         self.assertEqual(int(token['user_id']),self.user.id)
+
