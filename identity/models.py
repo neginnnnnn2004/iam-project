@@ -162,16 +162,19 @@ class UserGroup(models.Model):
     )
     is_primary = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
-        db_table = 'user_groups'
-
-        unique_together = ('user','group')
-
         constraints = [
             models.UniqueConstraint(
+                fields=['user', 'group'],
+                condition=Q(deleted_at__isnull=True),
+                name='unique_active_user_group'
+            ),
+            models.UniqueConstraint(
                 fields=['user'],
-                condition=Q(is_primary=True),
+                condition=Q(is_primary=True, deleted_at__isnull=True),
                 name='unique_primary_group_per_user'
             )
         ]
@@ -192,10 +195,12 @@ class Domain(models.Model):
     )
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-    groups = models.ManyToManyField(
+    group = models.ForeignKey(
         'Group',
+        on_delete = models.CASCADE,
         related_name='domains',
-        blank=True
+        blank=True,
+        null=True,
     )
     def __str__(self):
         return self.domain_name
@@ -262,9 +267,11 @@ class User_Domain_Tag(models.Model):
     )
     class Meta:
         constraints = [
-            # combine of user & domain should be unique
+            # Only enforce uniqueness among active (non soft-deleted) rows,
+            # so a previously soft-deleted tag doesn't block re-adding it.
             models.UniqueConstraint(
                 fields=['user', 'domain', 'tag'],
+                condition=models.Q(deleted_at__isnull=True),
                 name='unique_user_tag_per_domain'
             )
         ]

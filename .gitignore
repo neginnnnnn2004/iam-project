@@ -24,3 +24,6 @@ Thumbs.db
 # Log files
 logs/
 *.log
+
+# Domain excel data
+/data/
