@@ -153,6 +153,12 @@ class UserRegisterSerializer(serializers.ModelSerializer):
                 "en": "Username cannot consist only of numbers."
             })
 
+        if not re.match(r'^[a-zA-Z0-9_-]+$', username):
+            raise serializers.ValidationError({
+                "fa": "نام کاربری فقط می‌تواند شامل حروف، اعداد، _ و - باشد.",
+                "en": "Username can only contain letters, numbers, underscores, and hyphens."
+            })
+
         if User.objects.filter(username=username).exists():
             raise serializers.ValidationError({
                 "fa": "این نام کاربری قبلاً ثبت شده است.",

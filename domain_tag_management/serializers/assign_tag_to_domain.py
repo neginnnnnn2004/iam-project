@@ -42,6 +42,15 @@ class UserDomainTagPatchSerializer(serializers.Serializer):
         default=False
     )
 
+class UserDomainTagDeleteSerializer(serializers.Serializer):
+    """
+    Serializer for deleting tags.
+    If title is provided, specific tag is deleted.
+    If title is omitted/null, all tags for the user in that domain are deleted.
+    """
+    domain_name = serializers.CharField()
+    title = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+
 
 class BulkSyncDomainTagsSerializer(serializers.Serializer):
     """
@@ -73,7 +82,7 @@ class BulkSyncDomainTagsSerializer(serializers.Serializer):
         default=list
     )
 
-    delete = UserDomainTagAddSerializer(
+    delete =UserDomainTagDeleteSerializer (
         many=True,
         required=False,
         default=list

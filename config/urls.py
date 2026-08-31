@@ -22,7 +22,7 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="IAM2 API",
+        title="Labeling API",
         default_version='v1',
     ),
     public=True,

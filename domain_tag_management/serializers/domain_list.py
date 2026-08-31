@@ -7,7 +7,7 @@ class GroupListSerializer(serializers.ModelSerializer):
     Serializer for representing group information.
 
     This serializer is used to return basic information about a group
-    when groups are included in API responses.
+    when group are included in API responses.
 
     Fields:
         id (int):
@@ -50,7 +50,7 @@ class DomainListSerializer(serializers.ModelSerializer):
             Description of the domain.
         created_by (str):
             Username of the user who created the domain. Read-only.
-        groups (dict):
+        group (dict):
             Group associated with the domain. This field is read-only.
     """
 
@@ -58,7 +58,7 @@ class DomainListSerializer(serializers.ModelSerializer):
         source='created_by.username'
     )
 
-    groups = GroupListSerializer(read_only=True)
+    group = GroupListSerializer(read_only=True)
 
     class Meta:
         model = Domain
@@ -67,7 +67,7 @@ class DomainListSerializer(serializers.ModelSerializer):
             'domain_name',
             'description',
             'created_by',
-            'groups'
+            'group'
         ]
         read_only_fields = ['created_by']
 

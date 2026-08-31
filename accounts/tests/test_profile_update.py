@@ -160,7 +160,10 @@ class ProfileUpdateTest(APITestCase):
         )
 
     # ---------------------------------------------------------
-    # 6. Password confirmation mismatch
+    # 6. Password confirmation mismatch -> error_code 32
+    #    (raised in ProfileUpdateSerializer.validate(), keyed
+    #    to 'confirm_password', caught by the `elif
+    #    'confirm_password' in errors` branch in the view)
     # ---------------------------------------------------------
 
     def test_unsuccessful_password_mismatch(self):
@@ -180,13 +183,16 @@ class ProfileUpdateTest(APITestCase):
             status.HTTP_400_BAD_REQUEST
         )
 
+        self.assertEqual(response.data['error_code'], 32)
+
         self.assertIn(
             "confirm_password",
             response.data['detail']
         )
 
     # ---------------------------------------------------------
-    # 7. Password without confirm_password
+    # 7. Password without confirm_password -> error_code 32
+    #    (raised in validate(), keyed to 'confirm_password')
     # ---------------------------------------------------------
 
     def test_unsuccessful_password_without_confirmation(self):
@@ -205,13 +211,17 @@ class ProfileUpdateTest(APITestCase):
             status.HTTP_400_BAD_REQUEST
         )
 
+        self.assertEqual(response.data['error_code'], 32)
+
         self.assertIn(
             "confirm_password",
             response.data['detail']
         )
 
     # ---------------------------------------------------------
-    # 8. confirm_password without password
+    # 8. confirm_password without password -> error_code 30
+    #    (raised in validate(), keyed to 'password'; the view's
+    #    `if 'password' in errors` branch fires first)
     # ---------------------------------------------------------
 
     def test_unsuccessful_confirmation_without_password(self):
@@ -230,13 +240,79 @@ class ProfileUpdateTest(APITestCase):
             status.HTTP_400_BAD_REQUEST
         )
 
+        self.assertEqual(response.data['error_code'], 30)
+
         self.assertIn(
             "password",
             response.data['detail']
         )
 
     # ---------------------------------------------------------
-    # 9. Invalid phone format
+    # 8b. Weak password rejected by Django's password validators
+    #     (validate_password() -> django's validate_password())
+    #     -> error_code 30
+    # ---------------------------------------------------------
+
+    def test_unsuccessful_weak_password(self):
+        data = {
+            "password": "12345678",
+            "confirm_password": "12345678",
+        }
+
+        response = self.client.patch(
+            self.profile_url,
+            data,
+            format="json"
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST
+        )
+
+        self.assertEqual(response.data['error_code'], 30)
+
+        self.assertIn(
+            "password",
+            response.data['detail']
+        )
+
+        # password must remain unchanged
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password("OldPassword123"))
+
+    # ---------------------------------------------------------
+    # 8c. Password shorter than the field's min_length=8
+    #     (field-level validation, not validate_password())
+    #     -> error_code 30
+    # ---------------------------------------------------------
+
+    def test_unsuccessful_password_too_short(self):
+        data = {
+            "password": "Ab1",
+            "confirm_password": "Ab1",
+        }
+
+        response = self.client.patch(
+            self.profile_url,
+            data,
+            format="json"
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST
+        )
+
+        self.assertEqual(response.data['error_code'], 30)
+
+        self.assertIn(
+            "password",
+            response.data['detail']
+        )
+
+    # ---------------------------------------------------------
+    # 9. Invalid phone format -> error_code 31
     # ---------------------------------------------------------
 
     def test_unsuccessful_invalid_phone(self):
@@ -255,13 +331,15 @@ class ProfileUpdateTest(APITestCase):
             status.HTTP_400_BAD_REQUEST
         )
 
+        self.assertEqual(response.data['error_code'], 31)
+
         self.assertIn(
             "phone",
             response.data['detail']
         )
 
     # ---------------------------------------------------------
-    # 10. Phone with more than 11 digits
+    # 10. Phone with more than 11 digits -> error_code 31
     # ---------------------------------------------------------
 
     def test_unsuccessful_phone_more_than_11_digits(self):
@@ -280,13 +358,15 @@ class ProfileUpdateTest(APITestCase):
             status.HTTP_400_BAD_REQUEST
         )
 
+        self.assertEqual(response.data['error_code'], 31)
+
         self.assertIn(
             "phone",
             response.data['detail']
         )
 
     # ---------------------------------------------------------
-    # 11. Phone with less than 11 digits
+    # 11. Phone with less than 11 digits -> error_code 31
     # ---------------------------------------------------------
 
     def test_unsuccessful_phone_less_than_11_digits(self):
@@ -305,13 +385,17 @@ class ProfileUpdateTest(APITestCase):
             status.HTTP_400_BAD_REQUEST
         )
 
+        self.assertEqual(response.data['error_code'], 31)
+
         self.assertIn(
             "phone",
             response.data['detail']
         )
 
     # ---------------------------------------------------------
-    # 12. Duplicate phone number
+    # 12. Duplicate phone number -> error_code 33
+    #     (the view's 'قبلاً ثبت' substring check matches the
+    #     serializer's Persian duplicate-phone message)
     # ---------------------------------------------------------
 
     def test_unsuccessful_duplicate_phone(self):
@@ -336,6 +420,8 @@ class ProfileUpdateTest(APITestCase):
             response.status_code,
             status.HTTP_400_BAD_REQUEST
         )
+
+        self.assertEqual(response.data['error_code'], 33)
 
         self.assertIn(
             "phone",
@@ -462,3 +548,59 @@ class ProfileUpdateTest(APITestCase):
             response.status_code,
             status.HTTP_401_UNAUTHORIZED
         )
+
+    # ---------------------------------------------------------
+    # 17. PATCH with an empty body is a no-op
+    #     (every field on ProfileUpdateSerializer is
+    #     required=False, so sending {} should still return 200
+    #     with the profile left completely unchanged)
+    # ---------------------------------------------------------
+
+    def test_patch_with_empty_body_is_noop(self):
+        response = self.client.patch(
+            self.profile_url,
+            {},
+            format="json"
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK
+        )
+
+        self.user.refresh_from_db()
+
+        self.assertEqual(self.user.first_name, "Test")
+        self.assertEqual(self.user.last_name, "User")
+        self.assertEqual(self.user.phone, "09123456789")
+        self.assertTrue(self.user.check_password("OldPassword123"))
+
+    # ---------------------------------------------------------
+    # 18. username and email are not part of
+    #     ProfileUpdateSerializer.Meta.fields, so submitting them
+    #     must be silently ignored rather than applied -
+    #     this guards against this endpoint being used to bypass
+    #     whatever dedicated flow (if any) governs those fields
+    # ---------------------------------------------------------
+
+    def test_username_and_email_cannot_be_changed(self):
+        data = {
+            "username": "hacked_username",
+            "email": "hacked@example.com",
+        }
+
+        response = self.client.patch(
+            self.profile_url,
+            data,
+            format="json"
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK
+        )
+
+        self.user.refresh_from_db()
+
+        self.assertEqual(self.user.username, "testuser")
+        self.assertEqual(self.user.email, "test@example.com")

@@ -1,300 +1,179 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
+from rest_framework_simplejwt.tokens import AccessToken
 from identity.models import User
-from django.utils import timezone
 
 class UserLoginTest(APITestCase):
 
     def setUp(self):
         self.login_url = reverse('login')
 
+        self.user = User.objects.create_user(
+            username='test_user',
+            password='Strong123',
+            email='test@test.com',
+            phone='09123456789',
+        )
+        self.user.status = 'active'
+        self.user.save()
+
+    #successful_login_tsets
     def test_successful_login(self):
-        user = User.objects.create_user(
-            username='dara',
-            password='^5MN76f[',
-            email='dara@test.com',
-            phone='09100825689'
-        )
+        data = {'username': 'test_user', 'password': 'Strong123'}
+        response = self.client.post(self.login_url, data, format='json')
 
-        user.status = 'active'
-        user.is_active = True
-        user.save()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        data = {
-            'username': 'dara',
-            'password': '^5MN76f[',
-        }
+        self.assertIn('access_token', response.data)
+        self.assertIn('refresh',response.data)
 
-        response = self.client.post(
-            self.login_url,
-            data,
-            format='json'
-        )
+        self.assertTrue(response.data['access_token'])
+        self.assertTrue(response.data['refresh'])
 
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_200_OK
-        )
+    def test_successful_login_username_case_insensitive(self):
+        data = {'username': 'TEST_USER', 'password': 'Strong123'}
+        response = self.client.post(self.login_url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.assertIn('access_token', response.data)
+        self.assertIn('refresh',response.data)
+
+    def test_successful_login_username_with_spaces(self):
+        data = {'username': '  test_user  ','password': 'Strong123', }
+        response = self.client.post(self.login_url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         self.assertIn('access_token', response.data)
         self.assertIn('refresh', response.data)
 
-        # Second successful login
-        user = User.objects.create_user(
-            username='nima',
-            password='r4-0X^1~',
-            email='nima@test.com',
-            phone='09188825689'
-        )
+    #unsuccessful_login_tsets
+    #Validation Tests:
+    def test_login_empty_username(self):
+        data = {'username': '','password': 'Strong123',}
+        response = self.client.post(self.login_url,data,format='json')
 
-        user.status = 'active'
-        user.is_active = True
-        user.save()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error_code'],10)
+        self.assertIn('username',response.data['detail'])
 
-        data = {
-            'username': 'nima',
-            'password': 'r4-0X^1~',
-        }
+    def test_login_empty_password(self):
+        data = {'username': 'test_user','password': '',}
+        response = self.client.post(self.login_url,data,format='json')
 
-        response = self.client.post(
-            self.login_url,
-            data,
-            format='json'
-        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error_code'],10)
+        self.assertIn('password',response.data['detail'])
 
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_200_OK
-        )
-        self.assertIn('access_token', response.data)
-        self.assertIn('refresh', response.data)
+    def test_login_missing_username(self):
+        data = {'password': 'Strong123',}
+        response = self.client.post(self.login_url,data,format='json')
 
-    def test_unsuccessful_login(self):
-        # Invalid username
-        user = User.objects.create_user(
-            username='nima',
-            password='r4-0X^1~',
-            email='nima@test.com',
-            phone='09188825689'
-        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error_code'],10)
+        self.assertIn('username',response.data['detail'])
 
-        user.status = 'active'
-        user.is_active = True
-        user.save()
+    def test_login_missing_password(self):
+        data = {'username': 'test_user',}
+        response = self.client.post(self.login_url,data,format='json')
 
-        data = {
-            'username': 'nimaa',
-            'password': 'r4-0X^1~'
-        }
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error_code'],10)
+        self.assertIn('password',response.data['detail'])
 
-        response = self.client.post(
-            self.login_url,
-            data,
-            format='json'
-        )
+    def test_login_null_username(self):
+        data = {'username': None,'password': 'Strong123',}
+        response = self.client.post(self.login_url,data,format='json')
 
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_401_UNAUTHORIZED
-        )
-        self.assertEqual(response.data['error_code'], 20)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error_code'],10)
+        self.assertIn('username',response.data['detail'])
 
-        # Invalid password
-        user = User.objects.create_user(
-            username='nima83',
-            password='r450X^1~',
-            email='nima83@test.com',
-            phone='09168825689'
-        )
+    def test_login_null_password(self):
+        data = {'username': 'test_user','password': None,}
+        response = self.client.post(self.login_url,data,format='json')
 
-        user.status = 'active'
-        user.is_active = True
-        user.save()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error_code'],10)
+        self.assertIn('password',response.data['detail'])
 
-        data = {
-            'username': 'nima83',
-            'password': 'r4-0X^1~'
-        }
+    #Invalid Credentials
+    def test_login_wrong_password(self):
+        data = {'username': 'test_user','password': 'WrongPassword123',}
+        response = self.client.post(self.login_url,data,format='json')
 
-        response = self.client.post(
-            self.login_url,
-            data,
-            format='json'
-        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data['error_code'],20)
+        self.assertIsNone(response.data['detail'])
 
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_401_UNAUTHORIZED
-        )
-        self.assertEqual(response.data['error_code'], 20)
+    def test_login_wrong_username(self):
+        data = {'username': 'unknown_user','password': 'Strong123',}
+        response = self.client.post(self.login_url,data,format='json')
 
-        # Deleted user
-        user = User.objects.create_user(
-            username='nilan',
-            password='r450X^1~',
-            email='nilan@test.com',
-            phone='09168826689'
-        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data['error_code'],20)
+        self.assertIsNone(response.data['detail'])
 
-        user.is_active = True
-        user.deleted_at = timezone.now()
-        user.status = 'deleted'
-        user.save()
+    def test_login_wrong_username_and_password(self):
+        data = {'username': 'unknown_user','password': 'WrongPassword123',}
+        response = self.client.post(self.login_url,data,format='json')
 
-        data = {
-            'username': 'nilan',
-            'password': 'r450X^1~'
-        }
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data['error_code'],20)
+        self.assertIsNone(response.data['detail'])
 
-        response = self.client.post(
-            self.login_url,
-            data,
-            format='json'
-        )
+    # Deleted User
+    def test_login_deleted_user(self):
+        self.user.status = 'deleted'
+        self.user.save()
 
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_401_UNAUTHORIZED
-        )
-        self.assertEqual(response.data['error_code'], 20)
+        data = {'username': 'test_user','password': 'Strong123',}
+        response = self.client.post(self.login_url,data,format='json')
 
-        # Pending user
-        user = User.objects.create_user(
-            username='asali',
-            password='r450X^1~',
-            email='asali@test.com',
-            phone='09178826689'
-        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data['error_code'],20)
+        self.assertIsNone(response.data['detail'])
 
-        user.status = 'pending'
-        user.is_active = True
-        user.save()
+    # Account Status
+    def test_login_unverified_user(self):
+        self.user.status = 'unverified'
+        self.user.save()
 
-        data = {
-            'username': 'asali',
-            'password': 'r450X^1~'
-        }
+        data = {'username': 'test_user','password': 'Strong123',}
+        response = self.client.post(self.login_url,data,format='json')
 
-        response = self.client.post(
-            self.login_url,
-            data,
-            format='json'
-        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data['error_code'],21)
+        self.assertIsNone(response.data['detail'])
 
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_401_UNAUTHORIZED
-        )
-        self.assertEqual(response.data['error_code'], 21)
+    def test_login_pending_user(self):
+        self.user.status = 'pending'
+        self.user.save()
 
-    def test_unsuccessful_bad_request(self):
-        user = User.objects.create_user(
-            username='negin',
-            password='5MN76Ff',
-            email='negin@test.com',
-            phone='09100825689'
-        )
+        data = {'username': 'test_user','password': 'Strong123',}
+        response = self.client.post(self.login_url,data,format='json')
 
-        user.status = 'active'
-        user.is_active = True
-        user.save()
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data['error_code'],21)
+        self.assertIsNone(response.data['detail'])
 
-        # Empty password
-        data = {
-            'username': 'negin',
-            'password': ''
-        }
+    def test_login_suspended_user(self):
+        self.user.status = 'suspended'
+        self.user.save()
 
-        response = self.client.post(
-            self.login_url,
-            data,
-            format='json'
-        )
+        data = {'username': 'test_user','password': 'Strong123',}
+        response = self.client.post(self.login_url,data,format='json')
 
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_400_BAD_REQUEST
-        )
-        self.assertEqual(response.data['error_code'], 10)
-
-        # Missing password
-        user = User.objects.create_user(
-            username='dara',
-            password='pass123'
-        )
-
-        user.status = 'active'
-        user.is_active = True
-        user.save()
-
-        data = {
-            'username': 'dara'
-        }
-
-        response = self.client.post(
-            self.login_url,
-            data,
-            format='json'
-        )
-
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_400_BAD_REQUEST
-        )
-        self.assertEqual(response.data['error_code'], 10)
-
-        # Empty username and password
-        data = {
-            'username': '',
-            'password': ''
-        }
-
-        response = self.client.post(
-            self.login_url,
-            data,
-            format='json'
-        )
-
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_400_BAD_REQUEST
-        )
-        self.assertEqual(response.data['error_code'], 10)
-
-        # Username as list
-        data = {
-            'username': ['dara', 'nima'],
-            'password': 'pass123'
-        }
-
-        response = self.client.post(
-            self.login_url,
-            data,
-            format='json'
-        )
-
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_400_BAD_REQUEST
-        )
-        self.assertEqual(response.data['error_code'], 10)
-
-        # Password as object
-        data = {
-            'username': 'dara',
-            'password': {
-                'value': 'pass123'
-            }
-        }
-
-        response = self.client.post(
-            self.login_url,
-            data,
-            format='json'
-        )
-
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_400_BAD_REQUEST
-        )
-        self.assertEqual(response.data['error_code'], 10)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data['error_code'],21)
+        self.assertIsNone(response.data['detail'])
+    #####################################################################
+    def test_successful_login_returns_valid_access_token(self):
+        data = {'username': 'test_user','password': 'Strong123',}
+        response = self.client.post(self.login_url,data,format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        access_token = response.data['access_token']
+        token = AccessToken(access_token)
+        self.assertEqual(int(token['user_id']),self.user.id)

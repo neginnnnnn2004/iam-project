@@ -63,7 +63,7 @@ class ProfileUpdateView(APIView):
             }
 
         elif 'confirm_password' in errors:
-            error_code = 30
+            error_code = 32
             error_message = {
                 "fa": "تکرار رمز عبور معتبر نیست",
                 "en": "Password confirmation does not match"
@@ -84,8 +84,8 @@ class ProfileUpdateView(APIView):
                     "en": "Provided data is invalid"
                 }
 
-        elif 'phone' in errors and 'قبلاً ثبت' in str(errors['phone']):
-            error_code = 31
+        elif 'phone' in errors and 'already registered' in str(errors['phone']).lower():
+            error_code = 33
             error_message = {
                 "fa": "شماره تلفن وارد شده تکراری است",
                 "en": "Provided phone number is already in use"
@@ -130,8 +130,10 @@ class ProfileUpdateView(APIView):
 
         Custom error codes for this endpoint:
         - code 10: Invalid input data.
-        - code 30: Provided password is invalid.
-        - code 31: Provided phone number is invalid or already in use.
+        - code 30: Provided password is invalid (weak or bad format).
+        - code 31: Invalid phone number format.
+        - code 32: Password and confirm_password do not match.
+        - code 33: Phone number is already registered by another user.
         """,
         request_body=ProfileUpdateSerializer,
         responses={
@@ -139,7 +141,7 @@ class ProfileUpdateView(APIView):
                 description="Profile updated successfully",
                 schema=ProfileUpdateResponseSerializer
             ),
-            400: "Bad Request (Code 10,30,31)",
+            400: "Bad Request (Code 10,30,31,32,33)",
             401: "Unauthorized",
         }
     )

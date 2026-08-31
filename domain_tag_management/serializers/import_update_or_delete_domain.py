@@ -7,7 +7,7 @@ class DomainImportOrEditSerializer(serializers.ModelSerializer):
     Serializer for creating and editing a domain.
 
     This serializer handles the domain's basic information and allows
-    associating the domain with one or more groups.
+    associating the domain with a group.
 
     The ``created_by`` field is read-only and exposes the username of
     the user who created the domain.
@@ -26,35 +26,13 @@ class DomainImportOrEditSerializer(serializers.ModelSerializer):
         group (int):
             Primary key of the group associated with the domain.
 
-    Notes:
-        The ``created_by`` field cannot be provided or modified by the
-        client.
-
-        When groups are provided, they are resolved to existing
-        ``Group`` instances by their primary keys.
-
-    Example:
-        Input:
-            {
-                "domain_name": "example.com",
-                "description": "Example domain",
-                "groups": [1, 2]
-            }
-
-        Output:
-            {
-                "domain_name": "example.com",
-                "description": "Example domain",
-                "created_by": "admin",
-                "groups": [1, 2]
-            }
     """
 
     created_by = serializers.ReadOnlyField(
         source='created_by.username'
     )
 
-    groups = serializers.PrimaryKeyRelatedField(
+    group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(),
         required=False,
         allow_null=True,
@@ -66,30 +44,21 @@ class DomainImportOrEditSerializer(serializers.ModelSerializer):
             'domain_name',
             'description',
             'created_by',
-            'groups'
+            'group'
         ]
         read_only_fields = ['created_by']
 
 
-class DomainDeleteSerializer(serializers.ModelSerializer):
+class DomainDeleteSerializer(serializers.Serializer):
     """
-    Serializer for deleting a domain.
+    Serializer for domain deletion requests.
 
-    This serializer identifies the domain that should be deleted
-    by its domain name.
+    Used to validate the domain name required to identify the domain
+    for deletion. Since this is an input-only serializer for
+    deletion logic, it does not perform database-level uniqueness checks.
 
-    Fields:
-        domain_name (str):
-            Name of the domain to be deleted.
-
-    Notes:
-        This serializer is intended to validate and receive the domain
-        name required for the delete operation. The actual deletion
-        logic is handled by the corresponding view or service.
+    Attributes:
+        domain_name (str): The unique name of the domain to be deleted.
     """
 
-    class Meta:
-        model = Domain
-        fields = [
-            'domain_name',
-        ]
+    domain_name = serializers.CharField(required=True)
