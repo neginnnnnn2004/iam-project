@@ -6,6 +6,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.views import APIView
 
 from identity.models import  Domain, UserGroup, User_Domain_Tag
+from identity.services import log_critical_event
 from domain_tag_management.serializers.domain_list import (DomainListSerializer, TagListSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
@@ -128,4 +129,15 @@ class DomainListView(APIView):
             domain_data['has_main_tag'] = has_main_tag
 
             result.append(domain_data)
+        log_critical_event(
+            action="DOMAIN_LIST",
+            status_type='success',
+            request=request,
+            user_id=request.user.id,
+            extra={
+                'search': search_query,
+                'page': paginator.page.number,
+                'result_count': len(result),
+            },
+        )
         return Response(result, status=status.HTTP_200_OK)
