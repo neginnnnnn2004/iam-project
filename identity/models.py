@@ -195,7 +195,7 @@ class Domain(models.Model):
     )
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-    groups = models.ForeignKey(
+    group = models.ForeignKey(
         'Group',
         on_delete = models.CASCADE,
         related_name='domains',
