@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 from identity.permissions import IsAdminRole
+from identity.services import log_critical_event
 from domain_tag_management.serializers.tag_create import (TagRegisterSerializer)
 
 from drf_yasg.utils import swagger_auto_schema
@@ -37,6 +38,13 @@ class TagCreateView(APIView):
             if 'title' in serializer.errors:
                 for error in serializer.errors['title']:
                     if getattr(error, 'code', None) =='tag_exists':
+                        log_critical_event(
+                            action="CREATE_TAG",
+                            status_type='failed',
+                            request=request,
+                            user_id=request.user.id,
+                            error_code=11,
+                        )
                         return Response({
                             "error_code": 11,
                             "message": {
@@ -46,6 +54,13 @@ class TagCreateView(APIView):
                             "detail": serializer.errors
                         }, status=status.HTTP_400_BAD_REQUEST)
 
+            log_critical_event(
+                action="CREATE_TAG",
+                status_type='failed',
+                request=request,
+                user_id=request.user.id,
+                error_code=10,
+            )
             return Response({
                 "error_code": 10,
                 "message": {
@@ -56,4 +71,14 @@ class TagCreateView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         tag = serializer.save(created_by=request.user)
+        log_critical_event(
+            action="CREATE_TAG",
+            status_type='success',
+            request=request,
+            user_id=request.user.id,
+            extra={
+                "tag_id": tag.id,
+                "tag_title": tag.title,
+            },
+        )
         return Response(TagRegisterSerializer(tag).data, status=status.HTTP_201_CREATED)
